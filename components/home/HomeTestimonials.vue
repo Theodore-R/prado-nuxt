@@ -27,113 +27,146 @@ const testimonials: Testimonial[] = [
   },
 ]
 
+const colors = ['#CF006C', '#FB6223', '#C18ED8', '#93C1AF']
 const firstColumn = testimonials
 const secondColumn = [...testimonials].reverse()
 const thirdColumn = [...testimonials.slice(1), testimonials[0]]
+const fourthColumn = [...testimonials.slice(2), ...testimonials.slice(0, 2)]
 </script>
 
 <template>
   <section class="py-20 relative">
-    <div class="max-w-7xl mx-auto px-6">
-      <!-- Header -->
-      <div class="flex flex-col items-center justify-center max-w-xl mx-auto mb-12">
-        <div class="border border-prado-border rounded-lg py-1 px-4 text-sm text-prado-text-muted mb-5">
-          Témoignages
-        </div>
-        <h2 class="text-3xl md:text-4xl text-prado-text text-center">
-          Ils travaillent avec nous
-        </h2>
-      </div>
+    <!-- Header -->
+    <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-12 px-6">
+      Ils travaillent avec nous
+    </h2>
 
-      <!-- Columns -->
-      <div
-        class="flex justify-center gap-6 max-h-[600px] overflow-hidden"
-        style="mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);"
-      >
-        <!-- Column 1 -->
-        <div class="w-full max-w-xs shrink-0">
-          <div class="testimonial-scroll flex flex-col gap-6 pb-6" style="--duration: 25s;">
-            <template v-for="loop in 2" :key="'c1-' + loop">
-              <div
-                v-for="(t, i) in firstColumn"
-                :key="'c1-' + loop + '-' + i"
-                class="p-8 rounded-3xl border border-prado-border bg-prado-surface max-w-xs w-full"
-              >
-                <p class="text-prado-text-secondary text-sm leading-relaxed italic">
-                  « {{ t.text }} »
-                </p>
-                <div class="flex items-center gap-3 mt-5">
-                  <div class="w-10 h-10 rounded-full bg-[#CF006C]/20 flex items-center justify-center text-[#CF006C] font-bold text-sm">
-                    {{ t.name.charAt(0) }}
-                  </div>
-                  <div>
-                    <div class="text-prado-text text-sm font-medium leading-5">{{ t.name }}</div>
-                    <div class="text-prado-text-muted text-xs leading-5">{{ t.role }}, {{ t.org }}</div>
-                  </div>
+    <!-- Columns — full width, no max-w container -->
+    <div
+      class="flex justify-center gap-6 max-h-[600px] overflow-hidden px-6"
+      style="mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);"
+    >
+      <!-- Column 1 -->
+      <div class="w-full max-w-xs shrink-0">
+        <div class="testimonial-scroll flex flex-col gap-6 pb-6" style="--duration: 25s;">
+          <template v-for="loop in 2" :key="'c1-' + loop">
+            <div
+              v-for="(t, i) in firstColumn"
+              :key="'c1-' + loop + '-' + i"
+              class="p-8 rounded-3xl border border-prado-border bg-prado-surface max-w-xs w-full"
+            >
+              <p class="text-prado-text-secondary text-sm leading-relaxed italic">
+                « {{ t.text }} »
+              </p>
+              <div class="flex items-center gap-3 mt-5">
+                <div
+                  class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm"
+                  :style="{ backgroundColor: colors[0] + '20', color: colors[0] }"
+                >
+                  {{ t.name.charAt(0) }}
+                </div>
+                <div>
+                  <div class="text-prado-text text-sm font-medium leading-5">{{ t.name }}</div>
+                  <div class="text-prado-text-muted text-xs leading-5">{{ t.role }}, {{ t.org }}</div>
                 </div>
               </div>
-            </template>
-          </div>
-        </div>
-
-        <!-- Column 2 (hidden on mobile) -->
-        <div class="hidden md:block w-full max-w-xs shrink-0">
-          <div class="testimonial-scroll flex flex-col gap-6 pb-6" style="--duration: 30s;">
-            <template v-for="loop in 2" :key="'c2-' + loop">
-              <div
-                v-for="(t, i) in secondColumn"
-                :key="'c2-' + loop + '-' + i"
-                class="p-8 rounded-3xl border border-prado-border bg-prado-surface max-w-xs w-full"
-              >
-                <p class="text-prado-text-secondary text-sm leading-relaxed italic">
-                  « {{ t.text }} »
-                </p>
-                <div class="flex items-center gap-3 mt-5">
-                  <div class="w-10 h-10 rounded-full bg-[#FB6223]/20 flex items-center justify-center text-[#FB6223] font-bold text-sm">
-                    {{ t.name.charAt(0) }}
-                  </div>
-                  <div>
-                    <div class="text-prado-text text-sm font-medium leading-5">{{ t.name }}</div>
-                    <div class="text-prado-text-muted text-xs leading-5">{{ t.role }}, {{ t.org }}</div>
-                  </div>
-                </div>
-              </div>
-            </template>
-          </div>
-        </div>
-
-        <!-- Column 3 (hidden on tablet and mobile) -->
-        <div class="hidden lg:block w-full max-w-xs shrink-0">
-          <div class="testimonial-scroll flex flex-col gap-6 pb-6" style="--duration: 22s;">
-            <template v-for="loop in 2" :key="'c3-' + loop">
-              <div
-                v-for="(t, i) in thirdColumn"
-                :key="'c3-' + loop + '-' + i"
-                class="p-8 rounded-3xl border border-prado-border bg-prado-surface max-w-xs w-full"
-              >
-                <p class="text-prado-text-secondary text-sm leading-relaxed italic">
-                  « {{ t.text }} »
-                </p>
-                <div class="flex items-center gap-3 mt-5">
-                  <div class="w-10 h-10 rounded-full bg-[#C18ED8]/20 flex items-center justify-center text-[#C18ED8] font-bold text-sm">
-                    {{ t.name.charAt(0) }}
-                  </div>
-                  <div>
-                    <div class="text-prado-text text-sm font-medium leading-5">{{ t.name }}</div>
-                    <div class="text-prado-text-muted text-xs leading-5">{{ t.role }}, {{ t.org }}</div>
-                  </div>
-                </div>
-              </div>
-            </template>
-          </div>
+            </div>
+          </template>
         </div>
       </div>
 
-      <!-- Note -->
-      <p class="text-prado-text-faint text-xs text-center mt-8 italic">
-        Témoignages représentatifs du secteur — à remplacer par de vrais témoignages avant publication.
-      </p>
+      <!-- Column 2 (hidden on mobile) -->
+      <div class="hidden md:block w-full max-w-xs shrink-0">
+        <div class="testimonial-scroll flex flex-col gap-6 pb-6" style="--duration: 30s;">
+          <template v-for="loop in 2" :key="'c2-' + loop">
+            <div
+              v-for="(t, i) in secondColumn"
+              :key="'c2-' + loop + '-' + i"
+              class="p-8 rounded-3xl border border-prado-border bg-prado-surface max-w-xs w-full"
+            >
+              <p class="text-prado-text-secondary text-sm leading-relaxed italic">
+                « {{ t.text }} »
+              </p>
+              <div class="flex items-center gap-3 mt-5">
+                <div
+                  class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm"
+                  :style="{ backgroundColor: colors[1] + '20', color: colors[1] }"
+                >
+                  {{ t.name.charAt(0) }}
+                </div>
+                <div>
+                  <div class="text-prado-text text-sm font-medium leading-5">{{ t.name }}</div>
+                  <div class="text-prado-text-muted text-xs leading-5">{{ t.role }}, {{ t.org }}</div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Column 3 (hidden on tablet and mobile) -->
+      <div class="hidden lg:block w-full max-w-xs shrink-0">
+        <div class="testimonial-scroll flex flex-col gap-6 pb-6" style="--duration: 22s;">
+          <template v-for="loop in 2" :key="'c3-' + loop">
+            <div
+              v-for="(t, i) in thirdColumn"
+              :key="'c3-' + loop + '-' + i"
+              class="p-8 rounded-3xl border border-prado-border bg-prado-surface max-w-xs w-full"
+            >
+              <p class="text-prado-text-secondary text-sm leading-relaxed italic">
+                « {{ t.text }} »
+              </p>
+              <div class="flex items-center gap-3 mt-5">
+                <div
+                  class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm"
+                  :style="{ backgroundColor: colors[2] + '20', color: colors[2] }"
+                >
+                  {{ t.name.charAt(0) }}
+                </div>
+                <div>
+                  <div class="text-prado-text text-sm font-medium leading-5">{{ t.name }}</div>
+                  <div class="text-prado-text-muted text-xs leading-5">{{ t.role }}, {{ t.org }}</div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Column 4 (hidden below xl) -->
+      <div class="hidden xl:block w-full max-w-xs shrink-0">
+        <div class="testimonial-scroll flex flex-col gap-6 pb-6" style="--duration: 27s;">
+          <template v-for="loop in 2" :key="'c4-' + loop">
+            <div
+              v-for="(t, i) in fourthColumn"
+              :key="'c4-' + loop + '-' + i"
+              class="p-8 rounded-3xl border border-prado-border bg-prado-surface max-w-xs w-full"
+            >
+              <p class="text-prado-text-secondary text-sm leading-relaxed italic">
+                « {{ t.text }} »
+              </p>
+              <div class="flex items-center gap-3 mt-5">
+                <div
+                  class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm"
+                  :style="{ backgroundColor: colors[3] + '20', color: colors[3] }"
+                >
+                  {{ t.name.charAt(0) }}
+                </div>
+                <div>
+                  <div class="text-prado-text text-sm font-medium leading-5">{{ t.name }}</div>
+                  <div class="text-prado-text-muted text-xs leading-5">{{ t.role }}, {{ t.org }}</div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
     </div>
+
+    <!-- Note -->
+    <p class="text-prado-text-faint text-xs text-center mt-8 italic px-6">
+      Témoignages représentatifs du secteur — à remplacer par de vrais témoignages avant publication.
+    </p>
   </section>
 </template>
 

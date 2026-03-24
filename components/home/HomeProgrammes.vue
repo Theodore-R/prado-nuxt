@@ -91,14 +91,14 @@ function setProgrammeRef(id: string, el: HTMLElement | null) {
 function scrollToProgram(id: string) {
   const el = programmeRefs.value[id]
   if (el) {
-    const headerOffset = 120
-    const top = el.getBoundingClientRect().top + window.scrollY - headerOffset
+    const offset = window.innerHeight * 0.5 - 50
+    const top = el.getBoundingClientRect().top + window.scrollY - offset
     window.scrollTo({ top, behavior: 'smooth' })
   }
 }
 
 function handleScroll() {
-  const threshold = window.innerHeight * 0.35
+  const threshold = window.innerHeight * 0.5
 
   for (let i = programmes.length - 1; i >= 0; i--) {
     const el = programmeRefs.value[programmes[i].id]
