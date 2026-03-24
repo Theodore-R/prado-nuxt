@@ -4277,7 +4277,7 @@ function _expandFromEnv(value) {
 const _inlineRuntimeConfig = {
   "app": {
     "baseURL": "/",
-    "buildId": "4ebfa949-39df-4a43-a11e-28c28ad21a6f",
+    "buildId": "1260df80-b8fa-42ae-a716-5d2efd41c122",
     "buildAssetsDir": "/_nuxt/",
     "cdnURL": ""
   },
@@ -4330,7 +4330,7 @@ const _inlineRuntimeConfig = {
       "clientOptions": {}
     },
     "prismic": {
-      "endpoint": "prado-itineraire",
+      "endpoint": "prado-nuxt",
       "environment": "",
       "client": "~/prismic/client",
       "linkResolver": "~/prismic/linkResolver",

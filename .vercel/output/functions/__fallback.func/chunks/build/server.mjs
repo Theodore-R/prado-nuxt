@@ -451,7 +451,7 @@ const _routes = [
     name: "mon-compte",
     path: "/mon-compte",
     meta: { "middleware": "auth" },
-    component: () => import('./mon-compte-CfX-LGAD.mjs')
+    component: () => import('./mon-compte-D68yemf3.mjs')
   },
   {
     name: "admin",
@@ -462,17 +462,17 @@ const _routes = [
   {
     name: "actions-id",
     path: "/actions/:id()",
-    component: () => import('./_id_-DQ_EEDio.mjs')
+    component: () => import('./_id_-DB2V6Nlz.mjs')
   },
   {
     name: "actions",
     path: "/actions",
-    component: () => import('./index-DcgDMmTb.mjs')
+    component: () => import('./index-CfVAPBoK.mjs')
   },
   {
     name: "ressources-id",
     path: "/ressources/:id()",
-    component: () => import('./_id_-peYwTdGY.mjs')
+    component: () => import('./_id_-DAXIOUwK.mjs')
   },
   {
     name: "slice-simulator",
@@ -483,7 +483,7 @@ const _routes = [
     name: "admin-inscriptions",
     path: "/admin/inscriptions",
     meta: { ...__nuxt_page_meta$1 || {}, ...{ "middleware": "admin" } },
-    component: () => import('./inscriptions-DHIo5r1a.mjs')
+    component: () => import('./inscriptions-nBMLqMrb.mjs')
   },
   {
     name: "admin-prescripteurs",
