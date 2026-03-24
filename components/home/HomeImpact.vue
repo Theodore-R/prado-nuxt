@@ -61,7 +61,7 @@ onMounted(() => {
 <template>
   <section
     ref="sectionRef"
-    class="py-24 bg-gradient-to-r from-[#CF006C] to-[#FB6223]"
+    class="py-24 my-16 bg-gradient-to-r from-[#CF006C] to-[#FB6223]"
   >
     <div class="max-w-7xl mx-auto px-6">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
