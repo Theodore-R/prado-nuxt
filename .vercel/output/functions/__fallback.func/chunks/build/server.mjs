@@ -462,17 +462,17 @@ const _routes = [
   {
     name: "actions-id",
     path: "/actions/:id()",
-    component: () => import('./_id_-C3eNH3Zj.mjs')
+    component: () => import('./_id_-BpS60fMS.mjs')
   },
   {
     name: "actions",
     path: "/actions",
-    component: () => import('./index-tv-woxf6.mjs')
+    component: () => import('./index-DRwLwqxK.mjs')
   },
   {
     name: "ressources-id",
     path: "/ressources/:id()",
-    component: () => import('./_id_-osS71OxB.mjs')
+    component: () => import('./_id_-rL0rBqST.mjs')
   },
   {
     name: "slice-simulator",
