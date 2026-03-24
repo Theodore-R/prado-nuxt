@@ -123,7 +123,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section ref="sectionRef" class="bg-prado-bg-deep">
+  <section ref="sectionRef" class="bg-prado-bg-pink">
     <div class="max-w-7xl mx-auto px-6 pt-24 pb-12 relative z-10">
       <h2 class="text-3xl md:text-4xl text-prado-text text-center">
         Quatre programmes pour agir concrètement

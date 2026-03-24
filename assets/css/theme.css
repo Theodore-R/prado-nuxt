@@ -57,6 +57,12 @@
   --prado-tag-bg: rgba(255, 255, 255, 0.08);
   --prado-gradient-start: #CF006C;
   --prado-gradient-end: #FB6223;
+
+  /* Tinted section backgrounds (very subtle ~3% accent on dark base) */
+  --prado-bg-pink: #1e172f;
+  --prado-bg-teal: #161e2d;
+  --prado-bg-purple: #1c172f;
+  --prado-bg-orange: #1e1828;
 }
 
 [data-theme="light"] {
@@ -98,6 +104,11 @@
   --prado-tag-bg: rgba(0, 0, 0, 0.06);
   --prado-gradient-start: #CF006C;
   --prado-gradient-end: #FB6223;
+
+  --prado-bg-pink: #f8f0f4;
+  --prado-bg-teal: #f0f5f3;
+  --prado-bg-purple: #f4f0f6;
+  --prado-bg-orange: #f6f2ef;
 }
 
 @theme inline {
@@ -142,6 +153,10 @@
 
   --color-prado-bg: var(--prado-bg);
   --color-prado-bg-deep: var(--prado-bg-deep);
+  --color-prado-bg-pink: var(--prado-bg-pink);
+  --color-prado-bg-teal: var(--prado-bg-teal);
+  --color-prado-bg-purple: var(--prado-bg-purple);
+  --color-prado-bg-orange: var(--prado-bg-orange);
   --color-prado-surface: var(--prado-surface);
   --color-prado-surface-hover: var(--prado-surface-hover);
   --color-prado-text: var(--prado-text);
