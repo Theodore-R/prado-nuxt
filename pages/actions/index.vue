@@ -186,7 +186,7 @@ function onCardEnter(el: Element, index: number) {
                 filterMode === 'activite' ? 'text-white' : 'text-prado-text-muted',
               ]"
             >
-              Activités
+              Planifié
             </span>
             <span
               :class="[
@@ -194,7 +194,7 @@ function onCardEnter(el: Element, index: number) {
                 filterMode === 'actions' ? 'text-white' : 'text-prado-text-muted',
               ]"
             >
-              Actions
+              Sur mesure
             </span>
           </button>
 
@@ -245,7 +245,7 @@ function onCardEnter(el: Element, index: number) {
                   v-else
                   class="absolute top-3 right-3 px-3 py-1.5 rounded-xl text-xs bg-prado-tag-bg backdrop-blur-sm text-prado-text"
                 >
-                  Toute l'année
+                  Sur mesure
                 </div>
 
                 <div
