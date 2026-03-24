@@ -143,7 +143,7 @@ onUnmounted(() => {
 <template>
   <div
     ref="sectionRef"
-    class="transition-colors duration-700 ease-in-out overflow-x-hidden bg-[#1a1a2e]"
+    class="transition-colors duration-700 ease-in-out overflow-x-hidden bg-prado-bg"
   >
     <section class="relative flex flex-col items-center justify-start min-h-[100dvh]">
       <div class="relative w-full flex flex-col items-center min-h-[100dvh]">
@@ -158,8 +158,8 @@ onUnmounted(() => {
             alt="Background"
             class="w-screen h-screen object-cover object-center"
           />
-          <div v-else class="w-screen h-screen" :style="{ backgroundColor: bgColor || 'var(--prado-bg)' }" />
-          <div v-if="bgImageSrc" class="absolute inset-0 bg-black/60" />
+          <div v-else class="w-screen h-screen bg-prado-bg" />
+          <div v-if="bgImageSrc" class="absolute inset-0 hero-overlay" />
         </div>
 
         <div class="container mx-auto flex flex-col items-center justify-start relative z-10">
@@ -167,13 +167,12 @@ onUnmounted(() => {
 
             <!-- Expanding media container -->
             <div
-              class="absolute z-[2] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl"
+              class="absolute z-[2] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl hero-media-shadow"
               :style="{
                 width: `${mediaWidth}px`,
                 height: `${mediaHeight}px`,
                 maxWidth: '95vw',
                 maxHeight: '85vh',
-                boxShadow: '0px 0px 50px rgba(0, 0, 0, 0.3)',
               }"
             >
               <!-- YouTube Video -->
@@ -225,7 +224,7 @@ onUnmounted(() => {
                   class="w-full h-full object-cover rounded-xl"
                 />
                 <div
-                  class="absolute inset-0 bg-black/50 rounded-xl transition-opacity duration-200"
+                  class="absolute inset-0 hero-image-overlay rounded-xl transition-opacity duration-200"
                   :style="{ opacity: 0.7 - scrollProgress * 0.3 }"
                 />
               </div>
@@ -234,14 +233,14 @@ onUnmounted(() => {
               <div class="flex flex-col items-center text-center relative z-10 mt-4">
                 <p
                   v-if="subtitle"
-                  class="text-2xl text-white/70"
+                  class="text-2xl text-prado-text-secondary"
                   :style="{ transform: `translateX(-${textTranslateX}vw)` }"
                 >
                   {{ subtitle }}
                 </p>
                 <p
                   v-if="scrollHint"
-                  class="text-white/60 font-medium text-center"
+                  class="text-prado-text-muted font-medium text-center"
                   :style="{ transform: `translateX(${textTranslateX}vw)` }"
                 >
                   {{ scrollHint }}
@@ -255,7 +254,7 @@ onUnmounted(() => {
               :class="textBlend ? 'mix-blend-difference' : 'mix-blend-normal'"
             >
               <h1
-                class="text-4xl md:text-5xl lg:text-6xl font-bold text-white"
+                class="text-4xl md:text-5xl lg:text-6xl font-bold text-prado-text"
                 :style="{
                   transform: `translateX(-${textTranslateX}vw)`,
                   fontFamily: 'Poppins',
@@ -264,7 +263,7 @@ onUnmounted(() => {
                 {{ firstWord }}
               </h1>
               <h1
-                class="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-white"
+                class="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-prado-text"
                 :style="{
                   transform: `translateX(${textTranslateX}vw)`,
                   fontFamily: 'Poppins',
@@ -275,9 +274,9 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <!-- Content slot (visible after expansion, forced dark theme) -->
+          <!-- Content slot (visible after expansion) -->
           <section
-            class="flex flex-col w-full px-8 py-10 md:px-16 lg:py-20 transition-opacity duration-700 [--prado-text:#ffffff] [--prado-text-secondary:rgba(255,255,255,0.6)] [--prado-text-muted:rgba(255,255,255,0.4)]"
+            class="flex flex-col w-full px-8 py-10 md:px-16 lg:py-20 transition-opacity duration-700"
             :style="{ opacity: contentOpacity }"
           >
             <slot />
@@ -287,3 +286,31 @@ onUnmounted(() => {
     </section>
   </div>
 </template>
+
+<style scoped>
+/* Dark mode: dark overlay on bg image */
+.hero-overlay {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.hero-image-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.hero-media-shadow {
+  box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.3);
+}
+
+/* Light mode: light overlay */
+[data-theme="light"] .hero-overlay {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="light"] .hero-image-overlay {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="light"] .hero-media-shadow {
+  box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.1);
+}
+</style>
