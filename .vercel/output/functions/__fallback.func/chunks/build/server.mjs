@@ -430,7 +430,7 @@ const _routes = [
   {
     name: "fresque",
     path: "/fresque",
-    component: () => import('./fresque-eKuJgWEp.mjs')
+    component: () => import('./fresque-8q0qpryo.mjs')
   },
   {
     name: "educolab",
@@ -445,7 +445,7 @@ const _routes = [
   {
     name: "foodtruck",
     path: "/foodtruck",
-    component: () => import('./foodtruck-DkVWnAkL.mjs')
+    component: () => import('./foodtruck-BgUv_Emd.mjs')
   },
   {
     name: "mon-compte",
@@ -462,17 +462,17 @@ const _routes = [
   {
     name: "actions-id",
     path: "/actions/:id()",
-    component: () => import('./_id_-BR_bqKbe.mjs')
+    component: () => import('./_id_-pGdS81-K.mjs')
   },
   {
     name: "actions",
     path: "/actions",
-    component: () => import('./index-VavtKhNc.mjs')
+    component: () => import('./index-jmuVj5An.mjs')
   },
   {
     name: "ressources-id",
     path: "/ressources/:id()",
-    component: () => import('./_id_-DFCrjRcD.mjs')
+    component: () => import('./_id_-DUrl2XIG.mjs')
   },
   {
     name: "slice-simulator",
