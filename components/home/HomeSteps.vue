@@ -21,7 +21,7 @@ const steps = [
 </script>
 
 <template>
-  <section class="py-24 bg-prado-bg-teal">
+  <section class="py-24" :style="{ backgroundColor: 'var(--prado-bg-teal)' }">
     <div class="max-w-7xl mx-auto px-6">
       <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-12">
         Comment inscrire un jeune ?

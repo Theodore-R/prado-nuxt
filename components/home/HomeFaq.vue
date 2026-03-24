@@ -37,7 +37,7 @@ function toggle(index: number) {
 </script>
 
 <template>
-  <section class="py-24 bg-prado-bg-purple">
+  <section class="py-24" :style="{ backgroundColor: 'var(--prado-bg-purple)' }">
     <div class="max-w-3xl mx-auto px-6">
       <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-12">
         Questions fréquentes
