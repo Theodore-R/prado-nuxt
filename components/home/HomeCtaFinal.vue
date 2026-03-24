@@ -3,12 +3,12 @@ import { ArrowRight } from 'lucide-vue-next'
 </script>
 
 <template>
-  <section class="py-20 bg-gradient-to-r from-[#CF006C] to-[#FB6223]">
+  <section class="py-24 bg-gradient-to-r from-[#CF006C] to-[#FB6223]">
     <div class="max-w-3xl mx-auto px-6 text-center">
-      <h2 class="text-3xl md:text-4xl text-white mb-6">
+      <h2 class="text-3xl md:text-4xl text-white mb-8">
         Agir ensemble pour l'autonomie des jeunes
       </h2>
-      <p class="text-white/80 leading-relaxed mb-10 max-w-2xl mx-auto">
+      <p class="text-white/80 text-base leading-relaxed mb-10 max-w-2xl mx-auto">
         Que vous soyez professionnel de l'accompagnement, partenaire institutionnel, ou simplement engagé pour la jeunesse, il y a une place pour vous dans le projet Prado Itinéraires. Inscrivez un jeune à une action, organisez une Fresque dans votre structure, accueillez le Foodtruck dans votre quartier, ou soutenez nos programmes.
       </p>
       <div class="flex flex-wrap justify-center gap-3">

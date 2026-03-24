@@ -35,7 +35,7 @@ const fourthColumn = [...testimonials.slice(2), ...testimonials.slice(0, 2)]
 </script>
 
 <template>
-  <section class="py-20 relative">
+  <section class="py-24 relative">
     <!-- Header -->
     <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-12 px-6">
       Ils travaillent avec nous

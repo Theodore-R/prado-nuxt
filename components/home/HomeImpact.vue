@@ -61,15 +61,15 @@ onMounted(() => {
 <template>
   <section
     ref="sectionRef"
-    class="py-20 bg-gradient-to-r from-[#CF006C] to-[#FB6223]"
+    class="py-24 bg-gradient-to-r from-[#CF006C] to-[#FB6223]"
   >
-    <div class="max-w-6xl mx-auto px-6">
+    <div class="max-w-7xl mx-auto px-6">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
         <div v-for="(stat, idx) in stats" :key="stat.label">
           <div class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2">
             {{ displayValues[idx] }}{{ stat.suffix }}
           </div>
-          <div class="text-white/70 text-sm leading-snug">
+          <div class="text-white/70 text-base leading-snug">
             {{ stat.label }}
           </div>
         </div>

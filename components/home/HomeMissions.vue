@@ -18,15 +18,15 @@ const missionsFamilles = [
 </script>
 
 <template>
-  <section class="py-20">
+  <section class="py-24">
     <div class="max-w-7xl mx-auto px-6">
       <!-- Header -->
-      <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-8">
+      <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-6">
         Nos missions
       </h2>
 
       <!-- Intro -->
-      <p class="text-prado-text-secondary leading-relaxed text-center max-w-4xl mx-auto mb-16">
+      <p class="text-prado-text-secondary text-base leading-relaxed text-center max-w-3xl mx-auto mb-12">
         Association loi 1901 créée le 21 janvier 2021 par la Fondation du Prado, Prado Itinéraires construit des solutions nouvelles et complémentaires dans le but de relier les publics accompagnés à des partenaires engagés, des environnements porteurs et favorables, afin qu'ils puissent prendre conscience de leur pouvoir d'agir et trouver leur place. L'association propose des actions concrètes au bénéfice des jeunes, des familles du Prado et d'autres acteurs de l'accompagnement.
       </p>
 

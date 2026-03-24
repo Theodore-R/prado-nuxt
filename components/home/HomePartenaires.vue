@@ -20,12 +20,12 @@ const scrollPartners = [...partners, ...partners]
 </script>
 
 <template>
-  <section class="py-20">
+  <section class="py-24">
     <div class="max-w-7xl mx-auto px-6">
       <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-4">
         Ils nous soutiennent
       </h2>
-      <p class="text-prado-text-muted text-center mb-12 max-w-2xl mx-auto">
+      <p class="text-prado-text-muted text-base text-center mb-12 max-w-3xl mx-auto">
         Notre activité est rendue possible grâce au soutien de la Métropole de Lyon, de la Fondation du Prado et de leurs partenaires.
       </p>
     </div>
