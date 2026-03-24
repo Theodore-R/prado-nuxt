@@ -30,8 +30,11 @@ const cards = [
 </script>
 
 <template>
-  <section class="py-24" :style="{ backgroundColor: 'var(--prado-bg-orange)' }">
-    <div class="max-w-7xl mx-auto px-6">
+  <section class="py-24 relative overflow-hidden">
+    <!-- Halo -->
+    <div class="absolute -top-32 -right-24 w-[500px] h-[500px] rounded-full bg-[#FB6223]/[0.04] blur-3xl pointer-events-none" />
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
       <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-12">
         En savoir plus
       </h2>

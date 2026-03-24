@@ -37,8 +37,11 @@ function toggle(index: number) {
 </script>
 
 <template>
-  <section class="py-24" :style="{ backgroundColor: 'var(--prado-bg-purple)' }">
-    <div class="max-w-3xl mx-auto px-6">
+  <section class="py-24 relative overflow-hidden">
+    <!-- Halo -->
+    <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-[#C18ED8]/[0.04] blur-3xl pointer-events-none" />
+
+    <div class="max-w-3xl mx-auto px-6 relative z-10">
       <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-12">
         Questions fréquentes
       </h2>

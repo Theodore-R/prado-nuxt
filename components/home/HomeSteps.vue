@@ -21,8 +21,11 @@ const steps = [
 </script>
 
 <template>
-  <section class="py-24" :style="{ backgroundColor: 'var(--prado-bg-teal)' }">
-    <div class="max-w-7xl mx-auto px-6">
+  <section class="py-24 relative overflow-hidden">
+    <!-- Halo -->
+    <div class="absolute -bottom-32 -left-32 w-[500px] h-[500px] rounded-full bg-[#93C1AF]/[0.05] blur-3xl pointer-events-none" />
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
       <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-12">
         Comment inscrire un jeune ?
       </h2>
