@@ -30,9 +30,8 @@ const cards = [
 </script>
 
 <template>
-  <section class="py-24 relative overflow-hidden">
-    <!-- Halo -->
-    <div class="absolute -top-32 -right-24 w-[500px] h-[500px] rounded-full bg-[#FB6223]/[0.04] blur-3xl pointer-events-none" />
+  <section class="py-24 relative">
+    <HomeHalo color="#FB6223" position="top-right" :size="600" :opacity="0.06" />
 
     <div class="max-w-7xl mx-auto px-6 relative z-10">
       <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-12">

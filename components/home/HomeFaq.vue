@@ -37,9 +37,8 @@ function toggle(index: number) {
 </script>
 
 <template>
-  <section class="py-24 relative overflow-hidden">
-    <!-- Halo -->
-    <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-[#C18ED8]/[0.04] blur-3xl pointer-events-none" />
+  <section class="py-24 relative">
+    <HomeHalo color="#C18ED8" position="top-center" :size="600" :opacity="0.06" />
 
     <div class="max-w-3xl mx-auto px-6 relative z-10">
       <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-12">

@@ -123,9 +123,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section ref="sectionRef" class="relative overflow-hidden">
-    <!-- Halo -->
-    <div class="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-[#CF006C]/[0.04] blur-3xl pointer-events-none" />
+  <section ref="sectionRef" class="relative">
+    <HomeHalo color="#CF006C" position="top-right" :size="700" :opacity="0.06" />
 
     <div class="max-w-7xl mx-auto px-6 pt-24 pb-12 relative z-10">
       <h2 class="text-3xl md:text-4xl text-prado-text text-center">
