@@ -41,11 +41,11 @@ const cards = [
           v-for="card in cards"
           :key="card.title"
           :to="card.to"
-          class="group bg-prado-surface rounded-2xl p-6 border border-prado-border hover:border-prado-border-light transition-all"
+          class="group bg-prado-surface rounded-2xl p-6 border border-prado-border hover:border-prado-border-light transition-all flex flex-col"
         >
           <h3 class="text-prado-text mb-3">{{ card.title }}</h3>
-          <p class="text-sm text-prado-text-secondary leading-relaxed mb-6">{{ card.text }}</p>
-          <span class="inline-flex items-center gap-1.5 text-sm text-[#FB6223] group-hover:gap-2.5 transition-all">
+          <p class="text-sm text-prado-text-secondary leading-relaxed flex-1">{{ card.text }}</p>
+          <span class="inline-flex items-center gap-1.5 text-sm text-[#FB6223] group-hover:gap-2.5 transition-all mt-6">
             {{ card.cta }} <ArrowRight :size="14" />
           </span>
         </NuxtLink>
