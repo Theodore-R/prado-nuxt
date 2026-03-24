@@ -123,12 +123,14 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section ref="sectionRef" class="py-20 bg-prado-bg-deep">
-    <div class="max-w-7xl mx-auto px-6">
-      <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-16">
+  <section ref="sectionRef" class="bg-prado-bg-deep">
+    <div class="max-w-7xl mx-auto px-6 pt-20">
+      <h2 class="text-3xl md:text-4xl text-prado-text text-center pb-16">
         Quatre programmes pour agir concrètement
       </h2>
+    </div>
 
+    <div class="max-w-7xl mx-auto px-6 pb-20">
       <!-- Desktop: split layout, page scroll -->
       <div class="hidden lg:flex gap-12 items-start">
         <!-- Left: sticky nav -->
