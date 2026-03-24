@@ -72,28 +72,26 @@ async function handleLogout() {
           <NuxtLink
             to="/actions"
             :class="[
-              'relative px-3 py-1.5 text-sm transition-colors',
+              'nav-link relative px-3 py-1.5 text-sm transition-colors',
               isActive('/actions')
-                ? 'text-prado-text'
+                ? 'text-prado-text is-active'
                 : 'text-prado-text-secondary hover:text-prado-text',
             ]"
           >
             Actions
-            <span v-if="isActive('/actions')" class="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-[#CF006C]" />
           </NuxtLink>
 
           <!-- Ressources -->
           <NuxtLink
             to="/ressources"
             :class="[
-              'relative px-3 py-1.5 text-sm transition-colors',
+              'nav-link relative px-3 py-1.5 text-sm transition-colors',
               isActive('/ressources')
-                ? 'text-prado-text'
+                ? 'text-prado-text is-active'
                 : 'text-prado-text-secondary hover:text-prado-text',
             ]"
           >
             Ressources
-            <span v-if="isActive('/ressources')" class="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-[#CF006C]" />
           </NuxtLink>
 
           <!-- Programmes dropdown -->
@@ -104,10 +102,12 @@ async function handleLogout() {
           >
             <button
               :class="[
-                'relative flex items-center gap-1 px-3 py-1.5 text-sm transition-colors',
-                isProgrammeActive || programmesOpen
-                  ? 'text-prado-text'
-                  : 'text-prado-text-secondary hover:text-prado-text',
+                'nav-link relative flex items-center gap-1 px-3 py-1.5 text-sm transition-colors',
+                isProgrammeActive
+                  ? 'text-prado-text is-active'
+                  : programmesOpen
+                    ? 'text-prado-text'
+                    : 'text-prado-text-secondary hover:text-prado-text',
               ]"
             >
               Nos programmes
@@ -116,7 +116,6 @@ async function handleLogout() {
                 class="transition-transform duration-200"
                 :class="programmesOpen ? 'rotate-180' : ''"
               />
-              <span v-if="isProgrammeActive" class="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-[#CF006C]" />
             </button>
 
             <!-- Mega dropdown -->
@@ -371,3 +370,27 @@ async function handleLogout() {
     </footer>
   </div>
 </template>
+
+<style scoped>
+/* Animated underline on nav links */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  border-radius: 1px;
+  background: #CF006C;
+  transform: scaleX(0);
+  transition: transform 0.25s ease-out;
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+.nav-link.is-active::after {
+  transform: scaleX(1);
+}
+</style>
