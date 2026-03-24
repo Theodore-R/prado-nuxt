@@ -3,6 +3,7 @@ import { Loader2, Download } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import {
   fetchAllInscriptions,
+  fetchAllActions,
   type AdminInscription,
 } from '~/lib/adminApi'
 import { exportToCsv } from '~/utils/csvExport'
@@ -10,29 +11,23 @@ import { exportToCsv } from '~/utils/csvExport'
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 
 const client = useSupabaseClient()
-const { client: prismic } = usePrismic()
 const inscriptions = ref<AdminInscription[]>([])
+const actionsMap = ref<Record<string, string>>({})
 const loading = ref(true)
 
-// Fetch Prismic actions for title resolution (SSR-compatible)
-const { data: prismicActions } = await useAsyncData('admin-actions', () =>
-  prismic.getAllByType('action')
-)
-
-// Build a map from original_id (string) to action title
-const actionsMap = computed(() => {
-  const map: Record<string, string> = {}
-  for (const doc of prismicActions.value ?? []) {
-    const originalId = doc.data.original_id as number
-    map[String(originalId)] = doc.data.title as string
-  }
-  return map
-})
-
-// Fetch inscriptions from Supabase (auth-gated, must run client-side)
+// Fetch inscriptions and actions from Supabase (auth-gated, must run client-side)
 onMounted(async () => {
   try {
-    inscriptions.value = await fetchAllInscriptions(client)
+    const [inscriptionsData, actionsData] = await Promise.all([
+      fetchAllInscriptions(client),
+      fetchAllActions(client),
+    ])
+    inscriptions.value = inscriptionsData
+    const map: Record<string, string> = {}
+    for (const action of actionsData) {
+      map[String(action.id)] = action.title
+    }
+    actionsMap.value = map
   } catch (err: unknown) {
     toast.error(err instanceof Error ? err.message : 'Erreur de chargement')
   } finally {

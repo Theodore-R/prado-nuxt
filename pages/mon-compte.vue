@@ -4,7 +4,7 @@ import { toast } from 'vue-sonner'
 
 definePageMeta({ middleware: 'auth' })
 
-const { client: prismic } = usePrismic()
+const supaClient = useSupabaseClient()
 const {
   user, loading, logout, updatePassword,
   jeunes, jeunesLoading, addJeune, removeJeune,
@@ -20,15 +20,15 @@ const newPassword = ref('')
 const confirmPassword = ref('')
 const submitting = ref(false)
 
-const { data: prismicActions } = await useAsyncData('mon-compte-actions', () =>
-  prismic.getAllByType('action')
-)
+const { data: actionsData } = await useAsyncData('mon-compte-actions', async () => {
+  const { data } = await supaClient.from('actions').select('id, title').order('id')
+  return (data ?? []) as Array<{ id: number; title: string }>
+})
 
-// Build a map from original_id (as string) to action data for inscription display
 const actions = computed(() =>
-  (prismicActions.value ?? []).map(doc => ({
-    id: doc.data.original_id as number,
-    title: doc.data.title as string,
+  (actionsData.value ?? []).map(row => ({
+    id: row.id,
+    title: row.title,
   }))
 )
 

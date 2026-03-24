@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Search, ChevronLeft, ChevronRight, Loader2 } from 'lucide-vue-next'
+import type { DbAction, DbRessource } from '~/lib/api'
 import {
   PROGRAMMATION_CATEGORIES,
   PROGRAMMATION_CATEGORY_COLORS,
@@ -12,7 +13,7 @@ import {
 type Panel = 'actions' | 'ressources'
 type FilterMode = 'activite' | 'actions'
 
-const { client: prismic } = usePrismic()
+const client = useSupabaseClient()
 
 const panel = ref<Panel>('actions')
 const search = ref('')
@@ -27,38 +28,40 @@ const listRef = ref<HTMLDivElement | null>(null)
 const ITEMS_PER_PAGE = 12
 const RES_PER_PAGE = 12
 
-const { data: prismicActions, status: actionsStatus } = await useAsyncData('actions', () =>
-  prismic.getAllByType('action')
-)
-const { data: prismicRessources, status: ressourcesStatus } = await useAsyncData('ressources', () =>
-  prismic.getAllByType('ressource')
-)
+const { data: dbActions, status: actionsStatus } = await useAsyncData('actions', async () => {
+  const { data } = await client.from('actions').select('*').eq('is_published', true).order('id')
+  return (data ?? []) as DbAction[]
+})
+const { data: dbRessources, status: ressourcesStatus } = await useAsyncData('ressources', async () => {
+  const { data } = await client.from('ressources').select('*').eq('is_published', true).order('id')
+  return (data ?? []) as DbRessource[]
+})
 
 const loadingData = computed(() => actionsStatus.value === 'pending' || ressourcesStatus.value === 'pending')
 
 const programmation = computed(() =>
-  (prismicActions.value ?? []).map(doc => ({
-    id: doc.data.original_id as number,
-    title: doc.data.title as string,
-    category: doc.data.category as ProgrammationCategory,
-    date: (doc.data.date_text as string) ?? '',
-    time: (doc.data.time_text as string) ?? '',
-    summary: (doc.data.summary as string) ?? '',
-    description: (doc.data.description as any)?.[0]?.text ?? '',
-    urlDetail: (doc.data.url_detail as any)?.url ?? '',
-    urlImage: '',
-    isActivite: (doc.data.is_activite as boolean) ?? false,
+  (dbActions.value ?? []).map(row => ({
+    id: row.id,
+    title: row.title,
+    category: row.category as ProgrammationCategory,
+    date: row.date ?? '',
+    time: row.time ?? '',
+    summary: row.summary ?? '',
+    description: row.description ?? '',
+    urlDetail: row.url_detail ?? '',
+    urlImage: row.url_image ?? '',
+    isActivite: row.is_activite ?? false,
   }))
 )
 
 const ressources = computed(() =>
-  (prismicRessources.value ?? []).map(doc => ({
-    id: doc.data.original_id as number,
-    title: doc.data.title as string,
-    category: doc.data.category as RessourceCategory,
-    description: (doc.data.description as any)?.[0]?.text ?? '',
-    url: (doc.data.url as any)?.url ?? '',
-    image: '',
+  (dbRessources.value ?? []).map(row => ({
+    id: row.id,
+    title: row.title,
+    category: row.category as RessourceCategory,
+    description: row.description ?? '',
+    url: row.url ?? '',
+    image: row.image ?? '',
   }))
 )
 
