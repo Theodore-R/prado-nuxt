@@ -35,12 +35,12 @@ const ressources = computed(() =>
   (prismicRessources.value ?? [])
     .filter(doc => (doc.data.title as string)?.trim())
     .map(doc => ({
-      id: doc.data.original_id as number ?? doc.id,
+      id: doc.uid ?? doc.id,
       title: doc.data.title as string,
       category: doc.data.category as RessourceCategory,
       description: doc.data.description?.[0]?.text ?? '',
       url: doc.data.url?.url ?? '',
-      image: getRessourceImage(doc.data.original_id as number),
+      image: doc.data.image?.url ?? getRessourceImage(doc.data.original_id as number),
     })),
 )
 
