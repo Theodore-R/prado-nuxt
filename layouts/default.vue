@@ -137,7 +137,7 @@ async function handleLogout() {
                   v-for="item in programmeItems"
                   :key="item.to"
                   :to="item.to"
-                  class="flex items-start gap-3 p-3 rounded-lg hover:bg-prado-surface-hover transition-colors group"
+                  class="flex items-start gap-3 p-3 rounded-lg hover:bg-prado-surface-hover active:scale-[0.98] transition-all group"
                   @click="closeProgrammes"
                 >
                   <div
@@ -162,7 +162,7 @@ async function handleLogout() {
         <!-- Desktop right -->
         <div class="hidden lg:flex items-center gap-2 shrink-0">
           <button
-            class="p-2 rounded-full text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface-hover transition-colors"
+            class="p-2 rounded-full text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface-hover active:scale-90 transition-all"
             aria-label="Changer de thème"
             @click="toggleTheme"
           >
@@ -174,19 +174,19 @@ async function handleLogout() {
             <NuxtLink
               v-if="isAdmin"
               to="/admin"
-              class="px-3 py-1.5 rounded-full bg-[#004657] text-white text-xs hover:bg-[#003545] transition-colors"
+              class="px-3 py-1.5 rounded-full bg-[#004657] text-white text-xs hover:bg-[#003545] hover:shadow-lg hover:shadow-[#004657]/25 active:scale-95 transition-all"
             >
               Admin
             </NuxtLink>
             <NuxtLink
               to="/mon-compte"
-              class="flex items-center gap-2 px-4 py-1.5 rounded-full border border-prado-border-medium text-prado-text text-sm hover:bg-prado-surface-hover transition-colors"
+              class="flex items-center gap-2 px-4 py-1.5 rounded-full border border-prado-border-medium text-prado-text text-sm hover:bg-prado-surface-hover hover:border-prado-border-light active:scale-95 transition-all"
             >
               <User :size="14" />
               <span>{{ user.name?.split(' ')[0] }}</span>
             </NuxtLink>
             <button
-              class="p-2 rounded-full hover:bg-prado-surface-hover text-prado-text-muted hover:text-prado-text transition-colors"
+              class="p-2 rounded-full hover:bg-prado-surface-hover text-prado-text-muted hover:text-prado-text active:scale-90 transition-all"
               title="Déconnexion"
               @click="logout()"
             >
@@ -197,13 +197,13 @@ async function handleLogout() {
           <template v-else>
             <NuxtLink
               to="/connexion"
-              class="px-4 py-1.5 text-sm text-prado-text-secondary hover:text-prado-text transition-colors"
+              class="px-4 py-1.5 rounded-full text-sm text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface-hover active:scale-95 transition-all"
             >
               Se connecter
             </NuxtLink>
             <NuxtLink
               to="/connexion?mode=register"
-              class="px-4 py-1.5 rounded-full bg-[#CF006C] text-white text-sm hover:bg-[#a80057] transition-colors font-medium"
+              class="px-4 py-1.5 rounded-full bg-[#CF006C] text-white text-sm hover:bg-[#a80057] hover:shadow-lg hover:shadow-[#CF006C]/25 active:scale-95 transition-all font-medium"
             >
               Créer un compte
             </NuxtLink>
