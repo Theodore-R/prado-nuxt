@@ -33,9 +33,9 @@ const { data: prismicRessources, status } = await useAsyncData('ressources-page'
 
 const ressources = computed(() =>
   (prismicRessources.value ?? [])
-    .filter(doc => doc.data.original_id && (doc.data.title as string)?.trim())
+    .filter(doc => (doc.data.title as string)?.trim())
     .map(doc => ({
-      id: doc.data.original_id as number,
+      id: doc.data.original_id as number ?? doc.id,
       title: doc.data.title as string,
       category: doc.data.category as RessourceCategory,
       description: doc.data.description?.[0]?.text ?? '',
