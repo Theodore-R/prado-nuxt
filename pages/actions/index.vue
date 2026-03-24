@@ -111,18 +111,6 @@ onMounted(() => {
 
 
 
-function onCardEnter(el: Element, index: number) {
-  const htmlEl = el as HTMLElement
-  htmlEl.style.opacity = '0'
-  htmlEl.style.transform = 'translateY(24px)'
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      htmlEl.style.transition = 'opacity 0.4s ease, transform 0.4s ease'
-      htmlEl.style.opacity = '1'
-      htmlEl.style.transform = 'translateY(0)'
-    }, index * 60)
-  })
-}
 </script>
 
 <template>
@@ -231,12 +219,10 @@ function onCardEnter(el: Element, index: number) {
         </div>
 
         <!-- Cards grid -->
-        <Transition name="grid-fade" mode="out-in">
-          <div v-if="visibleActions.length > 0" :key="actionsAnimKey" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div v-if="visibleActions.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <NuxtLink
               v-for="(a, i) in visibleActions"
               :key="a.id"
-              :ref="(el: any) => { if (el?.$el) onCardEnter(el.$el, i) }"
               :to="`/actions/${a.id}`"
               class="group block rounded-2xl overflow-hidden bg-prado-surface hover:brightness-105 transition-all duration-300"
               :class="{ 'opacity-60 hover:opacity-100': getPlacesInfo(a.id).isFull }"
@@ -283,10 +269,9 @@ function onCardEnter(el: Element, index: number) {
               </div>
             </NuxtLink>
           </div>
-          <div v-else :key="'empty-actions'" class="text-center py-20 text-prado-text-faint">
+          <div v-else class="text-center py-20 text-prado-text-faint">
             <p>Aucune action ne correspond à vos critères.</p>
           </div>
-        </Transition>
 
         <!-- Infinite scroll sentinel -->
         <div ref="sentinelRef">
