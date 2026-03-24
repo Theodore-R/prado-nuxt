@@ -17,7 +17,7 @@
           ]
         }
       },
-      "description": { "type": "StructuredText", "config": { "label": "Description", "single": "paragraph" } },
+      "description": { "type": "StructuredText", "config": { "label": "Description", "multi": "paragraph,heading3,heading4,heading5,heading6,strong,em,hyperlink,list-item,o-list-item" } },
       "url": { "type": "Link", "config": { "label": "Lien vers la ressource" } },
       "image": { "type": "Image", "config": { "label": "Image" } },
       "original_id": { "type": "Number", "config": { "label": "ID original (migration)" } }

@@ -34,7 +34,7 @@ const action = computed(() => {
     date: (doc.data.date_text as string) ?? '',
     time: (doc.data.time_text as string) ?? '',
     summary: (doc.data.summary as string) ?? '',
-    description: doc.data.description?.[0]?.text ?? '',
+    description: doc.data.description ?? [{ type: 'paragraph', text: '', spans: [] }],
     url_detail: doc.data.url_detail?.url ?? '',
     url_image: getActionImage(doc.data.original_id as number),
     is_activite: doc.data.is_activite ?? false,
@@ -103,7 +103,9 @@ async function handleDesinscrire(inscriptionId: string) {
     </div>
 
     <h1 class="text-3xl text-prado-text mb-4" :style="{ fontFamily: 'Poppins' }">{{ action.title }}</h1>
-    <p class="text-prado-text-muted mb-8 leading-relaxed">{{ action.description }}</p>
+    <div class="text-prado-text-muted mb-8 leading-relaxed prose prose-sm max-w-none">
+      <PrismicRichText :field="action.description" />
+    </div>
 
     <div class="bg-prado-surface rounded-2xl p-6 border border-prado-border space-y-3 mb-10">
       <h3 class="text-prado-text mb-1">Informations pratiques</h3>

@@ -28,7 +28,7 @@ const ressource = computed(() => {
     id: doc.data.original_id as number,
     title: doc.data.title as string,
     category: doc.data.category as string,
-    description: doc.data.description?.[0]?.text ?? '',
+    description: doc.data.description ?? [{ type: 'paragraph', text: '', spans: [] }],
     url: doc.data.url?.url ?? '',
     image: getRessourceImage(doc.data.original_id as number),
   }
@@ -65,7 +65,9 @@ const color = computed(() =>
     </div>
 
     <h1 class="text-3xl text-prado-text mb-4" :style="{ fontFamily: 'Poppins' }">{{ ressource.title }}</h1>
-    <p class="text-prado-text-muted mb-8 leading-relaxed text-lg">{{ ressource.description }}</p>
+    <div class="text-prado-text-muted mb-8 leading-relaxed prose prose-sm max-w-none">
+      <PrismicRichText :field="ressource.description" />
+    </div>
 
     <a
       :href="ressource.url"
