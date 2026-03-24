@@ -124,8 +124,8 @@ onUnmounted(() => {
 
 <template>
   <section ref="sectionRef" class="bg-prado-bg-deep">
-    <div class="max-w-7xl mx-auto px-6 pt-20">
-      <h2 class="text-3xl md:text-4xl text-prado-text text-center pb-16">
+    <div class="max-w-7xl mx-auto px-6 pt-20 pb-16 relative z-10">
+      <h2 class="text-3xl md:text-4xl text-prado-text text-center">
         Quatre programmes pour agir concrètement
       </h2>
     </div>
@@ -133,8 +133,8 @@ onUnmounted(() => {
     <div class="max-w-7xl mx-auto px-6 pb-20">
       <!-- Desktop: split layout, page scroll -->
       <div class="hidden lg:flex gap-12 items-start">
-        <!-- Left: sticky nav -->
-        <nav class="w-72 shrink-0 sticky top-1/2 -translate-y-1/2 self-start">
+        <!-- Left: sticky nav (top-[30vh] keeps it below the title area) -->
+        <nav class="w-72 shrink-0 sticky top-[30vh] self-start">
           <ul class="space-y-1">
             <li v-for="prog in programmes" :key="prog.id">
               <button
