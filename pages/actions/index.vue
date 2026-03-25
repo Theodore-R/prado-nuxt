@@ -5,11 +5,15 @@ import {
   PROGRAMMATION_CATEGORY_COLORS,
   type ProgrammationCategory,
 } from '~/constants/categories'
+import type { DbActionWithPlaces } from '~/lib/api'
 
 type FilterMode = 'activite' | 'actions'
 
-const { client: prismic } = usePrismic()
-const { getPlacesInfo } = useActionPlaces()
+const { complete: completeOnboarding } = useOnboarding()
+
+onMounted(() => {
+  completeOnboarding('catalogVisited')
+})
 
 const search = ref('')
 const categoryFilter = ref<ProgrammationCategory | 'all'>('all')
@@ -21,23 +25,26 @@ const visibleCount = ref(12)
 
 const BATCH_SIZE = 12
 
-
-const { data: prismicActions, status } = await useAsyncData('actions', () =>
-  prismic.getAllByType('action'),
+const { data: dbActions, status } = await useAsyncData('actions', () =>
+  $fetch<DbActionWithPlaces[]>('/api/actions'),
 )
 
 const programmation = computed(() =>
-  (prismicActions.value ?? []).map(doc => ({
-    id: doc.uid,
-    title: doc.data.title as string,
-    category: doc.data.category as ProgrammationCategory,
-    date: (doc.data.date_text as string) ?? '',
-    time: (doc.data.time_text as string) ?? '',
-    summary: (doc.data.summary as string) ?? '',
-    description: doc.data.description?.[0]?.text ?? '',
-    urlDetail: doc.data.url_detail?.url ?? '',
-    urlImage: doc.data.image?.url ?? '',
-    isActivite: doc.data.is_activite ?? false,
+  (dbActions.value ?? []).map(a => ({
+    id: a.id,
+    title: a.title,
+    category: a.category as ProgrammationCategory,
+    date: a.date ?? '',
+    time: a.time ?? '',
+    summary: a.summary ?? '',
+    description: a.description ?? '',
+    urlDetail: a.url_detail ?? '',
+    urlImage: a.url_image ?? '',
+    isActivite: a.is_activite ?? false,
+    placesMax: a.places_max,
+    inscriptionsCount: a.inscriptionsCount,
+    placesRemaining: a.placesRemaining,
+    isFull: a.places_max !== null && a.inscriptionsCount >= a.places_max,
   })),
 )
 
@@ -107,9 +114,6 @@ onMounted(() => {
   observer.observe(sentinelRef.value)
   onUnmounted(() => observer.disconnect())
 })
-
-
-
 </script>
 
 <template>
@@ -220,11 +224,11 @@ onMounted(() => {
         <!-- Cards grid -->
           <div v-if="visibleActions.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <NuxtLink
-              v-for="(a, i) in visibleActions"
+              v-for="a in visibleActions"
               :key="a.id"
               :to="`/actions/${a.id}`"
               class="group block rounded-2xl overflow-hidden bg-prado-surface hover:brightness-105 transition-all duration-300"
-              :class="{ 'opacity-60 hover:opacity-100': getPlacesInfo(a.id).isFull }"
+              :class="{ 'opacity-60 hover:opacity-100': a.isFull }"
             >
               <div class="relative h-48 overflow-hidden bg-prado-surface">
                 <ImageWithFallback :src="a.urlImage" :alt="a.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -245,18 +249,18 @@ onMounted(() => {
                 </div>
 
                 <div
-                  v-if="getPlacesInfo(a.id).placesRemaining !== null"
+                  v-if="a.placesRemaining !== null"
                   class="absolute bottom-3 right-3 px-2.5 py-1 rounded-full text-[10px] font-medium shadow-sm backdrop-blur-sm transition-all"
                   :class="[
-                    getPlacesInfo(a.id).isFull
+                    a.isFull
                       ? 'bg-red-500/90 text-white shadow-lg shadow-red-500/20 ring-1 ring-white/10'
-                      : getPlacesInfo(a.id).placesRemaining! <= 3
+                      : a.placesRemaining <= 3
                         ? 'bg-[#FB6223] text-white animate-pulse'
                         : 'bg-[#93C1AF] text-[#13332B]'
                   ]"
                 >
-                  <span v-if="getPlacesInfo(a.id).isFull">Complet</span>
-                  <span v-else>{{ getPlacesInfo(a.id).placesRemaining }} place{{ getPlacesInfo(a.id).placesRemaining! > 1 ? 's' : '' }}</span>
+                  <span v-if="a.isFull">Complet</span>
+                  <span v-else>{{ a.placesRemaining }} place{{ a.placesRemaining > 1 ? 's' : '' }}</span>
                 </div>
               </div>
 

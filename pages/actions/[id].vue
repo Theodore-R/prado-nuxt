@@ -1,40 +1,43 @@
 <script setup lang="ts">
 import { ArrowLeft, Calendar, Clock, ExternalLink, Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
-import * as prismicH from '@prismicio/client'
 import {
   PROGRAMMATION_CATEGORY_COLORS,
   type ProgrammationCategory,
 } from '~/constants/categories'
+import type { DbActionWithPlaces } from '~/lib/api'
 
 const route = useRoute()
-const { client: prismic } = usePrismic()
 const { user, jeunes, inscriptions, inscrire, desinscrire } = useAuth()
-const { getPlacesInfo } = useActionPlaces()
+const { complete: completeOnboarding } = useOnboarding()
 
 const showInscription = ref(false)
-const uid = route.params.id as string
+const actionId = route.params.id as string
 
-const { data: actionDoc, status } = await useAsyncData(`action-${uid}`, () =>
-  prismic.getByUID('action', uid)
+const { data: actionData, status } = await useAsyncData(`action-${actionId}`, () =>
+  $fetch<DbActionWithPlaces>(`/api/actions/${actionId}`),
 )
 
 const loading = computed(() => status.value === 'pending')
 
 const action = computed(() => {
-  const doc = actionDoc.value
-  if (!doc) return null
+  const a = actionData.value
+  if (!a) return null
   return {
-    id: doc.uid,
-    title: doc.data.title as string,
-    category: doc.data.category as string,
-    date: (doc.data.date_text as string) ?? '',
-    time: (doc.data.time_text as string) ?? '',
-    summary: (doc.data.summary as string) ?? '',
-    description: doc.data.description ?? [{ type: 'paragraph', text: '', spans: [] }],
-    url_detail: doc.data.url_detail?.url ?? '',
-    url_image: doc.data.image?.url ?? '',
-    is_activite: doc.data.is_activite ?? false,
+    id: a.id,
+    title: a.title,
+    category: a.category,
+    date: a.date ?? '',
+    time: a.time ?? '',
+    summary: a.summary ?? '',
+    description: a.description ?? '',
+    url_detail: a.url_detail ?? '',
+    url_image: a.url_image ?? '',
+    is_activite: a.is_activite ?? false,
+    placesMax: a.places_max,
+    inscriptionsCount: a.inscriptionsCount,
+    placesRemaining: a.placesRemaining,
+    isFull: a.places_max !== null && a.inscriptionsCount >= a.places_max,
   }
 })
 
@@ -48,8 +51,6 @@ const actionInscriptions = computed(() =>
   inscriptions.value.filter(i => i.actionId === String(action.value?.id))
 )
 
-const placesInfo = computed(() => action.value ? getPlacesInfo(action.value.id) : null)
-
 async function handleInscrire(jeuneId: string) {
   if (!action.value) return
   const already = inscriptions.value.find(
@@ -61,6 +62,7 @@ async function handleInscrire(jeuneId: string) {
   }
   try {
     await inscrire(String(action.value.id), jeuneId)
+    completeOnboarding('firstInscription')
     toast.success('Inscription confirmee !')
   } catch (err: unknown) {
     toast.error(err instanceof Error ? err.message : 'Erreur lors de l\'inscription')
@@ -102,8 +104,8 @@ async function handleDesinscrire(inscriptionId: string) {
     </div>
 
     <h1 class="text-3xl text-prado-text mb-4" :style="{ fontFamily: 'Poppins' }">{{ action.title }}</h1>
-    <div class="text-prado-text-muted mb-8 leading-relaxed prose prose-sm max-w-none">
-      <PrismicRichText :field="action.description" />
+    <div class="text-prado-text-muted mb-8 leading-relaxed prose prose-sm max-w-none whitespace-pre-line">
+      {{ action.description }}
     </div>
 
     <div class="bg-prado-surface rounded-2xl p-6 border border-prado-border space-y-3 mb-10">
@@ -118,17 +120,17 @@ async function handleDesinscrire(inscriptionId: string) {
       </div>
 
       <!-- Places status -->
-      <div v-if="placesInfo && placesInfo.placesMax !== null" class="pt-3 border-t border-prado-border-light mt-3">
+      <div v-if="action.placesMax !== null" class="pt-3 border-t border-prado-border-light mt-3">
         <div class="flex items-center justify-between text-sm mb-1.5">
-          <span :class="placesInfo.isFull ? 'text-red-400 font-medium' : 'text-prado-text-secondary'">
-            {{ placesInfo.isFull ? 'Complet' : `${placesInfo.placesRemaining} places restantes sur ${placesInfo.placesMax}` }}
+          <span :class="action.isFull ? 'text-red-400 font-medium' : 'text-prado-text-secondary'">
+            {{ action.isFull ? 'Complet' : `${action.placesRemaining} places restantes sur ${action.placesMax}` }}
           </span>
         </div>
         <div class="h-1.5 w-full bg-prado-bg rounded-full overflow-hidden">
           <div
             class="h-full rounded-full transition-all duration-500 ease-out"
-            :class="placesInfo.isFull ? 'bg-red-500' : (placesInfo.placesRemaining! <= 3 ? 'bg-[#FB6223]' : 'bg-[#93C1AF]')"
-            :style="{ width: `${placesInfo.placesMax > 0 ? Math.min(100, (placesInfo.inscriptionsCount / placesInfo.placesMax) * 100) : 0}%` }"
+            :class="action.isFull ? 'bg-red-500' : (action.placesRemaining! <= 3 ? 'bg-[#FB6223]' : 'bg-[#93C1AF]')"
+            :style="{ width: `${action.placesMax > 0 ? Math.min(100, (action.inscriptionsCount / action.placesMax) * 100) : 0}%` }"
           />
         </div>
       </div>
@@ -158,13 +160,13 @@ async function handleDesinscrire(inscriptionId: string) {
         </p>
       </template>
       <template v-else>
-        <div v-if="placesInfo?.isFull" class="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center mb-4">
+        <div v-if="action.isFull" class="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center mb-4">
           Cette action est complete.
         </div>
         <button
           v-if="!showInscription"
           class="px-6 py-2.5 rounded-full bg-[#CF006C] text-white text-sm hover:bg-[#a80057] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          :disabled="placesInfo?.isFull"
+          :disabled="action.isFull"
           @click="showInscription = true"
         >
           Inscrire un jeune
@@ -192,7 +194,7 @@ async function handleDesinscrire(inscriptionId: string) {
               <button
                 v-else
                 class="text-xs px-3 py-1.5 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] disabled:opacity-50 disabled:cursor-not-allowed"
-                :disabled="placesInfo?.isFull"
+                :disabled="action.isFull"
                 @click="handleInscrire(j.id)"
               >
                 Inscrire
