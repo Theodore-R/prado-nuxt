@@ -33,24 +33,50 @@ const youtubeEmbedUrl = computed(() => {
   return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&disablekb=1&modestbranding=1&playlist=${videoId}`
 })
 
-const scrollProgress = ref(0)
+const targetProgress = ref(0)
+const displayProgress = ref(0)
 const showContent = ref(false)
 const mediaFullyExpanded = ref(false)
 const touchStartY = ref(0)
 const isMobile = ref(false)
 const sectionRef = ref<HTMLDivElement | null>(null)
+let rafId: number | null = null
+
+const LERP_FACTOR = 0.1
+
+function lerp(current: number, target: number, factor: number): number {
+  return current + (target - current) * factor
+}
+
+function animate() {
+  const diff = targetProgress.value - displayProgress.value
+  if (Math.abs(diff) > 0.0005) {
+    displayProgress.value = lerp(displayProgress.value, targetProgress.value, LERP_FACTOR)
+    rafId = requestAnimationFrame(animate)
+  } else {
+    displayProgress.value = targetProgress.value
+    rafId = null
+  }
+}
+
+function startAnimation() {
+  if (rafId === null) {
+    rafId = requestAnimationFrame(animate)
+  }
+}
 
 watch(() => props.mediaType, () => {
-  scrollProgress.value = 0
+  targetProgress.value = 0
+  displayProgress.value = 0
   showContent.value = false
   mediaFullyExpanded.value = false
 })
 
-const mediaWidth = computed(() => 300 + scrollProgress.value * (isMobile.value ? 650 : 1250))
-const mediaHeight = computed(() => 400 + scrollProgress.value * (isMobile.value ? 200 : 400))
-const textTranslateX = computed(() => scrollProgress.value * (isMobile.value ? 180 : 150))
-const bgOpacity = computed(() => 1 - scrollProgress.value)
-const overlayOpacity = computed(() => 0.5 - scrollProgress.value * 0.3)
+const mediaWidth = computed(() => 300 + displayProgress.value * (isMobile.value ? 650 : 1250))
+const mediaHeight = computed(() => 400 + displayProgress.value * (isMobile.value ? 200 : 400))
+const textTranslateX = computed(() => displayProgress.value * (isMobile.value ? 180 : 150))
+const bgOpacity = computed(() => 1 - displayProgress.value)
+const overlayOpacity = computed(() => 0.5 - displayProgress.value * 0.3)
 const contentOpacity = computed(() => showContent.value ? 1 : 0)
 
 const firstWord = computed(() => props.title?.split(' ')[0] ?? '')
@@ -63,8 +89,9 @@ function handleWheel(e: WheelEvent) {
   } else if (!mediaFullyExpanded.value) {
     e.preventDefault()
     const scrollDelta = e.deltaY * 0.0009
-    const newProgress = Math.min(Math.max(scrollProgress.value + scrollDelta, 0), 1)
-    scrollProgress.value = newProgress
+    const newProgress = Math.min(Math.max(targetProgress.value + scrollDelta, 0), 1)
+    targetProgress.value = newProgress
+    startAnimation()
 
     if (newProgress >= 1) {
       mediaFullyExpanded.value = true
@@ -92,8 +119,9 @@ function handleTouchMove(e: TouchEvent) {
     e.preventDefault()
     const scrollFactor = deltaY < 0 ? 0.008 : 0.005
     const scrollDelta = deltaY * scrollFactor
-    const newProgress = Math.min(Math.max(scrollProgress.value + scrollDelta, 0), 1)
-    scrollProgress.value = newProgress
+    const newProgress = Math.min(Math.max(targetProgress.value + scrollDelta, 0), 1)
+    targetProgress.value = newProgress
+    startAnimation()
 
     if (newProgress >= 1) {
       mediaFullyExpanded.value = true
@@ -131,6 +159,10 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  if (rafId !== null) {
+    cancelAnimationFrame(rafId)
+    rafId = null
+  }
   window.removeEventListener('wheel', handleWheel)
   window.removeEventListener('scroll', handleScroll)
   window.removeEventListener('touchstart', handleTouchStart)
@@ -167,7 +199,7 @@ onUnmounted(() => {
 
             <!-- Expanding media container -->
             <div
-              class="absolute z-[2] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl hero-media-shadow"
+              class="absolute z-[2] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl hero-media-shadow will-change-[width,height]"
               :style="{
                 width: `${mediaWidth}px`,
                 height: `${mediaHeight}px`,
@@ -225,7 +257,7 @@ onUnmounted(() => {
                 />
                 <div
                   class="absolute inset-0 hero-image-overlay rounded-xl transition-opacity duration-200"
-                  :style="{ opacity: 0.7 - scrollProgress * 0.3 }"
+                  :style="{ opacity: 0.7 - displayProgress * 0.3 }"
                 />
               </div>
 
