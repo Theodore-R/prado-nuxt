@@ -19,6 +19,7 @@ export interface Jeune {
   dateOfBirth: string;
   address: string;
   situation: string;
+  notes: string;
 }
 
 export interface Inscription {
@@ -37,6 +38,7 @@ const toJeune = (row: any): Jeune => ({
   dateOfBirth: row.date_of_birth,
   address: row.address,
   situation: row.situation,
+  notes: row.notes ?? '',
 });
 
 const toInscription = (row: any): Inscription => ({
@@ -86,6 +88,7 @@ export async function updateJeune(client: SupabaseClient, id: string, data: Part
   if (data.dateOfBirth !== undefined) updates.date_of_birth = data.dateOfBirth;
   if (data.address !== undefined) updates.address = data.address;
   if (data.situation !== undefined) updates.situation = data.situation;
+  if (data.notes !== undefined) updates.notes = data.notes;
 
   const { data: row, error } = await client.from('jeunes').update(updates).eq('id', id).select().single();
   if (error) throw new Error(error.message);
@@ -154,6 +157,7 @@ export interface DbAction {
 
 export interface DbActionWithPlaces extends DbAction {
   places_max: number | null;
+  archived_at: string | null;
   inscriptionsCount: number;
   placesRemaining: number | null;
 }

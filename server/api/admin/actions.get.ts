@@ -1,12 +1,19 @@
-import { createClient } from '@supabase/supabase-js'
+import { requireAdmin } from '~/server/utils/admin'
 
-export default defineEventHandler(async () => {
-  const config = useRuntimeConfig()
-  const client = createClient(config.public.supabase.url, config.supabaseServiceRoleKey)
+export default defineEventHandler(async (event) => {
+  const adminClient = await requireAdmin(event)
+  const query = getQuery(event)
+  const showArchived = query.archived === 'true'
+
+  let actionsQuery = adminClient.from('actions').select('*').order('id', { ascending: true })
+
+  if (!showArchived) {
+    actionsQuery = actionsQuery.is('archived_at', null)
+  }
 
   const [actionsRes, inscriptionsRes] = await Promise.all([
-    client.from('actions').select('*').eq('is_published', true).is('archived_at', null).order('id', { ascending: true }),
-    client.from('inscriptions').select('action_id').is('canceled_at', null),
+    actionsQuery,
+    adminClient.from('inscriptions').select('action_id').is('canceled_at', null),
   ])
 
   if (actionsRes.error) throw createError({ statusCode: 500, message: actionsRes.error.message })

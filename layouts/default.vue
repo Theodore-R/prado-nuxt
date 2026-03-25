@@ -202,7 +202,7 @@ async function handleLogout() {
               class="nav-icon-btn"
               title="Mon espace"
             >
-              <User :size="16" />
+              <LayoutDashboard :size="16" />
             </NuxtLink>
           </template>
           <template v-else>

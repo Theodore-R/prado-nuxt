@@ -6,7 +6,7 @@ export default defineEventHandler(async () => {
 
   const { data, error } = await client
     .from('actions')
-    .select('id, title')
+    .select('id, title, date')
     .order('id', { ascending: true })
 
   if (error) throw createError({ statusCode: 500, message: error.message })

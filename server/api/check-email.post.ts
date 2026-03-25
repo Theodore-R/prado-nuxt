@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
   const { data } = await adminClient
     .from('prescripteurs')
     .select('id')
-    .eq('email', email.toLowerCase())
+    .eq('professional_email', email.toLowerCase())
     .limit(1)
     .maybeSingle()
 

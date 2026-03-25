@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeft, Calendar, Clock, ExternalLink, Loader2 } from 'lucide-vue-next'
+import { ArrowLeft, Calendar, Clock, ExternalLink, Loader2, Share2, Link, Mail } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import {
   PROGRAMMATION_CATEGORY_COLORS,
@@ -10,6 +10,9 @@ import type { DbActionWithPlaces } from '~/lib/api'
 const route = useRoute()
 const { user, jeunes, inscriptions, inscrire, desinscrire } = useAuth()
 const { complete: completeOnboarding } = useOnboarding()
+const { checkConflict } = useConflictCheck()
+const { share, copyLink, shareByEmail, shareByWhatsApp, canNativeShare } = useShare()
+const showShareMenu = ref(false)
 
 const showInscription = ref(false)
 const actionId = route.params.id as string
@@ -17,6 +20,16 @@ const actionId = route.params.id as string
 const { data: actionData, status } = await useAsyncData(`action-${actionId}`, () =>
   $fetch<DbActionWithPlaces>(`/api/actions/${actionId}`),
 )
+
+// Actions map for conflict detection
+const { data: actionsMapData } = await useAsyncData('conflict-actions-map-public', () =>
+  $fetch<{ id: number; title: string; date: string | null }[]>('/api/actions/map'),
+)
+const actionsMap = computed(() => {
+  const map = new Map<string, { id: number; title: string; date: string | null }>()
+  for (const a of actionsMapData.value ?? []) map.set(String(a.id), a)
+  return map
+})
 
 const loading = computed(() => status.value === 'pending')
 
@@ -60,6 +73,8 @@ async function handleInscrire(jeuneId: string) {
     toast.error('Ce jeune est deja inscrit')
     return
   }
+  // Conflict check (warning only, does not block)
+  checkConflict(jeuneId, String(action.value.id), action.value.date, actionsMap.value)
   try {
     await inscrire(String(action.value.id), jeuneId)
     completeOnboarding('firstInscription')
@@ -103,7 +118,33 @@ async function handleDesinscrire(inscriptionId: string) {
       <span v-if="!action.is_activite" class="px-3 py-1 rounded-full text-xs bg-prado-tag-bg text-prado-text">Toute l'annee</span>
     </div>
 
-    <h1 class="text-3xl text-prado-text mb-4" :style="{ fontFamily: 'Poppins' }">{{ action.title }}</h1>
+    <div class="flex items-start justify-between gap-4 mb-4">
+      <h1 class="text-3xl text-prado-text" :style="{ fontFamily: 'Poppins' }">{{ action.title }}</h1>
+      <div class="relative flex-shrink-0">
+        <button
+          class="p-2.5 rounded-xl bg-prado-surface border border-prado-border hover:bg-prado-surface-hover transition-colors text-prado-text-muted"
+          title="Partager"
+          @click="canNativeShare ? share(action.title, action.summary || action.title, window.location.href) : (showShareMenu = !showShareMenu)"
+        >
+          <Share2 :size="18" />
+        </button>
+        <div
+          v-if="showShareMenu && !canNativeShare"
+          class="absolute right-0 top-full mt-1.5 w-48 bg-prado-surface border border-prado-border rounded-xl shadow-lg z-20 py-1.5"
+        >
+          <button class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-prado-text hover:bg-prado-surface-hover transition-colors" @click="copyLink(window.location.href); showShareMenu = false">
+            <Link :size="14" class="text-prado-text-faint" /> Copier le lien
+          </button>
+          <button class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-prado-text hover:bg-prado-surface-hover transition-colors" @click="shareByEmail(action.title, window.location.href); showShareMenu = false">
+            <Mail :size="14" class="text-prado-text-faint" /> Envoyer par email
+          </button>
+          <button class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-prado-text hover:bg-prado-surface-hover transition-colors" @click="shareByWhatsApp(action.title, window.location.href); showShareMenu = false">
+            <svg class="w-3.5 h-3.5 text-prado-text-faint" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.025.504 3.932 1.387 5.607L0 24l6.576-1.372A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818c-1.91 0-3.74-.53-5.328-1.527l-.383-.227-3.97.829.843-3.888-.25-.396A9.775 9.775 0 012.182 12c0-5.418 4.4-9.818 9.818-9.818S21.818 6.582 21.818 12 17.418 21.818 12 21.818z"/></svg>
+            WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
     <div class="text-prado-text-muted mb-8 leading-relaxed prose prose-sm max-w-none whitespace-pre-line">
       {{ action.description }}
     </div>

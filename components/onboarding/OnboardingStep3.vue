@@ -7,25 +7,25 @@ const firstName = computed(() => user.value?.name?.split(' ')[0] ?? '')
 
 const cards = [
   {
+    icon: UserPlus,
+    title: 'Ajouter votre premier jeune',
+    desc: 'Créez une fiche pour inscrire un jeune à une action.',
+    to: '/espace/jeunes',
+    color: '#93C1AF',
+  },
+  {
     icon: BookOpen,
     title: 'Parcourir les 89 actions',
     desc: 'Ateliers, formations, stages — découvrez l\'offre complète.',
-    to: '/actions',
+    to: '/espace',
     color: '#CF006C',
   },
   {
     icon: FileText,
     title: 'Consulter les 183 ressources',
     desc: 'Guides pratiques, fiches dispositifs, outils pédagogiques.',
-    to: '/ressources',
+    to: '/espace',
     color: '#FB6223',
-  },
-  {
-    icon: UserPlus,
-    title: 'Ajouter votre premier jeune',
-    desc: 'Créez une fiche pour inscrire un jeune à une action.',
-    to: '/mon-compte',
-    color: '#93C1AF',
   },
 ]
 </script>
@@ -84,7 +84,7 @@ const cards = [
 
     <!-- Go to dashboard -->
     <NuxtLink
-      to="/mon-compte"
+      to="/espace"
       class="block w-full py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] transition-colors text-center font-medium"
     >
       Accéder à mon espace

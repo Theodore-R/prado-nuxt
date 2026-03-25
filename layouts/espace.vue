@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {
-  LayoutDashboard, Users, ClipboardList, Settings, BookOpen, Globe, LogOut, Menu, X,
+  LayoutDashboard, Users, ClipboardList, Settings, BookOpen, FileText, Globe, LogOut, Menu, X,
 } from 'lucide-vue-next'
 import { Toaster } from 'vue-sonner'
 
@@ -13,6 +13,8 @@ const navItems = [
   { to: '/espace', label: 'Tableau de bord', icon: LayoutDashboard, exact: true, badge: null as (() => number) | null },
   { to: '/espace/jeunes', label: 'Mes jeunes', icon: Users, exact: false, badge: () => jeunes.value.length },
   { to: '/espace/inscriptions', label: 'Inscriptions', icon: ClipboardList, exact: false, badge: () => inscriptions.value.length },
+  { to: '/espace/actions', label: 'Actions', icon: BookOpen, exact: false, badge: null },
+  { to: '/espace/ressources', label: 'Ressources', icon: FileText, exact: false, badge: null },
 ]
 
 const secondaryItems = [
@@ -20,7 +22,6 @@ const secondaryItems = [
 ]
 
 const externalItems = [
-  { to: '/actions', label: 'Catalogue actions', icon: BookOpen },
   { to: '/', label: 'Voir le site', icon: Globe },
 ]
 
@@ -150,8 +151,9 @@ async function handleLogout() {
         <div class="flex items-center gap-4">
           <NuxtLink
             to="/"
-            class="text-sm text-prado-text-muted hover:text-prado-text transition-colors"
+            class="flex items-center gap-1.5 text-sm text-prado-text-muted hover:text-prado-text transition-colors"
           >
+            <Globe :size="16" />
             Voir le site
           </NuxtLink>
         </div>

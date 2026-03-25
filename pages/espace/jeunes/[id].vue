@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeft, Pencil, Check, X, Trash2, Loader2, Calendar, Plus } from 'lucide-vue-next'
+import { ArrowLeft, Pencil, Check, X, Trash2, Loader2, Calendar, Plus, StickyNote } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 
 definePageMeta({ layout: 'espace', middleware: 'auth' })
@@ -8,18 +8,19 @@ const route = useRoute()
 const id = route.params.id as string
 const { jeunes, inscriptions, editJeune, desinscrire, inscrire } = useAuth()
 const { confirm } = useConfirm()
+const { checkConflict } = useConflictCheck()
 
 const jeune = computed(() => jeunes.value.find(j => j.id === id))
 
-// Actions map for inscription display + picker
+// Actions map for inscription display + picker + conflict detection
 const { data: actionsData } = await useAsyncData('espace-jeune-actions-map', () =>
-  $fetch<{ id: number; title: string }[]>('/api/actions/map'),
+  $fetch<{ id: number; title: string; date: string | null }[]>('/api/actions/map'),
 )
 
 const actionMap = computed(() => {
-  const map = new Map<string, { id: number; title: string }>()
+  const map = new Map<string, { id: number; title: string; date: string | null }>()
   for (const a of actionsData.value ?? []) {
-    map.set(String(a.id), { id: a.id, title: a.title })
+    map.set(String(a.id), a)
   }
   return map
 })
@@ -106,6 +107,9 @@ const availableActions = computed(() => {
 async function handleInscrire() {
   if (!selectedAction.value) return
   inscribing.value = true
+  // Conflict check (warning only)
+  const selectedActionEntry = actionMap.value.get(selectedAction.value)
+  checkConflict(id, selectedAction.value, selectedActionEntry?.date ?? null, actionMap.value)
   try {
     await inscrire(selectedAction.value, id)
     toast.success('Inscription reussie')
@@ -115,6 +119,29 @@ async function handleInscrire() {
     toast.error(err instanceof Error ? err.message : 'Erreur')
   } finally {
     inscribing.value = false
+  }
+}
+
+// Notes internes
+const editingNotes = ref(false)
+const notesValue = ref('')
+const savingNotes = ref(false)
+
+function startEditNotes() {
+  notesValue.value = jeune.value?.notes ?? ''
+  editingNotes.value = true
+}
+
+async function saveNotes() {
+  savingNotes.value = true
+  try {
+    await editJeune(id, { notes: notesValue.value })
+    toast.success('Notes enregistrees')
+    editingNotes.value = false
+  } catch (err: unknown) {
+    toast.error(err instanceof Error ? err.message : 'Erreur')
+  } finally {
+    savingNotes.value = false
   }
 }
 
@@ -189,6 +216,63 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
             </button>
           </template>
         </div>
+      </div>
+
+      <!-- Notes internes -->
+      <div class="bg-prado-surface rounded-2xl border border-prado-border p-5">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2 text-sm font-semibold text-prado-text">
+            <StickyNote :size="15" class="text-prado-text-faint" />
+            Notes internes
+          </div>
+          <button
+            v-if="!editingNotes"
+            class="p-1.5 rounded-lg hover:bg-prado-surface-hover text-prado-text-faint hover:text-prado-text-muted transition-colors"
+            @click="startEditNotes"
+          >
+            <Pencil :size="14" />
+          </button>
+        </div>
+
+        <template v-if="editingNotes">
+          <textarea
+            v-model="notesValue"
+            rows="4"
+            :class="inputClass"
+            placeholder="Notes privees sur ce jeune (non visibles par le jeune)..."
+          />
+          <div class="flex justify-end gap-2 mt-2">
+            <button
+              class="px-3 py-1.5 rounded-lg text-sm text-prado-text-muted hover:bg-prado-surface-hover transition-colors"
+              @click="editingNotes = false"
+            >
+              Annuler
+            </button>
+            <button
+              :disabled="savingNotes"
+              class="px-3 py-1.5 rounded-lg text-sm bg-[#004657] text-white hover:opacity-90 transition-opacity flex items-center gap-1.5"
+              @click="saveNotes"
+            >
+              <Loader2 v-if="savingNotes" :size="14" class="animate-spin" />
+              Enregistrer
+            </button>
+          </div>
+        </template>
+        <template v-else>
+          <p
+            v-if="jeune.notes"
+            class="text-sm text-prado-text-muted whitespace-pre-line"
+          >
+            {{ jeune.notes }}
+          </p>
+          <p
+            v-else
+            class="text-sm text-prado-text-faint italic cursor-pointer hover:text-prado-text-muted transition-colors"
+            @click="startEditNotes"
+          >
+            Aucune note — cliquez pour en ajouter
+          </p>
+        </template>
       </div>
 
       <!-- Inscriptions -->
