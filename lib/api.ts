@@ -79,6 +79,19 @@ export async function deleteJeune(client: SupabaseClient, id: string): Promise<v
   if (error) throw new Error(error.message);
 }
 
+export async function updateJeune(client: SupabaseClient, id: string, data: Partial<Omit<Jeune, 'id'>>): Promise<Jeune> {
+  const updates: Record<string, unknown> = {};
+  if (data.firstName !== undefined) updates.first_name = data.firstName;
+  if (data.lastName !== undefined) updates.last_name = data.lastName;
+  if (data.dateOfBirth !== undefined) updates.date_of_birth = data.dateOfBirth;
+  if (data.address !== undefined) updates.address = data.address;
+  if (data.situation !== undefined) updates.situation = data.situation;
+
+  const { data: row, error } = await client.from('jeunes').update(updates).eq('id', id).select().single();
+  if (error) throw new Error(error.message);
+  return toJeune(row);
+}
+
 // ─── Inscriptions ───
 
 export async function fetchInscriptions(client: SupabaseClient): Promise<Inscription[]> {
@@ -137,6 +150,12 @@ export interface DbAction {
   url_image: string;
   is_activite: boolean;
   is_published: boolean;
+}
+
+export interface DbActionWithPlaces extends DbAction {
+  places_max: number | null;
+  inscriptionsCount: number;
+  placesRemaining: number | null;
 }
 
 export async function fetchPublicActions(client: SupabaseClient): Promise<DbAction[]> {

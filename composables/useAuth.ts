@@ -1,4 +1,4 @@
-import { fetchPrescripteur, fetchJeunes, fetchInscriptions, createJeune as apiCreateJeune, deleteJeune as apiDeleteJeune, createInscription as apiCreateInscription, cancelInscription as apiCancelInscription } from '~/lib/api';
+import { fetchPrescripteur, fetchJeunes, fetchInscriptions, createJeune as apiCreateJeune, deleteJeune as apiDeleteJeune, updateJeune as apiUpdateJeune, createInscription as apiCreateInscription, cancelInscription as apiCancelInscription } from '~/lib/api';
 import type { Jeune, Inscription, Prescripteur } from '~/lib/api';
 
 interface User {
@@ -134,6 +134,27 @@ export function useAuth() {
     inscriptions.value = inscriptions.value.filter(i => i.jeuneId !== id);
   };
 
+  const editJeune = async (id: string, data: Partial<Omit<Jeune, 'id'>>) => {
+    const updated = await apiUpdateJeune(client, id, data);
+    jeunes.value = jeunes.value.map(j => j.id === id ? updated : j);
+  };
+
+  const updateProfile = async (data: { name: string; structure: string; fonction?: string; phone?: string }) => {
+    if (!supabaseUser.value) return { error: 'Non authentifié' };
+
+    try {
+      await $fetch('/api/update-profile', {
+        method: 'POST',
+        body: data,
+      });
+    } catch (err: any) {
+      return { error: err.data?.message ?? 'Erreur lors de la mise à jour' };
+    }
+
+    await loadProfile(supabaseUser.value.id, supabaseUser.value.email ?? '');
+    return {};
+  };
+
   const inscrire = async (actionId: string, jeuneId: string) => {
     if (!supabaseUser.value) return;
     const created = await apiCreateInscription(client, supabaseUser.value.id, actionId, jeuneId);
@@ -148,6 +169,6 @@ export function useAuth() {
   return {
     user, isAdmin, loading, jeunes, jeunesLoading, inscriptions,
     login, logout, register, sendMagicLink, completeProfile, resetPassword, updatePassword,
-    addJeune, removeJeune, inscrire, desinscrire, refreshData,
+    addJeune, removeJeune, editJeune, inscrire, desinscrire, updateProfile, refreshData,
   };
 }
