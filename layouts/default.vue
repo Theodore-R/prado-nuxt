@@ -11,6 +11,7 @@ const route = useRoute()
 
 const menuOpen = ref(false)
 const programmesOpen = ref(false)
+const isHomepage = computed(() => route.path === '/')
 
 const mainLinks = [
   { to: '/actions', label: 'Actions' },
@@ -63,7 +64,14 @@ async function handleLogout() {
     <Toaster position="top-right" rich-colors />
 
     <!-- Header -->
-    <header class="sticky top-0 z-50 bg-prado-header-bg backdrop-blur-md border-b border-prado-border">
+    <header
+      :class="[
+        'sticky top-0 z-50 backdrop-blur-md transition-colors duration-300',
+        isHomepage
+          ? 'bg-transparent border-b border-transparent'
+          : 'bg-prado-header-bg border-b border-prado-border',
+      ]"
+    >
       <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16 relative">
         <!-- Logo -->
         <NuxtLink to="/" class="flex items-center gap-2.5 shrink-0">
@@ -190,7 +198,7 @@ async function handleLogout() {
               <LayoutDashboard :size="16" />
             </NuxtLink>
             <NuxtLink
-              to="/mon-compte"
+              to="/espace"
               class="nav-icon-btn"
               title="Mon espace"
             >
@@ -287,7 +295,7 @@ async function handleLogout() {
           <div class="border-t border-prado-border mt-3 pt-3">
             <template v-if="user">
               <NuxtLink
-                to="/mon-compte"
+                to="/espace"
                 class="flex items-center gap-2 px-3 py-2.5 text-prado-text text-sm"
                 @click="closeMenu"
               >

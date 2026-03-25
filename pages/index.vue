@@ -11,8 +11,8 @@ function findSlice(type: string) {
 
 <template>
   <div>
-    <!-- Section 1 — Hero -->
-    <div id="hero">
+    <!-- Section 1 — Hero (remonte derrière la navbar) -->
+    <div id="hero" class="-mt-16">
       <UiScrollExpandHero
         media-type="image"
         :media-src="HERO_IMAGE"

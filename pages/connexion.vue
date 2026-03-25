@@ -4,6 +4,7 @@ import { toast } from 'vue-sonner'
 
 const route = useRoute()
 const { login, register, resetPassword, user, loading } = useAuth()
+const { complete: completeOnboarding } = useOnboarding()
 
 // Steps: 'email' | 'password' | 'register-email' | 'magic-link-sent' | 'register-password' | 'profile' | 'welcome'
 const step = ref<string>(
@@ -29,7 +30,7 @@ watch(user, (u) => {
     if (!u.name || u.name === '') {
       step.value = 'profile'
     } else if (step.value === 'password') {
-      navigateTo('/mon-compte')
+      navigateTo('/espace')
     }
   }
 }, { immediate: true })
@@ -74,7 +75,7 @@ async function handleLogin() {
     return
   }
   toast.success('Connexion réussie !')
-  navigateTo('/mon-compte')
+  navigateTo('/espace')
 }
 
 async function handleRegisterWithPassword() {
@@ -93,6 +94,7 @@ async function handleRegisterWithPassword() {
     toast.error(result.error)
     return
   }
+  completeOnboarding('accountCreated')
   toast.success('Compte créé ! Vérifiez votre email pour confirmer.')
   step.value = 'magic-link-sent'
   magicLinkEmail.value = registerForm.value.email
