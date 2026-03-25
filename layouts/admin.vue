@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {
-  LayoutDashboard, Users, ClipboardList, LogOut, Menu, X,
+  LayoutDashboard, Users, ClipboardList, UserCheck, Mail, Newspaper, Settings, LogOut, Menu, X,
 } from 'lucide-vue-next'
 import { Toaster } from 'vue-sonner'
 
@@ -9,11 +9,22 @@ const route = useRoute()
 
 const sidebarOpen = ref(false)
 
+const { counts } = useAdminCounts()
+
 const navItems = [
-  { to: '/admin', label: 'Tableau de bord', icon: LayoutDashboard, exact: true },
-  { to: '/admin/prescripteurs', label: 'Prescripteurs', icon: Users, exact: false },
-  { to: '/admin/inscriptions', label: 'Inscriptions', icon: ClipboardList, exact: false },
+  { to: '/admin', label: 'Tableau de bord', icon: LayoutDashboard, exact: true, badgeKey: null },
+  { to: '/admin/prescripteurs', label: 'Prescripteurs', icon: Users, exact: false, badgeKey: 'pendingPrescripteurs' as const },
+  { to: '/admin/inscriptions', label: 'Inscriptions', icon: ClipboardList, exact: false, badgeKey: null },
+  { to: '/admin/jeunes', label: 'Jeunes', icon: UserCheck, exact: false, badgeKey: null },
+  { to: '/admin/contacts', label: 'Contacts', icon: Mail, exact: false, badgeKey: 'unreadContacts' as const },
+  { to: '/admin/newsletter', label: 'Newsletter', icon: Newspaper, exact: false, badgeKey: null },
+  { to: '/admin/actions', label: 'Actions', icon: Settings, exact: false, badgeKey: null },
 ]
+
+const badgeColors: Record<string, string> = {
+  pendingPrescripteurs: 'bg-[#FB6223]',
+  unreadContacts: 'bg-[#CF006C]',
+}
 
 function isNavActive(to: string, exact: boolean) {
   if (exact) return route.path === to
@@ -66,7 +77,13 @@ async function handleLogout() {
           @click="sidebarOpen = false"
         >
           <component :is="item.icon" :size="18" />
-          <span>{{ item.label }}</span>
+          <span class="flex-1">{{ item.label }}</span>
+          <span
+            v-if="item.badgeKey && counts[item.badgeKey] > 0"
+            :class="['ml-auto min-w-[20px] h-5 flex items-center justify-center rounded-full text-[10px] font-bold text-white px-1.5', badgeColors[item.badgeKey]]"
+          >
+            {{ counts[item.badgeKey] }}
+          </span>
         </NuxtLink>
       </nav>
 
@@ -113,6 +130,8 @@ async function handleLogout() {
       <main class="flex-1 p-6 overflow-auto">
         <slot />
       </main>
+
+      <AdminConfirmDialog />
     </div>
   </div>
 </template>

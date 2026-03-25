@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { Users, UserCheck, ClipboardList, Clock, Loader2, Eye } from 'lucide-vue-next'
+import {
+  Users, UserCheck, ClipboardList, Clock, Mail, Newspaper,
+  Loader2, CircleDot,
+} from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
-import { fetchDashboardStats } from '~/lib/adminApi'
 
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 
@@ -10,10 +12,19 @@ interface DashboardStats {
   jeunesCount: number
   inscriptionsCount: number
   pendingCount: number
+  unreadContactsCount: number
+  newsletterCount: number
 }
 
-const client = useSupabaseClient()
+interface ActivityItem {
+  type: 'inscription' | 'prescripteur' | 'contact' | 'newsletter'
+  label: string
+  detail: string
+  date: string
+}
+
 const stats = ref<DashboardStats | null>(null)
+const activity = ref<ActivityItem[]>([])
 const loading = ref(true)
 
 const statCards = [
@@ -21,17 +32,41 @@ const statCards = [
   { key: 'jeunesCount' as const, label: 'Jeunes', icon: UserCheck, color: '#FB6223' },
   { key: 'inscriptionsCount' as const, label: 'Inscriptions', icon: ClipboardList, color: '#93C1AF' },
   { key: 'pendingCount' as const, label: 'En attente', icon: Clock, color: '#C18ED8' },
+  { key: 'unreadContactsCount' as const, label: 'Contacts non lus', icon: Mail, color: '#FB6223' },
+  { key: 'newsletterCount' as const, label: 'Abonnes newsletter', icon: Newspaper, color: '#93C1AF' },
 ]
+
+const activityColors: Record<string, string> = {
+  inscription: '#93C1AF',
+  prescripteur: '#C18ED8',
+  contact: '#FB6223',
+  newsletter: '#004657',
+}
 
 onMounted(async () => {
   try {
-    stats.value = await fetchDashboardStats(client)
+    const [statsData, activityData] = await Promise.all([
+      $fetch<DashboardStats>('/api/admin/stats'),
+      $fetch<ActivityItem[]>('/api/admin/activity'),
+    ])
+    stats.value = statsData
+    activity.value = activityData
   } catch (err: unknown) {
     toast.error(err instanceof Error ? err.message : 'Erreur de chargement')
   } finally {
     loading.value = false
   }
 })
+
+function formatRelativeDate(dateStr: string) {
+  const diff = Date.now() - new Date(dateStr).getTime()
+  const minutes = Math.floor(diff / 60000)
+  if (minutes < 60) return `il y a ${minutes}min`
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) return `il y a ${hours}h`
+  const days = Math.floor(hours / 24)
+  return `il y a ${days}j`
+}
 </script>
 
 <template>
@@ -43,7 +78,7 @@ onMounted(async () => {
     <h1 class="text-xl font-semibold text-prado-text italic">Tableau de bord</h1>
 
     <!-- Stat cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <div
         v-for="{ key, label, icon: Icon, color } in statCards"
         :key="key"
@@ -64,15 +99,30 @@ onMounted(async () => {
       </div>
     </div>
 
-    <!-- Quick actions -->
-    <div class="flex flex-wrap gap-3">
-      <NuxtLink
-        to="/admin/prescripteurs"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#C18ED8] text-white text-sm hover:opacity-90 transition-opacity"
-      >
-        <Eye :size="16" />
-        Voir les comptes en attente
-      </NuxtLink>
+    <!-- Recent activity -->
+    <div class="bg-prado-surface rounded-2xl border border-prado-border p-6">
+      <h2 class="text-sm font-semibold text-prado-text mb-4">Activite recente</h2>
+      <div v-if="activity.length === 0" class="text-sm text-prado-text-muted py-4 text-center">
+        Aucune activite recente
+      </div>
+      <div v-else class="space-y-3">
+        <div
+          v-for="(item, idx) in activity"
+          :key="idx"
+          class="flex items-start gap-3"
+        >
+          <CircleDot :size="16" class="mt-0.5 flex-shrink-0" :style="{ color: activityColors[item.type] }" />
+          <div class="flex-1 min-w-0">
+            <p class="text-sm text-prado-text">
+              <span class="font-medium">{{ item.label }}</span>
+              <span class="text-prado-text-muted"> — {{ item.detail }}</span>
+            </p>
+          </div>
+          <span class="text-xs text-prado-text-faint flex-shrink-0">
+            {{ formatRelativeDate(item.date) }}
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </template>

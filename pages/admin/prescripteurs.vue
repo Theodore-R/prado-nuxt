@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import { Loader2, Download, CheckCircle, XCircle } from 'lucide-vue-next'
+import { Download, CheckCircle, XCircle } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
-import {
-  fetchAllPrescripteurs,
-  updatePrescripteurStatus,
-  type AdminPrescripteur,
-} from '~/lib/adminApi'
+import type { AdminPrescripteur } from '~/lib/adminApi'
 import { exportToCsv } from '~/utils/csvExport'
+import type { AdminTableColumn } from '~/components/admin/AdminTable.vue'
 
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 
 type FilterTab = 'all' | 'pending' | 'approved' | 'rejected'
 
-const client = useSupabaseClient()
 const prescripteurs = ref<AdminPrescripteur[]>([])
 const loading = ref(true)
 const filter = ref<FilterTab>('all')
@@ -30,6 +26,15 @@ const statusConfig: Record<string, { label: string; className: string }> = {
   rejected: { label: 'Rejete', className: 'bg-red-500/20 text-red-400' },
 }
 
+const columns: AdminTableColumn[] = [
+  { key: 'name', label: 'Nom', sortable: true },
+  { key: 'professional_email', label: 'Email', sortable: true, hiddenBelow: 'md' },
+  { key: 'structure', label: 'Structure', sortable: true, hiddenBelow: 'lg' },
+  { key: 'status', label: 'Statut', sortable: true },
+  { key: 'role', label: 'Role', sortable: true, hiddenBelow: 'lg' },
+  { key: 'created_at', label: 'Date', sortable: true, hiddenBelow: 'xl' },
+]
+
 const filtered = computed(() =>
   filter.value === 'all'
     ? prescripteurs.value
@@ -37,22 +42,23 @@ const filtered = computed(() =>
 )
 
 onMounted(async () => {
-  await loadData()
-})
-
-async function loadData() {
   try {
-    prescripteurs.value = await fetchAllPrescripteurs(client)
+    prescripteurs.value = await $fetch<AdminPrescripteur[]>('/api/admin/prescripteurs')
   } catch (err: unknown) {
     toast.error(err instanceof Error ? err.message : 'Erreur de chargement')
   } finally {
     loading.value = false
   }
-}
+})
+
+const { confirm } = useConfirm()
 
 async function handleStatusChange(id: string, status: 'approved' | 'rejected') {
+  const msg = status === 'approved' ? 'Approuver ce prescripteur ?' : 'Rejeter ce prescripteur ?'
+  const ok = await confirm(msg, { variant: status === 'rejected' ? 'danger' : 'default' })
+  if (!ok) return
   try {
-    await updatePrescripteurStatus(client, id, status)
+    await $fetch('/api/admin/prescripteurs', { method: 'PATCH', body: { id, status } })
     prescripteurs.value = prescripteurs.value.map(p =>
       p.id === id ? { ...p, status } : p
     )
@@ -78,11 +84,7 @@ function handleExport() {
 </script>
 
 <template>
-  <div v-if="loading" class="flex items-center justify-center py-32">
-    <Loader2 class="animate-spin text-prado-text-muted" :size="32" />
-  </div>
-
-  <div v-else class="max-w-6xl mx-auto space-y-6">
+  <div class="max-w-6xl mx-auto space-y-6">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       <h1 class="text-xl font-semibold text-prado-text italic">Prescripteurs</h1>
       <button
@@ -111,68 +113,51 @@ function handleExport() {
       </button>
     </div>
 
-    <!-- Table -->
-    <div class="bg-prado-surface rounded-2xl border border-prado-border overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="border-b border-prado-border">
-              <th class="text-left px-4 py-3 text-prado-text-secondary font-medium">Nom</th>
-              <th class="text-left px-4 py-3 text-prado-text-secondary font-medium hidden md:table-cell">Email</th>
-              <th class="text-left px-4 py-3 text-prado-text-secondary font-medium hidden lg:table-cell">Structure</th>
-              <th class="text-left px-4 py-3 text-prado-text-secondary font-medium">Statut</th>
-              <th class="text-left px-4 py-3 text-prado-text-secondary font-medium hidden lg:table-cell">Role</th>
-              <th class="text-left px-4 py-3 text-prado-text-secondary font-medium hidden xl:table-cell">Date</th>
-              <th class="text-right px-4 py-3 text-prado-text-secondary font-medium">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="p in filtered"
-              :key="p.id"
-              class="border-b border-prado-border last:border-0 hover:bg-prado-surface-hover"
-            >
-              <td class="px-4 py-3 text-prado-text">{{ p.name }}</td>
-              <td class="px-4 py-3 text-prado-text-secondary hidden md:table-cell">{{ p.professional_email }}</td>
-              <td class="px-4 py-3 text-prado-text-secondary hidden lg:table-cell">{{ p.structure }}</td>
-              <td class="px-4 py-3">
-                <span :class="['inline-block px-2.5 py-0.5 rounded-full text-xs', (statusConfig[p.status] ?? statusConfig.pending).className]">
-                  {{ (statusConfig[p.status] ?? statusConfig.pending).label }}
-                </span>
-              </td>
-              <td class="px-4 py-3 text-prado-text-secondary hidden lg:table-cell">{{ p.role }}</td>
-              <td class="px-4 py-3 text-prado-text-muted hidden xl:table-cell">
-                {{ new Date(p.created_at).toLocaleDateString('fr-FR') }}
-              </td>
-              <td class="px-4 py-3">
-                <div class="flex items-center justify-end gap-2">
-                  <button
-                    v-if="p.status !== 'approved'"
-                    class="p-1.5 rounded-lg text-[#93C1AF] hover:bg-[#93C1AF]/10 transition-colors"
-                    title="Approuver"
-                    @click="handleStatusChange(p.id, 'approved')"
-                  >
-                    <CheckCircle :size="16" />
-                  </button>
-                  <button
-                    v-if="p.status !== 'rejected'"
-                    class="p-1.5 rounded-lg text-red-400 hover:bg-red-400/10 transition-colors"
-                    title="Rejeter"
-                    @click="handleStatusChange(p.id, 'rejected')"
-                  >
-                    <XCircle :size="16" />
-                  </button>
-                </div>
-              </td>
-            </tr>
-            <tr v-if="filtered.length === 0">
-              <td colspan="7" class="px-4 py-8 text-center text-prado-text-muted">
-                Aucun prescripteur trouve
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <AdminTable
+      :columns="columns"
+      :rows="filtered"
+      :loading="loading"
+      search-placeholder="Rechercher un prescripteur..."
+      empty-message="Aucun prescripteur trouve"
+    >
+      <template #cell-name="{ value }">
+        <span class="text-prado-text">{{ value }}</span>
+      </template>
+      <template #cell-professional_email="{ value }">
+        <span class="text-prado-text-secondary">{{ value }}</span>
+      </template>
+      <template #cell-structure="{ value }">
+        <span class="text-prado-text-secondary">{{ value }}</span>
+      </template>
+      <template #cell-status="{ value }">
+        <span :class="['inline-block px-2.5 py-0.5 rounded-full text-xs', (statusConfig[value] ?? statusConfig.pending).className]">
+          {{ (statusConfig[value] ?? statusConfig.pending).label }}
+        </span>
+      </template>
+      <template #cell-role="{ value }">
+        <span class="text-prado-text-secondary">{{ value }}</span>
+      </template>
+      <template #cell-created_at="{ value }">
+        <span class="text-prado-text-muted">{{ new Date(value).toLocaleDateString('fr-FR') }}</span>
+      </template>
+      <template #actions="{ row }">
+        <button
+          v-if="row.status !== 'approved'"
+          class="p-1.5 rounded-lg text-[#93C1AF] hover:bg-[#93C1AF]/10 transition-colors"
+          title="Approuver"
+          @click="handleStatusChange(row.id, 'approved')"
+        >
+          <CheckCircle :size="16" />
+        </button>
+        <button
+          v-if="row.status !== 'rejected'"
+          class="p-1.5 rounded-lg text-red-400 hover:bg-red-400/10 transition-colors"
+          title="Rejeter"
+          @click="handleStatusChange(row.id, 'rejected')"
+        >
+          <XCircle :size="16" />
+        </button>
+      </template>
+    </AdminTable>
   </div>
 </template>
