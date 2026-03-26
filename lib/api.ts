@@ -18,6 +18,8 @@ export interface Jeune {
   lastName: string;
   dateOfBirth: string;
   address: string;
+  postalCode: string;
+  city: string;
   situation: string;
   notes: string;
   identityVerified: boolean;
@@ -38,6 +40,8 @@ const toJeune = (row: any): Jeune => ({
   lastName: row.last_name,
   dateOfBirth: row.date_of_birth,
   address: row.address,
+  postalCode: row.postal_code ?? '',
+  city: row.city ?? '',
   situation: row.situation,
   notes: row.notes ?? '',
   identityVerified: row.identity_verified ?? false,
@@ -72,7 +76,7 @@ export async function fetchJeunes(client: SupabaseClient): Promise<Jeune[]> {
 export async function createJeune(client: SupabaseClient, prescripteurId: string, jeune: Omit<Jeune, 'id'>): Promise<Jeune> {
   const { data, error } = await client.from('jeunes').insert({
     prescripteur_id: prescripteurId, first_name: jeune.firstName, last_name: jeune.lastName,
-    date_of_birth: jeune.dateOfBirth, address: jeune.address, situation: jeune.situation,
+    date_of_birth: jeune.dateOfBirth, address: jeune.address, postal_code: jeune.postalCode ?? '', city: jeune.city ?? '', situation: jeune.situation,
   }).select().single();
   if (error) throw new Error(error.message);
   return toJeune(data);
@@ -89,6 +93,8 @@ export async function updateJeune(client: SupabaseClient, id: string, data: Part
   if (data.lastName !== undefined) updates.last_name = data.lastName;
   if (data.dateOfBirth !== undefined) updates.date_of_birth = data.dateOfBirth;
   if (data.address !== undefined) updates.address = data.address;
+  if (data.postalCode !== undefined) updates.postal_code = data.postalCode;
+  if (data.city !== undefined) updates.city = data.city;
   if (data.situation !== undefined) updates.situation = data.situation;
   if (data.notes !== undefined) updates.notes = data.notes;
 

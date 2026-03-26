@@ -18,7 +18,7 @@ const isRestricted = computed(() =>
 const showAdd = ref(route.query.add === '1')
 const submitting = ref(false)
 const newJeune = ref({
-  firstName: '', lastName: '', dateOfBirth: '', address: '', situation: '',
+  firstName: '', lastName: '', dateOfBirth: '', address: '', postalCode: '', city: '', situation: '',
 })
 
 const columns: AdminTableColumn[] = [
@@ -44,7 +44,7 @@ async function handleAdd() {
   try {
     await addJeune(newJeune.value)
     complete('firstJeuneAdded')
-    newJeune.value = { firstName: '', lastName: '', dateOfBirth: '', address: '', situation: '' }
+    newJeune.value = { firstName: '', lastName: '', dateOfBirth: '', address: '', postalCode: '', city: '', situation: '' }
     showAdd.value = false
     toast.success('Fiche jeune creee')
   } catch (err: unknown) {
@@ -68,12 +68,14 @@ async function handleRemove(id: string, name: string) {
 function handleExport() {
   exportToCsv(
     'jeunes.csv',
-    ['Nom', 'Date de naissance', 'Situation', 'Adresse'],
+    ['Nom', 'Date de naissance', 'Adresse', 'Code postal', 'Ville', 'Situation'],
     jeunes.value.map(j => [
       `${j.firstName} ${j.lastName}`,
       new Date(j.dateOfBirth).toLocaleDateString('fr-FR'),
-      j.situation,
       j.address,
+      j.postalCode,
+      j.city,
+      j.situation,
     ]),
   )
 }
@@ -81,7 +83,6 @@ function handleExport() {
 const addFormFields = [
   { label: 'Prenom', key: 'firstName', type: 'text' },
   { label: 'Nom', key: 'lastName', type: 'text' },
-  { label: 'Adresse', key: 'address', type: 'text' },
 ]
 
 const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-border-medium'
@@ -119,6 +120,13 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
       <div class="sm:col-span-2">
         <label class="text-xs text-prado-text-muted mb-1 block">Date de naissance</label>
         <UiDateOfBirthPicker v-model="newJeune.dateOfBirth" />
+      </div>
+      <div class="sm:col-span-2">
+        <UiAddressAutocomplete
+          v-model:address="newJeune.address"
+          v-model:postal-code="newJeune.postalCode"
+          v-model:city="newJeune.city"
+        />
       </div>
       <div class="sm:col-span-2">
         <label class="text-xs text-prado-text-muted mb-1 block">Situation globale</label>

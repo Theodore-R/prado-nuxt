@@ -52,6 +52,8 @@ const fields = computed(() => {
     { key: 'lastName', label: 'Nom', value: jeune.value.lastName },
     { key: 'dateOfBirth', label: 'Date de naissance', value: jeune.value.dateOfBirth, display: new Date(jeune.value.dateOfBirth).toLocaleDateString('fr-FR'), type: 'dateOfBirth' },
     { key: 'address', label: 'Adresse', value: jeune.value.address },
+    { key: 'postalCode', label: 'Code postal', value: jeune.value.postalCode },
+    { key: 'city', label: 'Ville', value: jeune.value.city },
     { key: 'situation', label: 'Situation', value: jeune.value.situation },
   ]
 })
