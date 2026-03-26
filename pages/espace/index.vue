@@ -73,7 +73,7 @@ function formatDate(dateStr: string) {
     </div>
 
     <!-- Onboarding checklist -->
-    <OnboardingChecklist />
+    <OnboardingNextStep />
 
     <!-- Stat cards -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">

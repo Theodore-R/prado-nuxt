@@ -155,6 +155,10 @@ async function handleLogout() {
       </main>
 
       <AdminConfirmDialog />
+
+      <!-- Onboarding widget + panel -->
+      <OnboardingWidget />
+      <OnboardingPanel />
     </div>
   </div>
 </template>

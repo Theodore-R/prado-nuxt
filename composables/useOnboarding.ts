@@ -13,6 +13,15 @@ interface OnboardingState {
   firstInscription: boolean
 }
 
+export interface OnboardingStepConfig {
+  key: keyof OnboardingState
+  label: string
+  description: string
+  link: string | null
+  duration: string | null
+  done: boolean
+}
+
 const defaultState: OnboardingState = {
   accountCreated: false,
   profileCompleted: false,
@@ -24,6 +33,7 @@ const defaultState: OnboardingState = {
 export function useOnboarding() {
   const state = useState<OnboardingState>('onboarding', () => ({ ...defaultState }))
   const dismissed = useState<boolean>('onboarding-dismissed', () => false)
+  const panelOpen = useState<boolean>('onboarding-panel', () => false)
 
   function loadFromStorage() {
     if (import.meta.server) return
@@ -33,6 +43,8 @@ export function useOnboarding() {
         const parsed = JSON.parse(raw) as Partial<OnboardingState>
         state.value = { ...defaultState, ...parsed }
       }
+      const dismissedRaw = localStorage.getItem(`${STORAGE_KEY}-dismissed`)
+      if (dismissedRaw === 'true') dismissed.value = true
     } catch { /* ignore */ }
   }
 
@@ -45,16 +57,24 @@ export function useOnboarding() {
     if (state.value[step]) return
     state.value = { ...state.value, [step]: true }
     saveToStorage()
+    return true // returns true if step was newly completed
   }
 
   function dismiss() {
     dismissed.value = true
+    if (!import.meta.server) localStorage.setItem(`${STORAGE_KEY}-dismissed`, 'true')
   }
+
+  function openPanel() { panelOpen.value = true }
+  function closePanel() { panelOpen.value = false }
 
   function reset() {
     state.value = { ...defaultState }
     dismissed.value = false
-    if (!import.meta.server) localStorage.removeItem(STORAGE_KEY)
+    if (!import.meta.server) {
+      localStorage.removeItem(STORAGE_KEY)
+      localStorage.removeItem(`${STORAGE_KEY}-dismissed`)
+    }
   }
 
   const completedCount = computed(() =>
@@ -69,26 +89,67 @@ export function useOnboarding() {
 
   const isComplete = computed(() => completedCount.value === totalSteps.value)
 
-  const showChecklist = computed(() => !isComplete.value && !dismissed.value)
+  const showWidget = computed(() => !isComplete.value && !dismissed.value)
 
-  const steps = computed(() => [
-    { key: 'accountCreated' as const, label: 'Créer votre compte', done: state.value.accountCreated },
-    { key: 'profileCompleted' as const, label: 'Compléter votre profil', done: state.value.profileCompleted },
-    { key: 'catalogVisited' as const, label: 'Parcourir le catalogue d\'actions', done: state.value.catalogVisited },
-    { key: 'firstJeuneAdded' as const, label: 'Ajouter un premier jeune', done: state.value.firstJeuneAdded },
-    { key: 'firstInscription' as const, label: 'Inscrire un jeune à une action', done: state.value.firstInscription },
+  const steps = computed<OnboardingStepConfig[]>(() => [
+    {
+      key: 'accountCreated',
+      label: 'Créer votre compte',
+      description: 'Votre compte a été créé avec succès.',
+      link: null,
+      duration: null,
+      done: state.value.accountCreated,
+    },
+    {
+      key: 'profileCompleted',
+      label: 'Compléter votre profil',
+      description: 'Renseignez votre fonction et votre structure.',
+      link: '/espace/parametres',
+      duration: '~1 min',
+      done: state.value.profileCompleted,
+    },
+    {
+      key: 'catalogVisited',
+      label: 'Parcourir le catalogue',
+      description: 'Découvrez les actions disponibles pour vos jeunes.',
+      link: '/espace/actions',
+      duration: '~2 min',
+      done: state.value.catalogVisited,
+    },
+    {
+      key: 'firstJeuneAdded',
+      label: 'Ajouter un jeune',
+      description: 'Créez une fiche pour votre premier jeune.',
+      link: '/espace/jeunes?add=1',
+      duration: '~1 min',
+      done: state.value.firstJeuneAdded,
+    },
+    {
+      key: 'firstInscription',
+      label: 'Inscrire un jeune',
+      description: 'Inscrivez un jeune à sa première action.',
+      link: '/espace/actions',
+      duration: '~1 min',
+      done: state.value.firstInscription,
+    },
   ])
+
+  const nextStep = computed(() => steps.value.find(s => !s.done) ?? null)
 
   return {
     state,
     steps,
+    nextStep,
     completedCount,
     totalSteps,
     progress,
     isComplete,
-    showChecklist,
+    showWidget,
+    panelOpen,
     complete,
     dismiss,
+    openPanel,
+    closePanel,
     reset,
     loadFromStorage,
   }
