@@ -10,7 +10,6 @@ export interface Prescripteur {
   phone: string | null;
   role: 'prescripteur' | 'admin';
   status: 'pending' | 'approved' | 'rejected';
-  identityVerified: boolean;
 }
 
 export interface Jeune {
@@ -21,6 +20,7 @@ export interface Jeune {
   address: string;
   situation: string;
   notes: string;
+  identityVerified: boolean;
 }
 
 export interface Inscription {
@@ -40,6 +40,7 @@ const toJeune = (row: any): Jeune => ({
   address: row.address,
   situation: row.situation,
   notes: row.notes ?? '',
+  identityVerified: row.identity_verified ?? false,
 });
 
 const toInscription = (row: any): Inscription => ({
@@ -57,7 +58,6 @@ export async function fetchPrescripteur(client: SupabaseClient, userId: string):
   return {
     id: data.id, name: data.name, professionalEmail: data.professional_email,
     structure: data.structure, phone: data.phone, role: data.role, status: data.status,
-    identityVerified: data.identity_verified ?? false,
   };
 }
 

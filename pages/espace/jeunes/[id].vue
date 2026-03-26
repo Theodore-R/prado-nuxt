@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeft, Pencil, Check, X, Trash2, Loader2, Calendar, Plus, StickyNote } from 'lucide-vue-next'
+import { ArrowLeft, Pencil, Check, X, Trash2, Loader2, Calendar, Plus, StickyNote, ShieldCheck, ShieldOff } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 
 definePageMeta({ layout: 'espace', middleware: 'auth' })
@@ -9,6 +9,7 @@ const id = route.params.id as string
 const { jeunes, inscriptions, editJeune, desinscrire, inscrire } = useAuth()
 const { confirm } = useConfirm()
 const { checkConflict } = useConflictCheck()
+const { startVerification, verifying, status: veriffStatus, error: veriffError, reset: resetVeriff } = useVeriff()
 
 const jeune = computed(() => jeunes.value.find(j => j.id === id))
 
@@ -145,6 +146,25 @@ async function saveNotes() {
   }
 }
 
+async function handleVerifyIdentity() {
+  if (!jeune.value) return
+  resetVeriff()
+  await startVerification(jeune.value.id, jeune.value.firstName, jeune.value.lastName)
+}
+
+watch(veriffStatus, (val) => {
+  if (val === 'submitted') {
+    toast.success('Vérification soumise ! Le résultat sera mis à jour automatiquement.')
+  }
+  if (val === 'canceled') {
+    toast.info('Vérification annulée.')
+  }
+})
+
+watch(veriffError, (val) => {
+  if (val) toast.error(val)
+})
+
 const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-border-medium'
 </script>
 
@@ -166,9 +186,66 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
     </div>
 
     <template v-else>
-      <h1 class="text-xl font-semibold text-prado-text italic">
-        {{ jeune.firstName }} {{ jeune.lastName }}
-      </h1>
+      <div class="flex items-center justify-between">
+        <h1 class="text-xl font-semibold text-prado-text italic">
+          {{ jeune.firstName }} {{ jeune.lastName }}
+        </h1>
+        <span
+          v-if="jeune.identityVerified"
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-[#93C1AF]/20 text-[#93C1AF]"
+        >
+          <ShieldCheck :size="13" />
+          Identité vérifiée
+        </span>
+        <span
+          v-else
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-prado-tag-bg text-prado-text-muted"
+        >
+          <ShieldOff :size="13" />
+          Non vérifiée
+        </span>
+      </div>
+
+      <!-- Identity verification -->
+      <div
+        v-if="!jeune.identityVerified && veriffStatus !== 'submitted'"
+        class="bg-[#004657]/10 rounded-2xl p-5 border border-[#004657]/20"
+      >
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-[#004657]/15 flex items-center justify-center shrink-0">
+            <ShieldCheck :size="20" class="text-[#004657]" />
+          </div>
+          <div class="flex-1">
+            <p class="text-prado-text font-medium mb-1">Vérifier l'identité de {{ jeune.firstName }}</p>
+            <p class="text-sm text-prado-text-secondary mb-3">
+              En présence du jeune, lancez la vérification d'identité avec une pièce d'identité valide.
+            </p>
+            <button
+              :disabled="verifying"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#004657] text-white text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+              @click="handleVerifyIdentity"
+            >
+              <Loader2 v-if="verifying" :size="14" class="animate-spin" />
+              <ShieldCheck v-else :size="14" />
+              {{ verifying ? 'Lancement...' : 'Vérifier l\'identité' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verification in progress -->
+      <div
+        v-else-if="veriffStatus === 'submitted'"
+        class="bg-[#93C1AF]/10 rounded-2xl p-5 border border-[#93C1AF]/20"
+      >
+        <div class="flex items-center gap-3">
+          <ShieldCheck :size="20" class="text-[#93C1AF]" />
+          <div>
+            <p class="text-[#93C1AF] font-medium">Vérification en cours</p>
+            <p class="text-sm text-prado-text-secondary">L'identité est en cours de vérification par Veriff.</p>
+          </div>
+        </div>
+      </div>
 
       <!-- Info fields with inline edit -->
       <div class="bg-prado-surface rounded-2xl border border-prado-border divide-y divide-prado-border">

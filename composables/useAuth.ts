@@ -8,7 +8,6 @@ interface User {
   structure: string;
   role: 'prescripteur' | 'admin';
   status: 'pending' | 'approved' | 'rejected';
-  identityVerified: boolean;
 }
 
 export function useAuth() {
@@ -26,7 +25,7 @@ export function useAuth() {
   const loadProfile = async (userId: string, email: string) => {
     const profile = await fetchPrescripteur(client, userId);
     if (profile) {
-      user.value = { id: userId, email, name: profile.name, structure: profile.structure, role: profile.role, status: profile.status, identityVerified: profile.identityVerified };
+      user.value = { id: userId, email, name: profile.name, structure: profile.structure, role: profile.role, status: profile.status };
     }
   };
 

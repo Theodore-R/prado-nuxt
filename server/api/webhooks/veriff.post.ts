@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
 
   // Only process decision webhooks (codes 9001, 9102, 9103, 9104)
   const code = verification.code
-  const vendorData = verification.vendorData // This is the user ID
+  const vendorData = verification.vendorData // This is the jeune ID
   const sessionId = verification.id
 
   if (!vendorData || !sessionId) {
@@ -56,7 +56,7 @@ export default defineEventHandler(async (event) => {
   // Code 9001 = approved
   if (code === 9001) {
     await adminClient
-      .from('prescripteurs')
+      .from('jeunes')
       .update({ identity_verified: true })
       .eq('id', vendorData)
       .eq('veriff_session_id', sessionId)

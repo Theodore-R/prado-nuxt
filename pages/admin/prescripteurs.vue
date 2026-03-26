@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Download, CheckCircle, XCircle, ShieldCheck, ShieldOff } from 'lucide-vue-next'
+import { Download, CheckCircle, XCircle } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import type { AdminPrescripteur } from '~/lib/adminApi'
 import { exportToCsv } from '~/utils/csvExport'
@@ -30,7 +30,6 @@ const columns: AdminTableColumn[] = [
   { key: 'name', label: 'Nom', sortable: true },
   { key: 'professional_email', label: 'Email', sortable: true, hiddenBelow: 'md' },
   { key: 'structure', label: 'Structure', sortable: true, hiddenBelow: 'lg' },
-  { key: 'identity_verified', label: 'Identite', sortable: true, hiddenBelow: 'md' },
   { key: 'status', label: 'Statut', sortable: true },
   { key: 'role', label: 'Role', sortable: true, hiddenBelow: 'lg' },
   { key: 'created_at', label: 'Date', sortable: true, hiddenBelow: 'xl' },
@@ -70,12 +69,11 @@ async function handleStatusChange(id: string, status: 'approved' | 'rejected') {
 }
 
 function handleExport() {
-  const headers = ['Nom', 'Email', 'Structure', 'Identite', 'Statut', 'Role', 'Date']
+  const headers = ['Nom', 'Email', 'Structure', 'Statut', 'Role', 'Date']
   const rows = filtered.value.map(p => [
     p.name,
     p.professional_email,
     p.structure,
-    (p as any).identity_verified ? 'Verifiee' : 'Non',
     p.status,
     p.role,
     new Date(p.created_at).toLocaleDateString('fr-FR'),
@@ -130,24 +128,6 @@ function handleExport() {
       </template>
       <template #cell-structure="{ value }">
         <span class="text-prado-text-secondary">{{ value }}</span>
-      </template>
-      <template #cell-identity_verified="{ value }">
-        <span
-          v-if="value"
-          class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-[#93C1AF]/20 text-[#93C1AF]"
-          title="Identite verifiee"
-        >
-          <ShieldCheck :size="12" />
-          Verifiee
-        </span>
-        <span
-          v-else
-          class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-prado-tag-bg text-prado-text-muted"
-          title="Non verifiee"
-        >
-          <ShieldOff :size="12" />
-          Non
-        </span>
       </template>
       <template #cell-status="{ value }">
         <span :class="['inline-block px-2.5 py-0.5 rounded-full text-xs', (statusConfig[value] ?? statusConfig.pending).className]">

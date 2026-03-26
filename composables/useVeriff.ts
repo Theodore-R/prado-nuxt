@@ -3,16 +3,16 @@ export function useVeriff() {
   const error = ref<string | null>(null)
   const status = ref<'idle' | 'started' | 'submitted' | 'finished' | 'canceled'>('idle')
 
-  const startVerification = async (firstName?: string, lastName?: string) => {
+  const startVerification = async (jeuneId: string, firstName?: string, lastName?: string) => {
     verifying.value = true
     error.value = null
     status.value = 'idle'
 
     try {
-      // Create session server-side
+      // Create session server-side, linked to the jeune
       const session = await $fetch('/api/veriff/session', {
         method: 'POST',
-        body: { firstName, lastName },
+        body: { jeuneId, firstName, lastName },
       })
 
       // Dynamically import Veriff InContext SDK (client-side only)
@@ -45,10 +45,17 @@ export function useVeriff() {
     }
   }
 
+  const reset = () => {
+    verifying.value = false
+    error.value = null
+    status.value = 'idle'
+  }
+
   return {
     verifying,
     error,
     status,
     startVerification,
+    reset,
   }
 }

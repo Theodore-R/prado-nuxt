@@ -18,7 +18,6 @@ export async function fetchDashboardStats(client: SupabaseClient) {
 export interface AdminPrescripteur {
   id: string; name: string; professional_email: string; structure: string;
   phone: string | null; role: string; status: string; created_at: string;
-  identity_verified: boolean;
 }
 
 export async function fetchAllPrescripteurs(client: SupabaseClient): Promise<AdminPrescripteur[]> {
