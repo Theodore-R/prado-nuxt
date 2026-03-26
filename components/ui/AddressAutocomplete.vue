@@ -98,7 +98,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
         <!-- Suggestions dropdown -->
         <div
           v-if="showSuggestions"
-          class="absolute z-20 left-0 right-0 top-full mt-1 bg-prado-surface border border-prado-border rounded-xl shadow-lg overflow-hidden"
+          class="absolute z-20 left-0 right-0 top-full mt-1 bg-prado-bg border border-prado-border rounded-xl shadow-lg overflow-hidden"
         >
           <button
             v-for="(s, i) in suggestions"

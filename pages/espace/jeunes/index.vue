@@ -15,7 +15,14 @@ const isRestricted = computed(() =>
   user.value?.status === 'pending' || user.value?.status === 'rejected',
 )
 
-const showAdd = ref(route.query.add === '1')
+const hasJeunes = computed(() => jeunes.value.length > 0)
+const showAdd = ref(route.query.add === '1' || !hasJeunes.value)
+
+// Keep form open when there are no jeunes
+watch(hasJeunes, (has) => {
+  if (!has) showAdd.value = true
+})
+
 const submitting = ref(false)
 const newJeune = ref({
   firstName: '', lastName: '', dateOfBirth: '', address: '', postalCode: '', city: '', situation: '',
@@ -80,6 +87,10 @@ function handleExport() {
   )
 }
 
+function rowLink(row: Record<string, any>) {
+  return `/espace/jeunes/${row.id}`
+}
+
 const addFormFields = [
   { label: 'Prenom', key: 'firstName', type: 'text' },
   { label: 'Nom', key: 'lastName', type: 'text' },
@@ -93,12 +104,19 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
     <div class="flex items-center justify-between">
       <h1 class="text-xl font-semibold text-prado-text italic">Mes jeunes</h1>
       <button
+        v-if="hasJeunes"
         :disabled="isRestricted"
         class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#004657] text-white text-sm hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
         @click="showAdd = !showAdd"
       >
         <UserPlus :size="14" /> Ajouter
       </button>
+    </div>
+
+    <!-- Empty state message when no jeunes -->
+    <div v-if="!hasJeunes && !jeunesLoading" class="text-center py-4">
+      <p class="text-prado-text-secondary mb-1">Vous n'avez pas encore de jeune enregistré.</p>
+      <p class="text-sm text-prado-text-muted">Commencez par créer une fiche ci-dessous.</p>
     </div>
 
     <!-- Add jeune form -->
@@ -147,6 +165,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
           Enregistrer
         </button>
         <button
+          v-if="hasJeunes"
           type="button"
           class="px-5 py-2 rounded-full bg-prado-tag-bg text-prado-text-muted text-sm"
           @click="showAdd = false"
@@ -156,11 +175,13 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
       </div>
     </form>
 
-    <!-- Table -->
+    <!-- Table (only shown when there are jeunes) -->
     <AdminTable
+      v-if="hasJeunes"
       :columns="columns"
       :rows="rows"
       :loading="jeunesLoading"
+      :row-link="rowLink"
       search-placeholder="Rechercher un jeune..."
       empty-message="Aucun jeune enregistre"
     >
@@ -185,7 +206,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
         <button
           class="p-1.5 rounded-lg hover:bg-red-500/10 text-prado-text-muted hover:text-red-400 transition-colors"
           title="Supprimer"
-          @click="handleRemove(row.id, row.name)"
+          @click.stop="handleRemove(row.id, row.name)"
         >
           <Trash2 :size="15" />
         </button>

@@ -16,13 +16,17 @@ const props = withDefaults(defineProps<{
   searchPlaceholder?: string
   emptyMessage?: string
   pageSize?: number
+  rowLink?: (row: Record<string, any>) => string
 }>(), {
   loading: false,
   searchable: true,
   searchPlaceholder: 'Rechercher...',
   emptyMessage: 'Aucun resultat',
   pageSize: 25,
+  rowLink: undefined,
 })
+
+const router = useRouter()
 
 defineSlots<{
   [key: `cell-${string}`]: (props: { row: Record<string, any>; value: any }) => any
@@ -155,7 +159,11 @@ function toggleSort(key: string) {
               <tr
                 v-for="(row, idx) in paginated"
                 :key="idx"
-                class="border-b border-prado-border last:border-0 hover:bg-prado-surface-hover"
+                :class="[
+                  'border-b border-prado-border last:border-0 hover:bg-prado-surface-hover transition-colors',
+                  rowLink ? 'cursor-pointer' : '',
+                ]"
+                @click="rowLink && router.push(rowLink(row))"
               >
                 <td
                   v-for="col in columns"
