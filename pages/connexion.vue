@@ -1,6 +1,18 @@
 <script setup lang="ts">
 import { Loader2, Lock, Mail, ArrowLeft, ArrowRight } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
+import { STRUCTURES_PARTENAIRES } from '~/constants/structures'
+
+const FONCTIONS = [
+  'Éducateur·rice spécialisé·e',
+  'Référent·e ASE',
+  'Référent·e PJJ',
+  'Conseiller·e en insertion',
+  'Chef·fe de service',
+  'Travailleur·se social·e',
+  'Coordinateur·rice',
+  'Autre',
+]
 
 const route = useRoute()
 const { login, register, resetPassword, user, loading } = useAuth()
@@ -21,7 +33,7 @@ const checking = ref(false)
 
 const loginForm = ref({ email: '', password: '' })
 const registerForm = ref({
-  email: '', password: '', confirmPassword: '', name: '', structure: '', fonction: '', phone: '',
+  email: '', password: '', confirmPassword: '', firstName: '', lastName: '', structure: '', structureLibre: '', fonction: '', phone: '',
 })
 
 // Redirect if already logged in (with profile)
@@ -87,8 +99,20 @@ async function handleRegisterWithPassword() {
     toast.error('Le mot de passe doit contenir au moins 6 caractères')
     return
   }
+  const structure = registerForm.value.structure === '__autre' ? registerForm.value.structureLibre : registerForm.value.structure
+  if (!structure) {
+    toast.error('Veuillez sélectionner une structure')
+    return
+  }
   submitting.value = true
-  const result = await register(registerForm.value)
+  const result = await register({
+    email: registerForm.value.email,
+    password: registerForm.value.password,
+    name: `${registerForm.value.firstName} ${registerForm.value.lastName}`,
+    structure,
+    fonction: registerForm.value.fonction,
+    phone: registerForm.value.phone,
+  })
   submitting.value = false
   if (result.error) {
     toast.error(result.error)
@@ -308,9 +332,15 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
         <OnboardingProgress :current="1" :total="3" />
 
         <form class="space-y-4" @submit.prevent="handleRegisterWithPassword">
-          <div>
-            <label class="text-sm text-prado-text-secondary mb-1.5 block">Nom complet *</label>
-            <input v-model="registerForm.name" type="text" required :class="inputClass.replace('pl-10', 'pl-4')" />
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-sm text-prado-text-secondary mb-1.5 block">Prénom *</label>
+              <input v-model="registerForm.firstName" type="text" autocomplete="given-name" required :class="inputClass.replace('pl-10', 'pl-4')" />
+            </div>
+            <div>
+              <label class="text-sm text-prado-text-secondary mb-1.5 block">Nom *</label>
+              <input v-model="registerForm.lastName" type="text" autocomplete="family-name" required :class="inputClass.replace('pl-10', 'pl-4')" />
+            </div>
           </div>
           <div>
             <label class="text-sm text-prado-text-secondary mb-1.5 block">Email professionnel *</label>
@@ -318,7 +348,27 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
           </div>
           <div>
             <label class="text-sm text-prado-text-secondary mb-1.5 block">Structure *</label>
-            <input v-model="registerForm.structure" type="text" required :class="inputClass.replace('pl-10', 'pl-4')" />
+            <select v-model="registerForm.structure" required :class="inputClass.replace('pl-10', 'pl-4')">
+              <option value="" disabled>Sélectionner votre structure</option>
+              <option v-for="s in STRUCTURES_PARTENAIRES" :key="s" :value="s">{{ s }}</option>
+              <option value="__autre">Autre (saisie libre)</option>
+            </select>
+            <input
+              v-if="registerForm.structure === '__autre'"
+              v-model="registerForm.structureLibre"
+              type="text"
+              required
+              placeholder="Nom de votre structure..."
+              :class="inputClass.replace('pl-10', 'pl-4')"
+              class="mt-2"
+            />
+          </div>
+          <div>
+            <label class="text-sm text-prado-text-secondary mb-1.5 block">Fonction</label>
+            <select v-model="registerForm.fonction" :class="inputClass.replace('pl-10', 'pl-4')">
+              <option value="">Sélectionner votre fonction</option>
+              <option v-for="f in FONCTIONS" :key="f" :value="f">{{ f }}</option>
+            </select>
           </div>
           <div>
             <label class="text-sm text-prado-text-secondary mb-1.5 block">Mot de passe *</label>
