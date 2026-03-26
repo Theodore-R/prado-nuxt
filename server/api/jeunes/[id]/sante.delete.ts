@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
 import { serverSupabaseUser } from '#supabase/server'
-import { getHdsClient, logAuditSante } from '~/server/utils/hds-client'
 
 export default defineEventHandler(async (event) => {
   const user = await serverSupabaseUser(event)
@@ -9,10 +8,10 @@ export default defineEventHandler(async (event) => {
   const jeuneId = getRouterParam(event, 'id')
   if (!jeuneId) throw createError({ statusCode: 400, message: 'id requis' })
 
-  // Verify ownership
   const config = useRuntimeConfig()
   const supabase = createClient(config.public.supabase.url, config.supabaseServiceRoleKey)
 
+  // Verify ownership
   const { data: jeune } = await supabase
     .from('jeunes')
     .select('prescripteur_id')
@@ -31,19 +30,12 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 403, message: 'Accès refusé' })
   }
 
-  // Delete from HDS database
-  const hds = getHdsClient()
-  await hds.query('DELETE FROM jeune_sante WHERE jeune_id = $1', [jeuneId])
+  const { error } = await supabase
+    .from('jeune_sante')
+    .delete()
+    .eq('jeune_id', jeuneId)
 
-  // Audit log
-  await logAuditSante(
-    jeuneId,
-    'delete',
-    user.id,
-    { reason: 'user_request' },
-    getHeader(event, 'x-forwarded-for') ?? getHeader(event, 'x-real-ip'),
-    getHeader(event, 'user-agent'),
-  )
+  if (error) throw createError({ statusCode: 500, message: error.message })
 
   return { success: true }
 })

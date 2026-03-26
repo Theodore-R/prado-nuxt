@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
 import { serverSupabaseUser } from '#supabase/server'
-import { getHdsClient, logAuditSante } from '~/server/utils/hds-client'
 import { toJeuneSante } from '~/lib/types/sante'
 
 export default defineEventHandler(async (event) => {
@@ -10,10 +9,10 @@ export default defineEventHandler(async (event) => {
   const jeuneId = getRouterParam(event, 'id')
   if (!jeuneId) throw createError({ statusCode: 400, message: 'id requis' })
 
-  // Verify ownership: jeune belongs to this prescripteur (or user is admin)
   const config = useRuntimeConfig()
   const supabase = createClient(config.public.supabase.url, config.supabaseServiceRoleKey)
 
+  // Verify ownership
   const { data: jeune } = await supabase
     .from('jeunes')
     .select('prescripteur_id')
@@ -32,24 +31,15 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 403, message: 'Accès refusé' })
   }
 
-  // Fetch from HDS database
-  const hds = getHdsClient()
-  const { rows } = await hds.query(
-    'SELECT * FROM jeune_sante WHERE jeune_id = $1',
-    [jeuneId],
-  )
+  // Fetch from Supabase
+  const { data, error } = await supabase
+    .from('jeune_sante')
+    .select('*')
+    .eq('jeune_id', jeuneId)
+    .maybeSingle()
 
-  // Audit log
-  await logAuditSante(
-    jeuneId,
-    'read',
-    user.id,
-    undefined,
-    getHeader(event, 'x-forwarded-for') ?? getHeader(event, 'x-real-ip'),
-    getHeader(event, 'user-agent'),
-  )
+  if (error) throw createError({ statusCode: 500, message: error.message })
+  if (!data) return null
 
-  if (rows.length === 0) return null
-
-  return toJeuneSante(rows[0])
+  return toJeuneSante(data)
 })
