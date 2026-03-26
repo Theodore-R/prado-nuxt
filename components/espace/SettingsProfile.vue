@@ -1,6 +1,18 @@
 <script setup lang="ts">
 import { Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
+import { STRUCTURES_PARTENAIRES } from '~/constants/structures'
+
+const FONCTIONS = [
+  'Éducateur·rice spécialisé·e',
+  'Référent·e ASE',
+  'Référent·e PJJ',
+  'Conseiller·e en insertion',
+  'Chef·fe de service',
+  'Travailleur·se social·e',
+  'Coordinateur·rice',
+  'Autre',
+]
 
 const { user, updateProfile } = useAuth()
 const supabaseUser = useSupabaseUser()
@@ -11,24 +23,33 @@ const form = ref({
   fonction: '',
   phone: '',
 })
+const structureLibre = ref('')
 const saving = ref(false)
 
 watch(user, (u) => {
   if (u) {
     form.value.name = u.name ?? ''
-    form.value.structure = u.structure ?? ''
     form.value.phone = supabaseUser.value?.user_metadata?.phone ?? ''
     form.value.fonction = supabaseUser.value?.user_metadata?.fonction ?? ''
+    // Si la structure n'est pas dans la liste, c'est une saisie libre
+    const struct = u.structure ?? ''
+    if (STRUCTURES_PARTENAIRES.includes(struct)) {
+      form.value.structure = struct
+    } else if (struct) {
+      form.value.structure = '__autre'
+      structureLibre.value = struct
+    }
   }
 }, { immediate: true })
 
 async function handleSave() {
-  if (!form.value.name || !form.value.structure) {
+  const structure = form.value.structure === '__autre' ? structureLibre.value : form.value.structure
+  if (!form.value.name || !structure) {
     toast.error('Nom et structure sont requis')
     return
   }
   saving.value = true
-  const result = await updateProfile(form.value)
+  const result = await updateProfile({ ...form.value, structure })
   saving.value = false
   if (result.error) {
     toast.error(result.error)
@@ -54,11 +75,27 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
       </div>
       <div>
         <label class="text-xs text-prado-text-muted mb-1.5 block">Structure *</label>
-        <input v-model="form.structure" type="text" required :class="inputClass" />
+        <select v-model="form.structure" required :class="inputClass">
+          <option value="" disabled>Sélectionner votre structure</option>
+          <option v-for="s in STRUCTURES_PARTENAIRES" :key="s" :value="s">{{ s }}</option>
+          <option value="__autre">Autre (saisie libre)</option>
+        </select>
+        <input
+          v-if="form.structure === '__autre'"
+          v-model="structureLibre"
+          type="text"
+          required
+          placeholder="Nom de votre structure..."
+          :class="inputClass"
+          class="mt-2"
+        />
       </div>
       <div>
         <label class="text-xs text-prado-text-muted mb-1.5 block">Fonction</label>
-        <input v-model="form.fonction" type="text" :class="inputClass" />
+        <select v-model="form.fonction" :class="inputClass">
+          <option value="">Sélectionner votre fonction</option>
+          <option v-for="f in FONCTIONS" :key="f" :value="f">{{ f }}</option>
+        </select>
       </div>
       <div>
         <label class="text-xs text-prado-text-muted mb-1.5 block">Telephone</label>
