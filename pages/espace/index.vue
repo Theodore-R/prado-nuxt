@@ -4,11 +4,27 @@ import { Users, ClipboardList, CalendarDays, UserPlus, BookOpen, Loader2, Calend
 definePageMeta({ layout: 'espace', middleware: 'auth' })
 
 const { user, jeunes, inscriptions, loading } = useAuth()
-const { loadFromStorage, complete } = useOnboarding()
+const { loadFromStorage, syncWithData } = useOnboarding()
 
 onMounted(() => {
   loadFromStorage()
-  complete('accountCreated')
+  // Sync onboarding state with actual data
+  syncWithData({
+    hasUser: !!user.value,
+    hasProfile: !!(user.value?.name),
+    jeunesCount: jeunes.value.length,
+    inscriptionsCount: inscriptions.value.length,
+  })
+})
+
+// Re-sync when data changes (e.g. jeune added, inscription created)
+watch([jeunes, inscriptions], () => {
+  syncWithData({
+    hasUser: !!user.value,
+    hasProfile: !!(user.value?.name),
+    jeunesCount: jeunes.value.length,
+    inscriptionsCount: inscriptions.value.length,
+  })
 })
 
 const isPending = computed(() => user.value?.status === 'pending')

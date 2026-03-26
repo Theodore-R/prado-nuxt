@@ -68,6 +68,16 @@ export function useOnboarding() {
   function openPanel() { panelOpen.value = true }
   function closePanel() { panelOpen.value = false }
 
+  /** Sync onboarding state with actual data (user, jeunes, inscriptions) */
+  function syncWithData(opts: { hasUser: boolean, hasProfile: boolean, jeunesCount: number, inscriptionsCount: number }) {
+    let changed = false
+    if (opts.hasUser && !state.value.accountCreated) { state.value = { ...state.value, accountCreated: true }; changed = true }
+    if (opts.hasProfile && !state.value.profileCompleted) { state.value = { ...state.value, profileCompleted: true }; changed = true }
+    if (opts.jeunesCount > 0 && !state.value.firstJeuneAdded) { state.value = { ...state.value, firstJeuneAdded: true }; changed = true }
+    if (opts.inscriptionsCount > 0 && !state.value.firstInscription) { state.value = { ...state.value, firstInscription: true }; changed = true }
+    if (changed) saveToStorage()
+  }
+
   function reset() {
     state.value = { ...defaultState }
     dismissed.value = false
@@ -152,5 +162,6 @@ export function useOnboarding() {
     closePanel,
     reset,
     loadFromStorage,
+    syncWithData,
   }
 }
