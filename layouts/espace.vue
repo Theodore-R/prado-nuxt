@@ -6,7 +6,28 @@ import { Toaster } from 'vue-sonner'
 
 const { user, logout, jeunes, inscriptions } = useAuth()
 const { theme, toggleTheme } = useTheme()
+const { loadFromStorage, syncWithData } = useOnboarding()
 const route = useRoute()
+
+// Load and sync onboarding on every espace page
+onMounted(() => {
+  loadFromStorage()
+  syncWithData({
+    hasUser: !!user.value,
+    hasProfile: !!(user.value?.name),
+    jeunesCount: jeunes.value.length,
+    inscriptionsCount: inscriptions.value.length,
+  })
+})
+
+watch([user, jeunes, inscriptions], () => {
+  syncWithData({
+    hasUser: !!user.value,
+    hasProfile: !!(user.value?.name),
+    jeunesCount: jeunes.value.length,
+    inscriptionsCount: inscriptions.value.length,
+  })
+})
 
 const sidebarOpen = ref(false)
 
