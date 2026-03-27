@@ -52,7 +52,8 @@ const strokeDashoffset = computed(() =>
     <Transition name="slide">
       <div
         v-if="panelOpen"
-        class="fixed top-0 right-0 bottom-0 z-[61] w-full max-w-md bg-prado-bg border-l border-prado-border overflow-y-auto flex flex-col"
+        class="fixed top-0 right-0 bottom-0 z-[61] w-full max-w-md border-l border-prado-border overflow-y-auto flex flex-col"
+        style="background-color: var(--prado-surface);"
       >
         <!-- Header -->
         <div class="p-6 border-b border-prado-border">
