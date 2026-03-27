@@ -106,23 +106,12 @@ async function handleLogout() {
       <div class="p-3 border-t border-prado-border space-y-1">
         <!-- Theme toggle -->
         <button
-          class="flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-sm text-prado-text-muted hover:text-prado-text hover:bg-prado-surface-hover transition-colors"
+          class="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm text-prado-text-muted hover:text-prado-text hover:bg-prado-surface-hover transition-colors"
           @click="toggleTheme"
         >
-          <div class="flex items-center gap-3">
-            <Sun v-if="theme === 'dark'" :size="18" />
-            <Moon v-else :size="18" />
-            <span>{{ theme === 'dark' ? 'Mode clair' : 'Mode sombre' }}</span>
-          </div>
-          <div
-            class="relative w-9 h-5 rounded-full transition-colors"
-            :class="theme === 'dark' ? 'bg-[#004657]' : 'bg-prado-border'"
-          >
-            <div
-              class="absolute top-0.5 w-4 h-4 rounded-full bg-white transition-transform"
-              :class="theme === 'dark' ? 'translate-x-4' : 'translate-x-0.5'"
-            />
-          </div>
+          <Sun v-if="theme === 'dark'" :size="18" />
+          <Moon v-else :size="18" />
+          <span>{{ theme === 'dark' ? 'Mode clair' : 'Mode sombre' }}</span>
         </button>
 
         <!-- Parametres -->
