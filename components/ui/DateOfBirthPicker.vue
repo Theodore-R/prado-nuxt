@@ -7,11 +7,9 @@ const emit = defineEmits<{
   'update:modelValue': [value: string]
 }>()
 
-// Max date = today minus 18 years
+// Max date = today (mineurs acceptés)
 const maxDate = computed(() => {
-  const d = new Date()
-  d.setFullYear(d.getFullYear() - 18)
-  return d.toISOString().split('T')[0]
+  return new Date().toISOString().split('T')[0]
 })
 
 const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-border-medium'
