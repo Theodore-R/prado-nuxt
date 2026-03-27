@@ -55,6 +55,9 @@
   --prado-header-bg: rgba(26, 26, 46, 0.95);
   --prado-input-bg: rgba(255, 255, 255, 0.05);
   --prado-tag-bg: rgba(255, 255, 255, 0.08);
+  --prado-signature: #FFD228;
+  --prado-signature-muted: rgba(255, 210, 40, 0.15);
+  --prado-signature-text: #1a1a2e;
   --prado-gradient-start: #CF006C;
   --prado-gradient-end: #FB6223;
 
@@ -102,6 +105,9 @@
   --prado-header-bg: rgba(245, 245, 247, 0.95);
   --prado-input-bg: rgba(0, 0, 0, 0.04);
   --prado-tag-bg: rgba(0, 0, 0, 0.06);
+  --prado-signature: #FFD228;
+  --prado-signature-muted: rgba(255, 210, 40, 0.12);
+  --prado-signature-text: #1a1a2e;
   --prado-gradient-start: #CF006C;
   --prado-gradient-end: #FB6223;
 
@@ -169,6 +175,9 @@
   --color-prado-header-bg: var(--prado-header-bg);
   --color-prado-input-bg: var(--prado-input-bg);
   --color-prado-tag-bg: var(--prado-tag-bg);
+  --color-prado-signature: var(--prado-signature);
+  --color-prado-signature-muted: var(--prado-signature-muted);
+  --color-prado-signature-text: var(--prado-signature-text);
 }
 
 @layer base {
