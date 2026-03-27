@@ -90,7 +90,7 @@ function handleBlur() {
 
     <!-- Suggestions dropdown -->
     <div v-if="showSuggestions && filteredSuggestions.length > 0" class="relative">
-      <div class="absolute z-20 left-0 right-0 top-0 mt-1 bg-prado-bg border border-prado-border rounded-xl shadow-lg overflow-hidden max-h-48 overflow-y-auto">
+      <div class="absolute z-20 left-0 right-0 top-0 mt-1 bg-prado-surface border border-prado-border rounded-xl shadow-lg overflow-hidden max-h-48 overflow-y-auto">
         <button
           v-for="s in filteredSuggestions"
           :key="s"

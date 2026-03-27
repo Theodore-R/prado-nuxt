@@ -124,7 +124,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
 
     <!-- Suggestions dropdown -->
     <div v-if="showSuggestions && suggestions.length > 0" class="relative">
-      <div class="absolute z-20 left-0 right-0 top-0 mt-0.5 bg-prado-bg border border-prado-border rounded-xl shadow-lg overflow-hidden max-h-64 overflow-y-auto">
+      <div class="absolute z-20 left-0 right-0 top-0 mt-0.5 bg-prado-surface border border-prado-border rounded-xl shadow-lg overflow-hidden max-h-64 overflow-y-auto">
         <button
           v-for="(m, i) in suggestions"
           :key="i"
