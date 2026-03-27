@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Users, ClipboardList, CalendarDays, UserPlus, BookOpen, Loader2, Calendar } from 'lucide-vue-next'
+import { Users, ClipboardList, CalendarDays, Loader2, Calendar, ShieldCheck, UserPlus, FileText, ArrowRight } from 'lucide-vue-next'
 
 definePageMeta({ layout: 'espace', middleware: 'auth' })
 
@@ -43,6 +43,66 @@ const latestInscriptions = computed(() => {
       date: insc.date,
     }
   })
+})
+
+// Contextual action cards
+const actionCards = computed(() => {
+  const cards: { icon: typeof ShieldCheck; color: string; bgColor: string; title: string; description: string; link: string }[] = []
+
+  // No jeunes yet → suggest adding one
+  if (jeunes.value.length === 0) {
+    cards.push({
+      icon: UserPlus,
+      color: '#004657',
+      bgColor: '#004657',
+      title: 'Créer votre première fiche jeune',
+      description: 'Commencez par enregistrer un jeune pour accéder à toutes les fonctionnalités.',
+      link: '/espace/jeunes?add=1',
+    })
+  }
+
+  // Jeunes without identity verification
+  for (const j of jeunes.value.filter(j => !j.identityVerified)) {
+    cards.push({
+      icon: ShieldCheck,
+      color: '#004657',
+      bgColor: '#004657',
+      title: `Vérifier l'identité de ${j.firstName}`,
+      description: 'En présence du jeune, lancez la vérification avec une pièce d\'identité valide.',
+      link: `/espace/jeunes/${j.id}`,
+    })
+  }
+
+  // Jeunes without inscriptions → suggest enrolling
+  const jeuneIds = new Set(inscriptions.value.map(i => i.jeuneId))
+  for (const j of jeunes.value.filter(j => !jeuneIds.has(j.id))) {
+    cards.push({
+      icon: ClipboardList,
+      color: '#93C1AF',
+      bgColor: '#93C1AF',
+      title: `Inscrire ${j.firstName} à une action`,
+      description: 'Ce jeune n\'est inscrit à aucune action. Parcourez le catalogue pour l\'inscrire.',
+      link: `/espace/jeunes/${j.id}`,
+    })
+  }
+
+  // Jeunes with incomplete health records
+  // (show max 2 of this type to avoid flooding)
+  let healthCount = 0
+  for (const j of jeunes.value) {
+    if (healthCount >= 2) break
+    cards.push({
+      icon: FileText,
+      color: '#FB6223',
+      bgColor: '#FB6223',
+      title: `Compléter la fiche santé de ${j.firstName}`,
+      description: 'Renseignez les informations de santé et la situation familiale.',
+      link: `/espace/jeunes/${j.id}`,
+    })
+    healthCount++
+  }
+
+  return cards.slice(0, 4) // Max 4 action cards
 })
 
 function formatDate(dateStr: string) {
@@ -100,21 +160,28 @@ function formatDate(dateStr: string) {
       </div>
     </div>
 
-    <!-- Quick links -->
-    <div class="flex flex-wrap gap-3">
+    <!-- Contextual action cards -->
+    <div v-if="actionCards.length > 0" class="space-y-3">
       <NuxtLink
-        to="/espace/jeunes?add=1"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#004657] text-white text-sm hover:opacity-90 transition-opacity"
+        v-for="(card, i) in actionCards"
+        :key="i"
+        :to="card.link"
+        class="block rounded-2xl p-5 border transition-opacity hover:opacity-90"
+        :style="{ backgroundColor: card.bgColor + '10', borderColor: card.bgColor + '20' }"
       >
-        <UserPlus :size="16" />
-        Ajouter un jeune
-      </NuxtLink>
-      <NuxtLink
-        to="/actions"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#93C1AF] text-white text-sm hover:opacity-90 transition-opacity"
-      >
-        <BookOpen :size="16" />
-        Parcourir les actions
+        <div class="flex items-start gap-3">
+          <div
+            class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+            :style="{ backgroundColor: card.bgColor + '15' }"
+          >
+            <component :is="card.icon" :size="20" :style="{ color: card.color }" />
+          </div>
+          <div class="flex-1">
+            <p class="text-prado-text font-medium mb-0.5">{{ card.title }}</p>
+            <p class="text-sm text-prado-text-secondary">{{ card.description }}</p>
+          </div>
+          <ArrowRight :size="16" class="text-prado-text-faint shrink-0 mt-2.5" />
+        </div>
       </NuxtLink>
     </div>
 
