@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Loader2, Heart, Plus, Trash2 } from 'lucide-vue-next'
+import { Loader2, Heart, Plus, Trash2, X, Pencil } from 'lucide-vue-next'
 import {
   REGIMES_ALIMENTAIRES, TYPES_HANDICAP, ALLERGENES_COURANTS, MEDICAMENTS_COURANTS,
   SPECIALITES_MEDICALES, FREQUENCES_SUIVI, TYPES_SUIVI_PSY,
@@ -17,12 +17,39 @@ const emit = defineEmits<{
 
 const form = defineModel<JeuneSanteInput>({ required: true })
 
-// Suivi médical helpers
-function addSuivi() {
-  form.value = {
-    ...form.value,
-    suiviMedical: [...form.value.suiviMedical, emptySuiviMedicalEntry()],
+// Suivi médical — modal form
+const showSuiviForm = ref(false)
+const editingSuiviIndex = ref<number | null>(null)
+const suiviDraft = ref<SuiviMedicalEntry>(emptySuiviMedicalEntry())
+
+function openAddSuivi() {
+  suiviDraft.value = emptySuiviMedicalEntry()
+  editingSuiviIndex.value = null
+  showSuiviForm.value = true
+}
+
+function openEditSuivi(index: number) {
+  suiviDraft.value = { ...form.value.suiviMedical[index] }
+  editingSuiviIndex.value = index
+  showSuiviForm.value = true
+}
+
+function saveSuiviDraft() {
+  if (!suiviDraft.value.specialite) return
+  if (editingSuiviIndex.value !== null) {
+    form.value = {
+      ...form.value,
+      suiviMedical: form.value.suiviMedical.map((s, i) =>
+        i === editingSuiviIndex.value ? { ...suiviDraft.value } : s,
+      ),
+    }
+  } else {
+    form.value = {
+      ...form.value,
+      suiviMedical: [...form.value.suiviMedical, { ...suiviDraft.value }],
+    }
   }
+  showSuiviForm.value = false
 }
 
 function removeSuivi(index: number) {
@@ -32,13 +59,12 @@ function removeSuivi(index: number) {
   }
 }
 
-function updateSuivi(index: number, field: keyof SuiviMedicalEntry, value: string) {
-  form.value = {
-    ...form.value,
-    suiviMedical: form.value.suiviMedical.map((s, i) =>
-      i === index ? { ...s, [field]: value } : s,
-    ),
-  }
+function specialiteLabel(val: string): string {
+  return SPECIALITES_MEDICALES.find(s => s.value === val)?.label ?? val
+}
+
+function frequenceLabel(val: string): string {
+  return FREQUENCES_SUIVI.find(f => f.value === val)?.label ?? val
 }
 
 // Suivi psychologique helpers
@@ -104,55 +130,113 @@ const labelClass = 'text-sm text-prado-text-muted mb-1 block'
         <UiMedecinAutocomplete v-model="form.medecinTraitant" />
       </div>
 
-      <!-- Suivi medical (dynamic list) -->
+      <!-- Suivi medical (cards + modal form) -->
       <div class="md:col-span-2">
         <label :class="labelClass">Suivi medical</label>
         <div class="space-y-2">
+          <!-- Existing entries as summary cards -->
           <div
             v-for="(suivi, index) in form.suiviMedical"
             :key="index"
-            class="bg-prado-bg rounded-xl p-3"
+            class="bg-prado-bg rounded-xl p-3 flex items-center gap-3"
           >
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-xs font-medium text-prado-text-muted">Suivi {{ index + 1 }}</span>
-              <button
-                class="p-1 rounded-lg hover:bg-red-500/10 text-prado-text-faint hover:text-red-400 transition-colors"
-                @click="removeSuivi(index)"
-              >
-                <Trash2 :size="13" />
-              </button>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-prado-text">{{ specialiteLabel(suivi.specialite) }}</p>
+              <p class="text-xs text-prado-text-muted">
+                <span v-if="suivi.frequence">{{ frequenceLabel(suivi.frequence) }}</span>
+                <span v-if="suivi.frequence && suivi.details"> — </span>
+                <span v-if="suivi.details">{{ suivi.details }}</span>
+              </p>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              <select
-                :value="suivi.specialite"
-                :class="inputClass"
-                @change="updateSuivi(index, 'specialite', ($event.target as HTMLSelectElement).value)"
-              >
-                <option v-for="s in SPECIALITES_MEDICALES" :key="s.value" :value="s.value">{{ s.label }}</option>
-              </select>
-              <select
-                :value="suivi.frequence"
-                :class="inputClass"
-                @change="updateSuivi(index, 'frequence', ($event.target as HTMLSelectElement).value)"
-              >
-                <option v-for="f in FREQUENCES_SUIVI" :key="f.value" :value="f.value">{{ f.label }}</option>
-              </select>
-              <input
-                :value="suivi.details"
-                :class="inputClass"
-                placeholder="Details (nom, lieu...)"
-                @input="updateSuivi(index, 'details', ($event.target as HTMLInputElement).value)"
-              />
-            </div>
+            <button
+              class="p-1.5 rounded-lg hover:bg-prado-surface-hover text-prado-text-faint hover:text-prado-text-muted transition-colors"
+              @click="openEditSuivi(index)"
+            >
+              <Pencil :size="13" />
+            </button>
+            <button
+              class="p-1.5 rounded-lg hover:bg-red-500/10 text-prado-text-faint hover:text-red-400 transition-colors"
+              @click="removeSuivi(index)"
+            >
+              <Trash2 :size="13" />
+            </button>
           </div>
 
           <button
             class="inline-flex items-center gap-1.5 text-xs text-[#004657] hover:underline"
-            @click="addSuivi"
+            @click="openAddSuivi"
           >
             <Plus :size="12" /> Ajouter un suivi
           </button>
         </div>
+
+        <!-- Suivi form (modal-like overlay) -->
+        <Teleport to="body">
+          <div
+            v-if="showSuiviForm"
+            class="fixed inset-0 z-50 flex items-center justify-center p-4"
+          >
+            <!-- Backdrop -->
+            <div class="absolute inset-0 bg-black/50" @click="showSuiviForm = false" />
+
+            <!-- Modal -->
+            <div class="relative w-full max-w-lg rounded-2xl border border-prado-border p-6 space-y-4 shadow-2xl" style="background-color: var(--prado-surface);">
+              <div class="flex items-center justify-between">
+                <h4 class="text-sm font-semibold text-prado-text">
+                  {{ editingSuiviIndex !== null ? 'Modifier le suivi' : 'Ajouter un suivi medical' }}
+                </h4>
+                <button
+                  class="p-1.5 rounded-lg hover:bg-prado-surface-hover text-prado-text-faint transition-colors"
+                  @click="showSuiviForm = false"
+                >
+                  <X :size="16" />
+                </button>
+              </div>
+
+              <div class="space-y-3">
+                <div>
+                  <label class="text-xs text-prado-text-muted mb-1 block">Specialite *</label>
+                  <select v-model="suiviDraft.specialite" :class="inputClass">
+                    <option v-for="s in SPECIALITES_MEDICALES" :key="s.value" :value="s.value">{{ s.label }}</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="text-xs text-prado-text-muted mb-1 block">Frequence</label>
+                  <select v-model="suiviDraft.frequence" :class="inputClass">
+                    <option v-for="f in FREQUENCES_SUIVI" :key="f.value" :value="f.value">{{ f.label }}</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="text-xs text-prado-text-muted mb-1 block">Details (nom du praticien, lieu, notes...)</label>
+                  <textarea
+                    v-model="suiviDraft.details"
+                    :class="inputClass"
+                    rows="4"
+                    placeholder="Dr. Martin — CMP Lyon 7e&#10;Suivi depuis septembre 2025&#10;Bilan tous les 3 mois..."
+                  />
+                </div>
+              </div>
+
+              <div class="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  class="px-4 py-2 rounded-lg text-sm text-prado-text-muted hover:bg-prado-surface-hover transition-colors"
+                  @click="showSuiviForm = false"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="button"
+                  :disabled="!suiviDraft.specialite"
+                  class="px-4 py-2 rounded-lg text-sm bg-[#004657] text-white hover:opacity-90 transition-opacity disabled:opacity-50"
+                  @click="saveSuiviDraft"
+                >
+                  {{ editingSuiviIndex !== null ? 'Modifier' : 'Ajouter' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </Teleport>
       </div>
 
       <!-- Suivi psychologique (toggle + structured) -->

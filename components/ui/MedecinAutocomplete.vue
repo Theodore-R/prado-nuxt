@@ -117,8 +117,31 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
 
 <template>
   <div class="space-y-2">
-    <!-- Search input (hidden when manual form is open) -->
-    <template v-if="!showManualForm">
+    <!-- State 1: Selected medecin card (replaces everything) -->
+    <div
+      v-if="selected && model.nom && !showManualForm"
+      class="bg-prado-bg rounded-xl p-3 border border-prado-border"
+    >
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="text-sm font-medium text-prado-text">{{ model.nom }}</p>
+          <p v-if="model.specialite" class="text-xs text-[#004657]">{{ model.specialite }}</p>
+          <p v-if="model.adresse || model.codePostal" class="text-xs text-prado-text-muted mt-0.5">
+            {{ model.adresse }}<span v-if="model.codePostal">, {{ model.codePostal }}</span>
+          </p>
+          <p v-if="model.telephone" class="text-xs text-prado-text-muted">{{ model.telephone }}</p>
+        </div>
+        <button
+          class="p-1 rounded-lg hover:bg-red-500/10 text-prado-text-faint hover:text-red-400 transition-colors"
+          @click="clearSelection"
+        >
+          <X :size="14" />
+        </button>
+      </div>
+    </div>
+
+    <!-- State 2: Search bar (only when no medecin selected and no manual form) -->
+    <template v-else-if="!showManualForm">
       <div class="relative">
         <div class="absolute left-3 top-1/2 -translate-y-1/2 text-prado-text-faint">
           <Loader2 v-if="loading" :size="14" class="animate-spin" />
@@ -132,7 +155,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
           placeholder="Rechercher un medecin (nom, prenom)..."
           autocomplete="off"
           @input="handleInput(($event.target as HTMLInputElement).value)"
-          @focus="showSuggestions = suggestions.length > 0 && !selected"
+          @focus="showSuggestions = suggestions.length > 0"
           @blur="handleBlur"
         />
         <button
@@ -168,31 +191,8 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
         </div>
       </div>
 
-      <!-- Selected medecin card -->
-      <div
-        v-if="selected && model.nom"
-        class="bg-prado-bg rounded-xl p-3 border border-prado-border"
-      >
-        <div class="flex items-start justify-between">
-          <div>
-            <p class="text-sm font-medium text-prado-text">{{ model.nom }}</p>
-            <p v-if="model.specialite" class="text-xs text-[#004657]">{{ model.specialite }}</p>
-            <p v-if="model.adresse || model.codePostal" class="text-xs text-prado-text-muted mt-0.5">
-              {{ model.adresse }}<span v-if="model.codePostal">, {{ model.codePostal }}</span>
-            </p>
-            <p v-if="model.telephone" class="text-xs text-prado-text-muted">{{ model.telephone }}</p>
-          </div>
-          <button
-            class="p-1 rounded-lg hover:bg-red-500/10 text-prado-text-faint hover:text-red-400 transition-colors"
-            @click="clearSelection"
-          >
-            <X :size="14" />
-          </button>
-        </div>
-      </div>
-
       <!-- Manual input link -->
-      <div v-if="!selected" class="text-[10px] text-prado-text-faint">
+      <div class="text-[10px] text-prado-text-faint">
         Recherchez dans l'Annuaire Sante ou
         <button
           type="button"
@@ -204,7 +204,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
       </div>
     </template>
 
-    <!-- Manual form (replaces search when open) -->
+    <!-- State 3: Manual form -->
     <div v-if="showManualForm" class="bg-prado-bg rounded-xl border border-prado-border p-4 space-y-3">
       <div class="flex items-center justify-between mb-1">
         <div class="flex items-center gap-2">
@@ -223,19 +223,11 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
         <div>
           <label class="text-[10px] text-prado-text-faint mb-0.5 block">Nom du medecin *</label>
-          <input
-            v-model="manualForm.nom"
-            :class="inputClass"
-            placeholder="Dr. Dupont"
-          />
+          <input v-model="manualForm.nom" :class="inputClass" placeholder="Dr. Dupont" />
         </div>
         <div>
           <label class="text-[10px] text-prado-text-faint mb-0.5 block">Specialite</label>
-          <input
-            v-model="manualForm.specialite"
-            :class="inputClass"
-            placeholder="Medecin generaliste"
-          />
+          <input v-model="manualForm.specialite" :class="inputClass" placeholder="Medecin generaliste" />
         </div>
         <div>
           <label class="text-[10px] text-prado-text-faint mb-0.5 block">Telephone</label>
@@ -243,11 +235,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
         </div>
         <div>
           <label class="text-[10px] text-prado-text-faint mb-0.5 block">Adresse</label>
-          <input
-            v-model="manualForm.adresse"
-            :class="inputClass"
-            placeholder="12 rue de la Paix"
-          />
+          <input v-model="manualForm.adresse" :class="inputClass" placeholder="12 rue de la Paix" />
         </div>
       </div>
 
