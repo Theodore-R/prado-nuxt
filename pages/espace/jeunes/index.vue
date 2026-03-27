@@ -18,11 +18,11 @@ const isRestricted = computed(() =>
 )
 
 const hasJeunes = computed(() => jeunes.value.length > 0)
-const showAdd = ref(route.query.add === '1' || !hasJeunes.value)
+const showAdd = ref(route.query.add === '1')
 
-// Keep form open when there are no jeunes
-watch(hasJeunes, (has) => {
-  if (!has) showAdd.value = true
+// Show form automatically only when data is loaded and there are no jeunes
+watch([hasJeunes, jeunesLoading], ([has, loading]) => {
+  if (!loading && !has) showAdd.value = true
 })
 
 const submitting = ref(false)
