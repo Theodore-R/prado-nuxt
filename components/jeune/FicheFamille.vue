@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { Loader2, Users } from 'lucide-vue-next'
-import { MESURES_PROTECTION, LIEUX_HEBERGEMENT } from '~/lib/types/sante'
-import type { JeuneSanteInput } from '~/lib/types/sante'
+import { Loader2, Users, Plus, Trash2 } from 'lucide-vue-next'
+import {
+  MESURES_PROTECTION, LIEUX_HEBERGEMENT, DROITS_PARENTAUX_OPTIONS,
+  FONCTIONS_REFERENT, LIENS_FAMILIAUX,
+  emptyMembreFamille,
+} from '~/lib/types/sante'
+import type { JeuneSanteInput, ReferentAse, MembreFamille } from '~/lib/types/sante'
 
 const props = defineProps<{
   saving: boolean
@@ -12,6 +16,79 @@ const emit = defineEmits<{
 }>()
 
 const form = defineModel<JeuneSanteInput>({ required: true })
+
+// Droits parentaux: "exercice-commun|Details..." → select + textarea
+const droitsType = ref('')
+const droitsDetails = ref('')
+
+function parseDroits(val: string) {
+  if (!val) {
+    droitsType.value = ''
+    droitsDetails.value = ''
+    return
+  }
+  const sep = val.indexOf('|')
+  if (sep !== -1) {
+    droitsType.value = val.slice(0, sep)
+    droitsDetails.value = val.slice(sep + 1)
+  } else {
+    const isKnown = DROITS_PARENTAUX_OPTIONS.some(o => o.value === val)
+    if (isKnown) {
+      droitsType.value = val
+      droitsDetails.value = ''
+    } else {
+      droitsType.value = 'autre'
+      droitsDetails.value = val
+    }
+  }
+}
+
+parseDroits(form.value.droitsParentaux)
+watch(() => form.value.droitsParentaux, (val) => parseDroits(val))
+
+function updateDroits() {
+  if (!droitsType.value) {
+    form.value = { ...form.value, droitsParentaux: '' }
+  } else if (droitsDetails.value.trim()) {
+    form.value = { ...form.value, droitsParentaux: `${droitsType.value}|${droitsDetails.value}` }
+  } else {
+    form.value = { ...form.value, droitsParentaux: droitsType.value }
+  }
+}
+
+watch([droitsType, droitsDetails], () => updateDroits())
+
+// Referent ASE helpers
+function updateReferent(field: keyof ReferentAse, value: string) {
+  form.value = {
+    ...form.value,
+    referentAse: { ...form.value.referentAse, [field]: value },
+  }
+}
+
+// Composition familiale helpers
+function addMembre() {
+  form.value = {
+    ...form.value,
+    compositionFamiliale: [...form.value.compositionFamiliale, emptyMembreFamille()],
+  }
+}
+
+function removeMembre(index: number) {
+  form.value = {
+    ...form.value,
+    compositionFamiliale: form.value.compositionFamiliale.filter((_, i) => i !== index),
+  }
+}
+
+function updateMembre(index: number, field: keyof MembreFamille, value: string | boolean) {
+  form.value = {
+    ...form.value,
+    compositionFamiliale: form.value.compositionFamiliale.map((m, i) =>
+      i === index ? { ...m, [field]: value } : m,
+    ),
+  }
+}
 
 const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-border-medium'
 const labelClass = 'text-sm text-prado-text-muted mb-1 block'
@@ -25,12 +102,10 @@ const labelClass = 'text-sm text-prado-text-muted mb-1 block'
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <!-- Mesure de protection -->
-      <div>
-        <label :class="labelClass">Mesure de protection</label>
-        <select v-model="form.mesureProtection" :class="inputClass">
-          <option v-for="m in MESURES_PROTECTION" :key="m.value" :value="m.value">{{ m.label }}</option>
-        </select>
+      <!-- Mesure de protection (multi-select) -->
+      <div class="md:col-span-2">
+        <label :class="labelClass">Mesure(s) de protection</label>
+        <UiMultiCheckbox v-model="form.mesureProtection" :options="MESURES_PROTECTION" />
       </div>
 
       <!-- Lieu d'hebergement -->
@@ -41,31 +116,112 @@ const labelClass = 'text-sm text-prado-text-muted mb-1 block'
         </select>
       </div>
 
-      <!-- Referent ASE -->
+      <!-- Referent ASE / PJJ (structured) -->
       <div class="md:col-span-2">
         <label :class="labelClass">Referent ASE / PJJ</label>
-        <input v-model="form.referentAse" :class="inputClass" placeholder="Nom, fonction, coordonnees du referent" />
+        <div class="bg-prado-bg rounded-xl p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <input
+            :value="form.referentAse.nom"
+            :class="inputClass"
+            placeholder="Nom du referent"
+            @input="updateReferent('nom', ($event.target as HTMLInputElement).value)"
+          />
+          <select
+            :value="form.referentAse.fonction"
+            :class="inputClass"
+            @change="updateReferent('fonction', ($event.target as HTMLSelectElement).value)"
+          >
+            <option v-for="f in FONCTIONS_REFERENT" :key="f.value" :value="f.value">{{ f.label }}</option>
+          </select>
+          <UiPhoneInput
+            :model-value="form.referentAse.telephone"
+            placeholder="Telephone"
+            @update:model-value="updateReferent('telephone', $event)"
+          />
+          <input
+            :value="form.referentAse.email"
+            type="email"
+            :class="inputClass"
+            placeholder="Email"
+            @input="updateReferent('email', ($event.target as HTMLInputElement).value)"
+          />
+        </div>
       </div>
 
-      <!-- Composition familiale -->
+      <!-- Composition familiale (dynamic list) -->
       <div class="md:col-span-2">
         <label :class="labelClass">Composition familiale</label>
-        <textarea
-          v-model="form.compositionFamiliale"
-          :class="inputClass"
-          rows="3"
-          placeholder="Parents, fratrie, situation familiale..."
-        />
+        <div class="space-y-2">
+          <div
+            v-for="(membre, index) in form.compositionFamiliale"
+            :key="index"
+            class="bg-prado-bg rounded-xl p-3"
+          >
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-medium text-prado-text-muted">Membre {{ index + 1 }}</span>
+              <button
+                class="p-1 rounded-lg hover:bg-red-500/10 text-prado-text-faint hover:text-red-400 transition-colors"
+                @click="removeMembre(index)"
+              >
+                <Trash2 :size="13" />
+              </button>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <select
+                :value="membre.lien"
+                :class="inputClass"
+                @change="updateMembre(index, 'lien', ($event.target as HTMLSelectElement).value)"
+              >
+                <option v-for="l in LIENS_FAMILIAUX" :key="l.value" :value="l.value">{{ l.label }}</option>
+              </select>
+              <input
+                :value="membre.prenom"
+                :class="inputClass"
+                placeholder="Prenom"
+                @input="updateMembre(index, 'prenom', ($event.target as HTMLInputElement).value)"
+              />
+              <input
+                :value="membre.age"
+                :class="inputClass"
+                placeholder="Age"
+                type="number"
+                min="0"
+                max="120"
+                @input="updateMembre(index, 'age', ($event.target as HTMLInputElement).value)"
+              />
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  :checked="membre.vitAvec"
+                  class="rounded border-prado-border text-[#004657] focus:ring-[#004657]"
+                  @change="updateMembre(index, 'vitAvec', ($event.target as HTMLInputElement).checked)"
+                />
+                <span class="text-xs text-prado-text-muted">Vit avec</span>
+              </label>
+            </div>
+          </div>
+
+          <button
+            class="inline-flex items-center gap-1.5 text-xs text-[#004657] hover:underline"
+            @click="addMembre"
+          >
+            <Plus :size="12" /> Ajouter un membre
+          </button>
+        </div>
       </div>
 
-      <!-- Droits parentaux -->
-      <div class="md:col-span-2">
+      <!-- Droits parentaux (select + textarea détails) -->
+      <div class="md:col-span-2 space-y-2">
         <label :class="labelClass">Droits parentaux</label>
+        <select v-model="droitsType" :class="inputClass">
+          <option v-for="d in DROITS_PARENTAUX_OPTIONS" :key="d.value" :value="d.value">{{ d.label }}</option>
+        </select>
         <textarea
-          v-model="form.droitsParentaux"
+          v-if="droitsType"
+          v-model="droitsDetails"
           :class="inputClass"
           rows="2"
-          placeholder="Autorite parentale, droits de visite, jugements en cours..."
+          placeholder="Précisions : droits de visite, jugements en cours, détails..."
         />
       </div>
 

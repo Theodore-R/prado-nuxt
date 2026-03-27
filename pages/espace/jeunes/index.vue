@@ -2,6 +2,8 @@
 import { UserPlus, Trash2, Eye, Download, Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import { exportToCsv } from '~/utils/csvExport'
+import { SITUATIONS, TYPES_HANDICAP, MESURES_PROTECTION, REGIMES_ALIMENTAIRES, LIEUX_HEBERGEMENT, DROITS_PARENTAUX_OPTIONS } from '~/lib/types/sante'
+import type { JeuneSante } from '~/lib/types/sante'
 import type { AdminTableColumn } from '~/components/admin/AdminTable.vue'
 
 definePageMeta({ layout: 'espace', middleware: 'auth' })
@@ -35,13 +37,18 @@ const columns: AdminTableColumn[] = [
   { key: 'inscriptionsCount', label: 'Inscriptions', sortable: true, hiddenBelow: 'lg' },
 ]
 
+function situationLabel(val: string) {
+  const found = SITUATIONS.find(s => s.value === val)
+  return found ? found.label : val
+}
+
 const rows = computed(() =>
   jeunes.value.map(j => ({
     id: j.id,
     name: `${j.firstName} ${j.lastName}`,
     dateOfBirth: new Date(j.dateOfBirth).toLocaleDateString('fr-FR'),
     dateOfBirthRaw: j.dateOfBirth,
-    situation: j.situation,
+    situation: situationLabel(j.situation),
     inscriptionsCount: inscriptions.value.filter(i => i.jeuneId === j.id).length,
   })),
 )
@@ -72,19 +79,71 @@ async function handleRemove(id: string, name: string) {
   }
 }
 
-function handleExport() {
-  exportToCsv(
-    'jeunes.csv',
-    ['Nom', 'Date de naissance', 'Adresse', 'Code postal', 'Ville', 'Situation'],
-    jeunes.value.map(j => [
-      `${j.firstName} ${j.lastName}`,
-      new Date(j.dateOfBirth).toLocaleDateString('fr-FR'),
-      j.address,
-      j.postalCode,
-      j.city,
-      j.situation,
-    ]),
-  )
+const exporting = ref(false)
+
+function labelFromOptions(options: readonly { value: string; label: string }[], val: string): string {
+  return options.find(o => o.value === val)?.label ?? val
+}
+
+function labelsFromOptions(options: readonly { value: string; label: string }[], vals: string[]): string {
+  return vals.map(v => labelFromOptions(options, v)).join(', ')
+}
+
+async function handleExport() {
+  exporting.value = true
+  try {
+    // Fetch all sante data for enriched export
+    const santeMap = await $fetch<Record<string, JeuneSante>>('/api/jeunes/sante-export')
+
+    exportToCsv(
+      'jeunes.csv',
+      [
+        'Nom', 'Date de naissance', 'Adresse', 'Code postal', 'Ville', 'Situation',
+        'Allergies', 'Handicap', 'Taux invalidite', 'Regime alimentaire',
+        'Medecin traitant', 'Traitements en cours',
+        'Suivi medical', 'Suivi psychologique',
+        'Contacts urgence',
+        'Mesure de protection', 'Lieu hebergement', 'Referent ASE',
+        'Droits parentaux', 'Composition familiale',
+      ],
+      jeunes.value.map(j => {
+        const s = santeMap[j.id]
+        const droitsType = s?.droitsParentaux?.split('|')[0] ?? ''
+        const droitsDetail = s?.droitsParentaux?.split('|').slice(1).join('|') ?? ''
+
+        return [
+          `${j.firstName} ${j.lastName}`,
+          new Date(j.dateOfBirth).toLocaleDateString('fr-FR'),
+          j.address,
+          j.postalCode,
+          j.city,
+          situationLabel(j.situation),
+          // Sante
+          s?.allergies?.join(', ') ?? '',
+          s ? labelFromOptions([...TYPES_HANDICAP], s.handicap) : '',
+          s?.tauxInvalidite ?? '',
+          s ? labelsFromOptions([...REGIMES_ALIMENTAIRES], s.regimeAlimentaire) : '',
+          s?.medecinTraitant ? `${s.medecinTraitant.nom}${s.medecinTraitant.telephone ? ' (' + s.medecinTraitant.telephone + ')' : ''}` : '',
+          s?.traitementsEnCours?.join(', ') ?? '',
+          s?.suiviMedical?.map(sm => `${sm.specialite} - ${sm.frequence}${sm.details ? ' (' + sm.details + ')' : ''}`).join('; ') ?? '',
+          s?.suiviPsychologique?.enCours
+            ? `Oui - ${s.suiviPsychologique.type} ${s.suiviPsychologique.frequence}${s.suiviPsychologique.notes ? ' (' + s.suiviPsychologique.notes + ')' : ''}`
+            : 'Non',
+          s?.contactsUrgence?.map(c => `${c.nom} (${c.lien}) ${c.telephone}`).join('; ') ?? '',
+          // Famille
+          s ? labelsFromOptions([...MESURES_PROTECTION], s.mesureProtection) : '',
+          s ? labelFromOptions([...LIEUX_HEBERGEMENT], s.lieuHebergement) : '',
+          s?.referentAse ? `${s.referentAse.nom}${s.referentAse.fonction ? ' - ' + s.referentAse.fonction : ''}${s.referentAse.telephone ? ' (' + s.referentAse.telephone + ')' : ''}` : '',
+          droitsType ? `${labelFromOptions([...DROITS_PARENTAUX_OPTIONS], droitsType)}${droitsDetail ? ' - ' + droitsDetail : ''}` : '',
+          s?.compositionFamiliale?.map(m => `${m.lien}: ${m.prenom}${m.age ? ' (' + m.age + ' ans)' : ''}${m.vitAvec ? ' [vit avec]' : ''}`).join('; ') ?? '',
+        ]
+      }),
+    )
+  } catch {
+    toast.error('Erreur lors de l\'export')
+  } finally {
+    exporting.value = false
+  }
 }
 
 function rowLink(row: Record<string, any>) {
@@ -147,13 +206,11 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
         />
       </div>
       <div class="sm:col-span-2">
-        <label class="text-xs text-prado-text-muted mb-1 block">Situation globale</label>
-        <input
-          v-model="newJeune.situation"
-          required
-          :class="inputClass"
-          placeholder="Ex: Protection de l'enfance"
-        />
+        <label class="text-xs text-prado-text-muted mb-1 block">Situation</label>
+        <select v-model="newJeune.situation" required :class="inputClass">
+          <option value="" disabled>-- Selectionnez une situation --</option>
+          <option v-for="s in SITUATIONS.filter(s => s.value)" :key="s.value" :value="s.value">{{ s.label }}</option>
+        </select>
       </div>
       <div class="sm:col-span-2 flex gap-2">
         <button
@@ -188,10 +245,13 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
       <template #header-actions>
         <button
           v-if="rows.length > 0"
-          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-prado-border text-sm text-prado-text-secondary hover:bg-prado-surface-hover transition-colors"
+          :disabled="exporting"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-prado-border text-sm text-prado-text-secondary hover:bg-prado-surface-hover transition-colors disabled:opacity-50"
           @click="handleExport"
         >
-          <Download :size="14" /> CSV
+          <Loader2 v-if="exporting" :size="14" class="animate-spin" />
+          <Download v-else :size="14" />
+          {{ exporting ? 'Export...' : 'CSV complet' }}
         </button>
       </template>
 

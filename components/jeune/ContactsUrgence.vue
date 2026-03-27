@@ -19,6 +19,14 @@ function updateContact(index: number, field: keyof ContactUrgence, value: string
   )
 }
 
+const lienIcon = (lien: string) => {
+  const icons: Record<string, string> = {
+    pere: '\u{1F468}', mere: '\u{1F469}', tuteur: '\u{1F9D1}\u{200D}\u{2696}\u{FE0F}',
+    educateur: '\u{1F9D1}\u{200D}\u{1F3EB}', famille: '\u{1F46A}', autre: '\u{1F464}',
+  }
+  return icons[lien] ?? ''
+}
+
 const inputClass = 'w-full px-3 py-2 rounded-lg bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-border-medium'
 </script>
 
@@ -30,7 +38,10 @@ const inputClass = 'w-full px-3 py-2 rounded-lg bg-prado-input-bg border border-
       class="bg-prado-bg rounded-xl p-3 space-y-2"
     >
       <div class="flex items-center justify-between">
-        <span class="text-xs font-medium text-prado-text-muted">Contact {{ index + 1 }}</span>
+        <span class="text-xs font-medium text-prado-text-muted">
+          <span v-if="contact.lien" class="mr-1">{{ lienIcon(contact.lien) }}</span>
+          Contact {{ index + 1 }}
+        </span>
         <button
           class="p-1 rounded-lg hover:bg-red-500/10 text-prado-text-faint hover:text-red-400 transition-colors"
           @click="removeContact(index)"
@@ -45,12 +56,9 @@ const inputClass = 'w-full px-3 py-2 rounded-lg bg-prado-input-bg border border-
           placeholder="Nom"
           @input="updateContact(index, 'nom', ($event.target as HTMLInputElement).value)"
         />
-        <input
-          :value="contact.telephone"
-          :class="inputClass"
-          placeholder="Telephone"
-          type="tel"
-          @input="updateContact(index, 'telephone', ($event.target as HTMLInputElement).value)"
+        <UiPhoneInput
+          :model-value="contact.telephone"
+          @update:model-value="updateContact(index, 'telephone', $event)"
         />
         <select
           :value="contact.lien"

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ArrowLeft, Pencil, Check, X, Trash2, Loader2, Calendar, Plus, StickyNote, ShieldCheck, ShieldOff, Heart, Users, ClipboardList } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
+import { SITUATIONS } from '~/lib/types/sante'
 
 definePageMeta({ layout: 'espace', middleware: 'auth' })
 
@@ -45,18 +46,48 @@ const editing = ref<string | null>(null)
 const editValue = ref('')
 const saving = ref(false)
 
+const situationLabel = computed(() => {
+  if (!jeune.value?.situation) return ''
+  const found = SITUATIONS.find(s => s.value === jeune.value!.situation)
+  return found ? found.label : jeune.value.situation
+})
+
 const fields = computed(() => {
   if (!jeune.value) return []
   return [
     { key: 'firstName', label: 'Prenom', value: jeune.value.firstName },
     { key: 'lastName', label: 'Nom', value: jeune.value.lastName },
     { key: 'dateOfBirth', label: 'Date de naissance', value: jeune.value.dateOfBirth, display: new Date(jeune.value.dateOfBirth).toLocaleDateString('fr-FR'), type: 'dateOfBirth' },
-    { key: 'address', label: 'Adresse', value: jeune.value.address },
-    { key: 'postalCode', label: 'Code postal', value: jeune.value.postalCode },
-    { key: 'city', label: 'Ville', value: jeune.value.city },
-    { key: 'situation', label: 'Situation', value: jeune.value.situation },
+    { key: 'situation', label: 'Situation', value: jeune.value.situation, display: situationLabel.value, type: 'situation' },
   ]
 })
+
+// Address inline edit (grouped)
+const editingAddress = ref(false)
+const editAddress = ref({ address: '', postalCode: '', city: '' })
+
+function startEditAddress() {
+  if (!jeune.value) return
+  editAddress.value = {
+    address: jeune.value.address,
+    postalCode: jeune.value.postalCode,
+    city: jeune.value.city,
+  }
+  editingAddress.value = true
+}
+
+async function saveAddress() {
+  saving.value = true
+  try {
+    await editJeune(id, editAddress.value)
+    toast.success('Adresse enregistree')
+    editingAddress.value = false
+  } catch (err: unknown) {
+    toast.error(err instanceof Error ? err.message : 'Erreur')
+  } finally {
+    saving.value = false
+  }
+}
 
 function startEdit(key: string, value: string) {
   editing.value = key
@@ -297,6 +328,14 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
             <div v-if="field.type === 'dateOfBirth'" class="flex-1">
               <UiDateOfBirthPicker v-model="editValue" />
             </div>
+            <select
+              v-else-if="field.type === 'situation'"
+              v-model="editValue"
+              :class="inputClass"
+              class="flex-1"
+            >
+              <option v-for="s in SITUATIONS" :key="s.value" :value="s.value">{{ s.label }}</option>
+            </select>
             <input
               v-else
               v-model="editValue"
@@ -328,6 +367,57 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
             <button
               class="p-1.5 rounded-lg hover:bg-prado-surface-hover text-prado-text-faint hover:text-prado-text-muted transition-colors"
               @click="startEdit(field.key, field.value)"
+            >
+              <Pencil :size="14" />
+            </button>
+          </template>
+        </div>
+      </div>
+
+      <!-- Adresse (grouped inline edit) -->
+      <div class="bg-prado-surface rounded-2xl border border-prado-border">
+        <div class="flex items-start gap-4 px-5 py-4">
+          <span class="text-sm text-prado-text-muted w-40 shrink-0 pt-0.5">Adresse</span>
+
+          <template v-if="editingAddress">
+            <div class="flex-1">
+              <UiAddressAutocomplete
+                v-model:address="editAddress.address"
+                v-model:postal-code="editAddress.postalCode"
+                v-model:city="editAddress.city"
+              />
+            </div>
+            <div class="flex gap-1 pt-1">
+              <button
+                :disabled="saving"
+                class="p-1.5 rounded-lg hover:bg-[#93C1AF]/20 text-[#93C1AF] transition-colors"
+                @click="saveAddress"
+              >
+                <Loader2 v-if="saving" :size="15" class="animate-spin" />
+                <Check v-else :size="15" />
+              </button>
+              <button
+                class="p-1.5 rounded-lg hover:bg-prado-surface-hover text-prado-text-muted transition-colors"
+                @click="editingAddress = false"
+              >
+                <X :size="15" />
+              </button>
+            </div>
+          </template>
+
+          <template v-else>
+            <div class="flex-1 text-sm text-prado-text">
+              <p v-if="jeune.address || jeune.postalCode || jeune.city">
+                {{ jeune.address }}<br v-if="jeune.address && (jeune.postalCode || jeune.city)" />
+                <span v-if="jeune.postalCode || jeune.city" class="text-prado-text-muted">
+                  {{ jeune.postalCode }} {{ jeune.city }}
+                </span>
+              </p>
+              <span v-else class="text-prado-text-faint italic">Non renseignee</span>
+            </div>
+            <button
+              class="p-1.5 rounded-lg hover:bg-prado-surface-hover text-prado-text-faint hover:text-prado-text-muted transition-colors"
+              @click="startEditAddress"
             >
               <Pencil :size="14" />
             </button>
