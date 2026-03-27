@@ -90,6 +90,27 @@ function updateMembre(index: number, field: keyof MembreFamille, value: string |
   }
 }
 
+// Mesure de protection: "aucune" is exclusive (deselects others, others deselect "aucune")
+const mesuresProxy = computed({
+  get: () => form.value.mesureProtection,
+  set: (newVal: string[]) => {
+    const oldVal = form.value.mesureProtection
+    const addedAucune = newVal.includes('aucune') && !oldVal.includes('aucune')
+    const addedOther = newVal.some(v => v !== 'aucune' && !oldVal.includes(v))
+
+    let result: string[]
+    if (addedAucune) {
+      result = ['aucune']
+    } else if (addedOther) {
+      result = newVal.filter(v => v !== 'aucune')
+    } else {
+      result = newVal.length === 0 ? ['aucune'] : newVal
+    }
+
+    form.value = { ...form.value, mesureProtection: result }
+  },
+})
+
 const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-border-medium'
 const labelClass = 'text-sm text-prado-text-muted mb-1 block'
 </script>
@@ -105,7 +126,7 @@ const labelClass = 'text-sm text-prado-text-muted mb-1 block'
       <!-- Mesure de protection (multi-select) -->
       <div class="md:col-span-2">
         <label :class="labelClass">Mesure(s) de protection</label>
-        <UiMultiCheckbox v-model="form.mesureProtection" :options="MESURES_PROTECTION" />
+        <UiMultiCheckbox v-model="mesuresProxy" :options="MESURES_PROTECTION" />
       </div>
 
       <!-- Lieu d'hebergement -->
