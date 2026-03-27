@@ -63,12 +63,12 @@ function handleBlur() {
       <span
         v-for="(tag, i) in tags"
         :key="tag"
-        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#004657]/10 text-[#004657] text-xs"
+        class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#93C1AF]/20 text-[#93C1AF] text-xs font-medium"
       >
         {{ tag }}
         <button
           type="button"
-          class="p-0.5 rounded hover:bg-[#004657]/20 transition-colors"
+          class="p-0.5 rounded hover:bg-[#93C1AF]/30 transition-colors"
           @click.stop="removeTag(i)"
         >
           <X :size="10" />

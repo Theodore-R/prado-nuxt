@@ -2,7 +2,7 @@
 import { Loader2, Heart, Plus, Trash2, X, Pencil } from 'lucide-vue-next'
 import {
   REGIMES_ALIMENTAIRES, TYPES_HANDICAP, ALLERGENES_COURANTS, MEDICAMENTS_COURANTS,
-  SPECIALITES_MEDICALES, FREQUENCES_SUIVI, TYPES_SUIVI_PSY,
+  SPECIALITES_MEDICALES, FREQUENCES_SUIVI,
   emptySuiviMedicalEntry,
 } from '~/lib/types/sante'
 import type { JeuneSanteInput, SuiviMedicalEntry } from '~/lib/types/sante'
@@ -16,6 +16,9 @@ const emit = defineEmits<{
 }>()
 
 const form = defineModel<JeuneSanteInput>({ required: true })
+
+// Régime alimentaire suggestions (labels only for TagInput)
+const regimeSuggestions = REGIMES_ALIMENTAIRES.map(r => r.label)
 
 // Suivi médical — modal form
 const showSuiviForm = ref(false)
@@ -67,21 +70,6 @@ function frequenceLabel(val: string): string {
   return FREQUENCES_SUIVI.find(f => f.value === val)?.label ?? val
 }
 
-// Suivi psychologique helpers
-function toggleSuiviPsy(checked: boolean) {
-  form.value = {
-    ...form.value,
-    suiviPsychologique: { ...form.value.suiviPsychologique, enCours: checked },
-  }
-}
-
-function updateSuiviPsy(field: 'type' | 'frequence' | 'notes', value: string) {
-  form.value = {
-    ...form.value,
-    suiviPsychologique: { ...form.value.suiviPsychologique, [field]: value },
-  }
-}
-
 const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-border-medium'
 const labelClass = 'text-sm text-prado-text-muted mb-1 block'
 </script>
@@ -118,10 +106,14 @@ const labelClass = 'text-sm text-prado-text-muted mb-1 block'
         <UiTauxInvaliditeInput v-model="form.tauxInvalidite" />
       </div>
 
-      <!-- Regime alimentaire (MultiCheckbox) -->
+      <!-- Regime alimentaire (TagInput) -->
       <div class="md:col-span-2">
         <label :class="labelClass">Regime alimentaire</label>
-        <UiMultiCheckbox v-model="form.regimeAlimentaire" :options="REGIMES_ALIMENTAIRES" />
+        <UiTagInput
+          v-model="form.regimeAlimentaire"
+          :suggestions="regimeSuggestions"
+          placeholder="Tapez pour rechercher ou ajouter un regime..."
+        />
       </div>
 
       <!-- Medecin traitant (autocomplete Annuaire Santé) -->
@@ -170,16 +162,13 @@ const labelClass = 'text-sm text-prado-text-muted mb-1 block'
           </button>
         </div>
 
-        <!-- Suivi form (modal-like overlay) -->
+        <!-- Suivi form (modal overlay) -->
         <Teleport to="body">
           <div
             v-if="showSuiviForm"
             class="fixed inset-0 z-50 flex items-center justify-center p-4"
           >
-            <!-- Backdrop -->
             <div class="absolute inset-0 bg-black/50" @click="showSuiviForm = false" />
-
-            <!-- Modal -->
             <div class="relative w-full max-w-lg rounded-2xl border border-prado-border p-6 space-y-4 shadow-2xl" style="background-color: var(--prado-surface);">
               <div class="flex items-center justify-between">
                 <h4 class="text-sm font-semibold text-prado-text">
@@ -237,57 +226,6 @@ const labelClass = 'text-sm text-prado-text-muted mb-1 block'
             </div>
           </div>
         </Teleport>
-      </div>
-
-      <!-- Suivi psychologique (toggle + structured) -->
-      <div class="md:col-span-2">
-        <label :class="labelClass">Suivi psychologique</label>
-        <div class="bg-prado-bg rounded-xl p-4 space-y-3">
-          <!-- Toggle -->
-          <label class="flex items-center gap-3 cursor-pointer">
-            <button
-              type="button"
-              class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
-              :class="form.suiviPsychologique.enCours ? 'bg-[#004657]' : 'bg-prado-border'"
-              @click="toggleSuiviPsy(!form.suiviPsychologique.enCours)"
-            >
-              <span
-                class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow"
-                :class="form.suiviPsychologique.enCours ? 'translate-x-6' : 'translate-x-1'"
-              />
-            </button>
-            <span class="text-sm text-prado-text">
-              {{ form.suiviPsychologique.enCours ? 'Suivi en cours' : 'Pas de suivi' }}
-            </span>
-          </label>
-
-          <!-- Details (only if toggle on) -->
-          <template v-if="form.suiviPsychologique.enCours">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              <select
-                :value="form.suiviPsychologique.type"
-                :class="inputClass"
-                @change="updateSuiviPsy('type', ($event.target as HTMLSelectElement).value)"
-              >
-                <option v-for="t in TYPES_SUIVI_PSY" :key="t.value" :value="t.value">{{ t.label }}</option>
-              </select>
-              <select
-                :value="form.suiviPsychologique.frequence"
-                :class="inputClass"
-                @change="updateSuiviPsy('frequence', ($event.target as HTMLSelectElement).value)"
-              >
-                <option v-for="f in FREQUENCES_SUIVI" :key="f.value" :value="f.value">{{ f.label }}</option>
-              </select>
-            </div>
-            <textarea
-              :value="form.suiviPsychologique.notes"
-              :class="inputClass"
-              rows="2"
-              placeholder="Notes sur le suivi..."
-              @input="updateSuiviPsy('notes', ($event.target as HTMLTextAreaElement).value)"
-            />
-          </template>
-        </div>
       </div>
 
       <!-- Traitements en cours (TagInput) -->
