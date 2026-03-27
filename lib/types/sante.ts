@@ -145,13 +145,32 @@ export const MEDICAMENTS_COURANTS = [
 ] as const
 
 export const MESURES_PROTECTION = [
-  { value: 'ase', label: 'ASE (Aide Sociale à l\'Enfance)' },
-  { value: 'pjj', label: 'PJJ (Protection Judiciaire de la Jeunesse)' },
-  { value: 'tutelle', label: 'Tutelle' },
-  { value: 'curatelle', label: 'Curatelle' },
+  { value: 'aucune', label: 'Aucune mesure' },
+  // Mesures administratives (Conseil départemental / ASE)
+  { value: 'aed', label: 'AED (Aide Éducative à Domicile)' },
+  { value: 'accueil-provisoire', label: 'Accueil provisoire (ASE)' },
+  { value: 'contrat-jeune-majeur', label: 'Contrat jeune majeur' },
+  { value: 'apc', label: 'APC (Accueil Provisoire de l\'enfant Confié)' },
+  { value: 'ip', label: 'IP (Information Préoccupante)' },
+  // Mesures judiciaires civiles (Juge des enfants)
   { value: 'aemo', label: 'AEMO (Action Éducative en Milieu Ouvert)' },
-  { value: 'aucune', label: 'Aucune' },
-  { value: 'autre', label: 'Autre' },
+  { value: 'aemo-r', label: 'AEMO renforcée' },
+  { value: 'placement-ase', label: 'Placement ASE (ordonnance du JE)' },
+  { value: 'placement-direct', label: 'Placement direct (chez un tiers)' },
+  { value: 'dap', label: 'DAP (Délégation d\'Autorité Parentale)' },
+  { value: 'retrait-autorite', label: 'Retrait de l\'autorité parentale' },
+  { value: 'tutelle', label: 'Tutelle' },
+  // Mesures judiciaires pénales (PJJ)
+  { value: 'pjj-mo', label: 'PJJ — Milieu ouvert (UEMO)' },
+  { value: 'pjj-placement', label: 'PJJ — Placement (CEF, EPE, UEAJ)' },
+  { value: 'pjj-detention', label: 'PJJ — Détention' },
+  { value: 'tig', label: 'TIG (Travail d\'Intérêt Général)' },
+  { value: 'controle-judiciaire', label: 'Contrôle judiciaire' },
+  { value: 'sursis-probatoire', label: 'Sursis probatoire' },
+  // Mesures spécifiques
+  { value: 'mna', label: 'Prise en charge MNA' },
+  { value: 'mjie', label: 'MJIE (Mesure Judiciaire d\'Investigation Éducative)' },
+  { value: 'aesf', label: 'AESF (Aide Éducative et Sociale aux Familles)' },
 ] as const
 
 export const REGIMES_ALIMENTAIRES = [
@@ -404,7 +423,7 @@ export function emptySanteInput(): JeuneSanteInput {
     regimeAlimentaire: [],
     contactsUrgence: [],
     medecinTraitant: emptyMedecinTraitant(),
-    mesureProtection: [],
+    mesureProtection: ['aucune'],
     referentAse: emptyReferentAse(),
     compositionFamiliale: [],
     lieuHebergement: '',
