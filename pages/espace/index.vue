@@ -150,8 +150,8 @@ function formatDate(dateStr: string) {
         </div>
       </div>
       <div class="bg-prado-surface rounded-2xl border border-prado-border p-5 flex items-center gap-4">
-        <div class="w-11 h-11 rounded-xl flex items-center justify-center bg-[#FB6223]/15">
-          <CalendarDays :size="20" class="text-[#FB6223]" />
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center bg-prado-signature-muted">
+          <CalendarDays :size="20" class="text-prado-signature" />
         </div>
         <div>
           <p class="text-2xl font-semibold text-prado-text">{{ inscriptionsThisMonth }}</p>
@@ -180,7 +180,7 @@ function formatDate(dateStr: string) {
             <p class="text-prado-text font-medium mb-0.5">{{ card.title }}</p>
             <p class="text-sm text-prado-text-secondary">{{ card.description }}</p>
           </div>
-          <ArrowRight :size="16" class="text-prado-text-faint shrink-0 mt-2.5" />
+          <ArrowRight :size="16" class="text-prado-signature shrink-0 mt-2.5" />
         </div>
       </NuxtLink>
     </div>

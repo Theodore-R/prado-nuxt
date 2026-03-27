@@ -216,7 +216,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
         <button
           type="submit"
           :disabled="submitting"
-          class="px-5 py-2 rounded-full bg-[#93C1AF] text-white text-sm disabled:opacity-50 flex items-center gap-2"
+          class="px-5 py-2 rounded-full bg-prado-signature text-prado-signature-text text-sm disabled:opacity-50 flex items-center gap-2"
         >
           <Loader2 v-if="submitting" :size="14" class="animate-spin" />
           Enregistrer

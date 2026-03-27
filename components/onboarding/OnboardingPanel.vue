@@ -93,7 +93,7 @@ const strokeDashoffset = computed(() =>
                 />
                 <defs>
                   <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#CF006C" />
+                    <stop offset="0%" stop-color="#FFD228" />
                     <stop offset="100%" stop-color="#FB6223" />
                   </linearGradient>
                 </defs>

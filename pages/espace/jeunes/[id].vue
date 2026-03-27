@@ -240,7 +240,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
         </h1>
         <span
           v-if="jeune.identityVerified"
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-[#93C1AF]/20 text-[#93C1AF]"
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-prado-signature-muted text-prado-signature"
         >
           <ShieldCheck :size="13" />
           Identité vérifiée
@@ -284,7 +284,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
       <!-- Verification in progress -->
       <div
         v-else-if="veriffStatus === 'submitted'"
-        class="bg-[#93C1AF]/10 rounded-2xl p-5 border border-[#93C1AF]/20"
+        class="bg-prado-signature-muted rounded-2xl p-5 border border-prado-signature/20"
       >
         <div class="flex items-center gap-3">
           <ShieldCheck :size="20" class="text-[#93C1AF]" />
@@ -302,7 +302,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
           :key="tab.key"
           class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors"
           :class="activeTab === tab.key
-            ? 'bg-[#004657] text-white'
+            ? 'bg-prado-signature text-prado-signature-text font-medium'
             : 'text-prado-text-muted hover:bg-prado-surface-hover'"
           @click="activeTab = tab.key"
         >
@@ -347,7 +347,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
             />
             <button
               :disabled="saving"
-              class="p-1.5 rounded-lg hover:bg-[#93C1AF]/20 text-[#93C1AF] transition-colors"
+              class="p-1.5 rounded-lg hover:bg-prado-signature/20 text-prado-signature transition-colors"
               @click="saveEdit(field.key)"
             >
               <Loader2 v-if="saving" :size="15" class="animate-spin" />
@@ -390,7 +390,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
             <div class="flex gap-1 pt-1">
               <button
                 :disabled="saving"
-                class="p-1.5 rounded-lg hover:bg-[#93C1AF]/20 text-[#93C1AF] transition-colors"
+                class="p-1.5 rounded-lg hover:bg-prado-signature/20 text-prado-signature transition-colors"
                 @click="saveAddress"
               >
                 <Loader2 v-if="saving" :size="15" class="animate-spin" />
@@ -511,7 +511,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
             </select>
             <button
               :disabled="!selectedAction || inscribing"
-              class="px-4 py-2 rounded-xl bg-[#93C1AF] text-white text-sm disabled:opacity-50 flex items-center gap-1.5"
+              class="px-4 py-2 rounded-xl bg-prado-signature text-prado-signature-text text-sm disabled:opacity-50 flex items-center gap-1.5"
               @click="handleInscrire"
             >
               <Loader2 v-if="inscribing" :size="14" class="animate-spin" />
