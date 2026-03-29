@@ -31,6 +31,7 @@
 
   /* ── 10% Accent ── */
   --prado-signature: var(--prado-yellow);
+  --prado-signature-accent: var(--prado-yellow);
   --prado-signature-muted: rgba(255, 210, 40, 0.15);
   --prado-signature-text: var(--prado-black);
 
@@ -105,6 +106,7 @@
 
   /* ── 10% Accent ── */
   --prado-signature: var(--prado-yellow);
+  --prado-signature-accent: #B8940A;
   --prado-signature-muted: rgba(255, 210, 40, 0.12);
   --prado-signature-text: var(--prado-black);
 
@@ -211,6 +213,7 @@
   --color-prado-input-bg: var(--prado-input-bg);
   --color-prado-tag-bg: var(--prado-tag-bg);
   --color-prado-signature: var(--prado-signature);
+  --color-prado-signature-accent: var(--prado-signature-accent);
   --color-prado-signature-muted: var(--prado-signature-muted);
   --color-prado-signature-text: var(--prado-signature-text);
 }
