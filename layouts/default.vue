@@ -178,7 +178,7 @@ async function handleLogout() {
             href="https://www.le-prado.fr/don/"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#FB6223] text-white text-sm hover:bg-[#e0551a] active:scale-95 transition-all font-medium"
+            class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] text-sm hover:bg-[var(--prado-signature)]/80 active:scale-95 transition-all font-medium"
           >
             <Heart :size="14" />
             Faire un don
@@ -190,17 +190,9 @@ async function handleLogout() {
           <!-- Espace pro / connexion -->
           <template v-if="user">
             <NuxtLink
-              v-if="isAdmin"
-              to="/admin"
+              :to="isAdmin ? '/admin' : '/espace'"
               class="nav-icon-btn"
-              title="Admin"
-            >
-              <LayoutDashboard :size="16" />
-            </NuxtLink>
-            <NuxtLink
-              to="/espace"
-              class="nav-icon-btn"
-              title="Mon espace"
+              :title="isAdmin ? 'Administration' : 'Mon espace'"
             >
               <LayoutDashboard :size="16" />
             </NuxtLink>
@@ -295,11 +287,11 @@ async function handleLogout() {
           <div class="border-t border-prado-border mt-3 pt-3">
             <template v-if="user">
               <NuxtLink
-                to="/espace"
+                :to="isAdmin ? '/admin' : '/espace'"
                 class="flex items-center gap-2 px-3 py-2.5 text-prado-text text-sm"
                 @click="closeMenu"
               >
-                <User :size="16" /> Mon espace
+                <User :size="16" /> {{ isAdmin ? 'Administration' : 'Mon espace' }}
               </NuxtLink>
               <button
                 class="flex items-center gap-2 px-3 py-2.5 text-red-400 text-sm w-full text-left"
@@ -318,7 +310,7 @@ async function handleLogout() {
               </NuxtLink>
               <NuxtLink
                 to="/connexion?mode=register"
-                class="block mt-2 py-2.5 rounded-full bg-[#CF006C] text-white text-sm text-center font-medium"
+                class="block mt-2 py-2.5 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] text-sm text-center font-medium"
                 @click="closeMenu"
               >
                 Créer un compte
@@ -328,7 +320,7 @@ async function handleLogout() {
               href="https://www.le-prado.fr/don/"
               target="_blank"
               rel="noopener noreferrer"
-              class="block mt-2 py-2.5 rounded-full border border-[#FB6223]/30 text-[#FB6223] text-sm text-center"
+              class="block mt-2 py-2.5 rounded-full border border-[var(--prado-signature)]/30 text-[var(--prado-signature-accent)] text-sm text-center"
               @click="closeMenu"
             >
               Faire un don
@@ -362,7 +354,7 @@ async function handleLogout() {
               v-for="l in navLinks"
               :key="l.to"
               :to="l.to"
-              class="text-sm text-prado-text-muted hover:text-[#FB6223] transition-colors"
+              class="text-sm text-prado-text-muted hover:text-[var(--prado-signature-accent)] transition-colors"
             >
               {{ l.label }}
             </NuxtLink>
@@ -379,7 +371,7 @@ async function handleLogout() {
             href="https://www.le-prado.fr/don/"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-block mt-4 px-4 py-2 rounded-full border border-[#FB6223]/30 text-[#FB6223] text-sm hover:bg-[#FB6223]/10 transition-colors"
+            class="inline-block mt-4 px-4 py-2 rounded-full border border-[var(--prado-signature)]/30 text-[var(--prado-signature-accent)] text-sm hover:bg-[var(--prado-signature)]/10 transition-colors"
           >
             Faire un don
           </a>
@@ -389,8 +381,8 @@ async function handleLogout() {
           <p class="text-sm text-prado-text-muted mb-3">Recevez nos actualités</p>
           <UiNewsletterForm source="footer" />
           <div class="mt-4 flex flex-col gap-1 text-xs text-prado-text-muted">
-            <NuxtLink to="/mentions-legales" class="hover:text-[#FB6223]">Mentions légales</NuxtLink>
-            <NuxtLink to="/politique-confidentialite" class="hover:text-[#FB6223]">Politique de confidentialité</NuxtLink>
+            <NuxtLink to="/mentions-legales" class="hover:text-[var(--prado-signature-accent)]">Mentions légales</NuxtLink>
+            <NuxtLink to="/politique-confidentialite" class="hover:text-[var(--prado-signature-accent)]">Politique de confidentialité</NuxtLink>
           </div>
           <div class="flex gap-2 mt-5">
             <a
@@ -400,7 +392,7 @@ async function handleLogout() {
               target="_blank"
               rel="noopener noreferrer"
               :aria-label="link.label"
-              class="w-9 h-9 rounded-full bg-prado-tag-bg flex items-center justify-center text-prado-text-muted hover:bg-[#CF006C] hover:text-white transition-colors"
+              class="w-9 h-9 rounded-full bg-prado-tag-bg flex items-center justify-center text-prado-text-muted hover:bg-[var(--prado-signature)] hover:text-white transition-colors"
             >
               <component :is="link.icon" :size="15" />
             </a>
@@ -434,7 +426,7 @@ async function handleLogout() {
   right: 12px;
   height: 2px;
   border-radius: 1px;
-  background: #CF006C;
+  background: var(--prado-signature);
   transform: scaleX(0);
   transition: transform 0.25s ease-out;
 }

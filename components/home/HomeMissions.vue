@@ -97,8 +97,8 @@ onMounted(() => {
           style="--delay: 0.2s;"
         >
           <div class="flex items-center gap-3 mb-6">
-            <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-[#CF006C]/15">
-              <Users :size="20" class="text-[#CF006C]" />
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-[var(--prado-signature)]/15">
+              <Users :size="20" class="text-[var(--prado-signature-accent)]" />
             </div>
             <h3 class="text-xl text-prado-text">{{ jeunesTitle }}</h3>
           </div>
@@ -110,8 +110,8 @@ onMounted(() => {
               :class="isVisible && 'is-visible'"
               :style="{ '--delay': `${0.3 + idx * 0.07}s` }"
             >
-              <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 bg-[#CF006C]/15">
-                <Check :size="12" class="text-[#CF006C]" />
+              <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 bg-[var(--prado-signature)]/15">
+                <Check :size="12" class="text-[var(--prado-signature-accent)]" />
               </div>
               <span class="text-prado-text-secondary leading-relaxed">{{ mission }}</span>
             </li>

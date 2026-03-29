@@ -6,6 +6,10 @@ interface Props {
   bgImageSrc?: string
   bgColor?: string
   title?: string
+  titleLine1?: string
+  titleLine2?: string
+  titleLine2Rotating?: string[]
+  highlightLine?: 1 | 2
   subtitle?: string
   scrollHint?: string
   textBlend?: boolean
@@ -79,8 +83,15 @@ const bgOpacity = computed(() => 1 - displayProgress.value)
 const overlayOpacity = computed(() => 0.5 - displayProgress.value * 0.3)
 const contentOpacity = computed(() => showContent.value ? 1 : 0)
 
-const firstWord = computed(() => props.title?.split(' ')[0] ?? '')
-const restOfTitle = computed(() => props.title?.split(' ').slice(1).join(' ') ?? '')
+const line1 = computed(() => props.titleLine1 ?? props.title?.split(' ')[0] ?? '')
+const line2Static = computed(() => props.titleLine2 ?? props.title?.split(' ').slice(1).join(' ') ?? '')
+
+// Rotating words for line 2
+const rotatingWords = computed(() => props.titleLine2Rotating ?? [])
+const currentRotatingIndex = ref(0)
+const rotatingVisible = ref(true)
+
+let rotatingInterval: ReturnType<typeof setInterval> | null = null
 
 function handleWheel(e: WheelEvent) {
   if (mediaFullyExpanded.value && e.deltaY < 0 && window.scrollY <= 5) {
@@ -156,6 +167,17 @@ onMounted(() => {
   window.addEventListener('touchmove', handleTouchMove, { passive: false })
   window.addEventListener('touchend', handleTouchEnd)
   window.addEventListener('resize', checkMobile)
+
+  // Rotating words
+  if (rotatingWords.value.length > 0) {
+    rotatingInterval = setInterval(() => {
+      rotatingVisible.value = false
+      setTimeout(() => {
+        currentRotatingIndex.value = (currentRotatingIndex.value + 1) % rotatingWords.value.length
+        rotatingVisible.value = true
+      }, 400)
+    }, 4500)
+  }
 })
 
 onUnmounted(() => {
@@ -163,6 +185,7 @@ onUnmounted(() => {
     cancelAnimationFrame(rafId)
     rafId = null
   }
+  if (rotatingInterval) clearInterval(rotatingInterval)
   window.removeEventListener('wheel', handleWheel)
   window.removeEventListener('scroll', handleScroll)
   window.removeEventListener('touchstart', handleTouchStart)
@@ -175,7 +198,7 @@ onUnmounted(() => {
 <template>
   <div
     ref="sectionRef"
-    class="transition-colors duration-700 ease-in-out overflow-x-hidden bg-prado-bg"
+    class="transition-colors duration-700 ease-in-out overflow-x-hidden hero-gradient-bg"
   >
     <section class="relative flex flex-col items-center justify-start min-h-[100dvh]">
       <div class="relative w-full flex flex-col items-center min-h-[100dvh]">
@@ -190,7 +213,7 @@ onUnmounted(() => {
             alt="Background"
             class="w-screen h-screen object-cover object-center"
           />
-          <div v-else class="w-screen h-screen bg-prado-bg" />
+          <div v-else class="w-screen h-screen hero-gradient-bg" />
           <div v-if="bgImageSrc" class="absolute inset-0 hero-overlay" />
         </div>
 
@@ -282,26 +305,36 @@ onUnmounted(() => {
 
             <!-- Title overlay -->
             <div
-              class="flex items-center justify-center text-center gap-4 w-full relative z-10 flex-col"
+              class="flex items-center justify-center text-center gap-2 md:gap-4 w-full relative z-10 flex-col"
               :class="textBlend ? 'mix-blend-difference' : 'mix-blend-normal'"
             >
               <h1
-                class="text-4xl md:text-5xl lg:text-6xl font-bold text-prado-text"
+                class="text-3xl md:text-5xl lg:text-6xl font-bold text-prado-text"
                 :style="{
                   transform: `translateX(-${textTranslateX}vw)`,
                   fontFamily: 'Poppins',
                 }"
               >
-                {{ firstWord }}
+                <span v-if="highlightLine === 1" class="hero-highlight">{{ line1 }}</span>
+                <template v-else>{{ line1 }}</template>
               </h1>
               <h1
-                class="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-prado-text"
+                class="text-3xl md:text-5xl lg:text-6xl font-bold text-center text-prado-text"
                 :style="{
                   transform: `translateX(${textTranslateX}vw)`,
                   fontFamily: 'Poppins',
                 }"
               >
-                {{ restOfTitle }}
+                <template v-if="rotatingWords.length > 0">
+                  {{ line2Static }}&nbsp;<span
+                    class="inline-block transition-all duration-400"
+                    :class="rotatingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-3'"
+                  >{{ rotatingWords[currentRotatingIndex] }}</span>
+                </template>
+                <template v-else>
+                  <span v-if="highlightLine === 2" class="hero-highlight">{{ line2Static }}</span>
+                  <template v-else>{{ line2Static }}</template>
+                </template>
               </h1>
             </div>
           </div>
@@ -344,5 +377,42 @@ onUnmounted(() => {
 
 [data-theme="light"] .hero-media-shadow {
   box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.1);
+}
+
+/* Hero gradient background */
+.hero-gradient-bg {
+  background: var(--prado-bg);
+}
+
+[data-theme="light"] .hero-gradient-bg {
+  background:
+    radial-gradient(ellipse 70% 70% at 0% 0%, rgba(255, 210, 40, 0.45) 0%, transparent 60%),
+    var(--prado-bg);
+}
+
+/* Yellow diagonal highlight on title */
+.hero-highlight {
+  position: relative;
+  display: inline;
+  isolation: isolate;
+}
+.hero-highlight::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  bottom: 0%;
+  height: 80%;
+  background: var(--prado-signature);
+  transform: rotate(-2deg);
+  z-index: -1;
+  border-radius: 4px;
+  pointer-events: none;
+  clip-path: inset(0 100% 0 0);
+  animation: highlight-reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+}
+
+@keyframes highlight-reveal {
+  to { clip-path: inset(0 0 0 0); }
 }
 </style>

@@ -77,7 +77,7 @@ const tauxLabel = computed(() => {
         <span
           class="w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors"
           :class="statut === s.value
-            ? 'border-prado-signature bg-prado-signature'
+            ? 'border-[var(--prado-signature)] bg-[var(--prado-signature)]'
             : 'border-prado-border group-hover:border-prado-border-medium'"
         >
           <span v-if="statut === s.value" class="w-1.5 h-1.5 rounded-full bg-white" />

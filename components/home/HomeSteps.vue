@@ -101,7 +101,7 @@ onMounted(() => {
       >
         <NuxtLink
           :to="ctaLink"
-          class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#CF006C]/90 transition-colors font-medium"
+          class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] hover:bg-[var(--prado-signature)]/90 transition-colors font-medium"
         >
           {{ ctaLabel }}
           <ArrowRight :size="16" />

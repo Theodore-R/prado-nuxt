@@ -56,7 +56,9 @@ async function animateCounters() {
       ease: 'power2.out',
       delay: idx * 0.15,
       onUpdate() {
-        displayValues.value[idx] = Math.round(obj.val)
+        const newArr = [...displayValues.value]
+        newArr[idx] = Math.round(obj.val)
+        displayValues.value = newArr
       },
     })
   })
@@ -81,15 +83,15 @@ onMounted(() => {
 <template>
   <section
     ref="sectionRef"
-    class="py-24 my-16 bg-gradient-to-r from-[#CF006C] to-[#FB6223]"
+    class="py-24 my-16 bg-[var(--prado-signature)]"
   >
     <div class="max-w-7xl mx-auto px-6">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
         <div v-for="(stat, idx) in stats" :key="stat.label">
-          <div class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2">
+          <div class="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--prado-signature-text)] mb-2">
             {{ displayValues[idx] }}{{ stat.suffix }}
           </div>
-          <div class="text-white/70 text-base leading-snug">
+          <div class="text-[var(--prado-signature-text)]/70 text-base leading-snug">
             {{ stat.label }}
           </div>
         </div>

@@ -73,7 +73,7 @@ onMounted(() => {
 
 <template>
   <section ref="sectionRef" class="py-24 relative">
-    <HomeHalo color="#FB6223" position="top-right" :size="600" :opacity="0.06" />
+    <HomeHalo color="#FFD228" position="top-right" :size="600" :opacity="0.06" />
 
     <div class="max-w-7xl mx-auto px-6 relative z-10">
       <h2
@@ -95,7 +95,7 @@ onMounted(() => {
         >
           <h3 class="text-prado-text mb-3">{{ card.title }}</h3>
           <p class="text-sm text-prado-text-secondary leading-relaxed flex-1">{{ card.text }}</p>
-          <span class="inline-flex items-center gap-1.5 text-sm text-[#FB6223] group-hover:gap-2.5 transition-all mt-6">
+          <span class="inline-flex items-center gap-1.5 text-sm text-[var(--prado-signature-accent)] group-hover:gap-2.5 transition-all mt-6">
             {{ card.cta }} <ArrowRight :size="14" />
           </span>
         </NuxtLink>

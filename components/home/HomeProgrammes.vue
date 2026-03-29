@@ -177,7 +177,7 @@ onUnmounted(() => {
                   class="w-3 h-3 rounded-full shrink-0 transition-all duration-300"
                   :style="{
                     backgroundColor: activeId === prog.id ? prog.color : 'transparent',
-                    border: `2px solid ${activeId === prog.id ? prog.color : 'rgba(255,255,255,0.15)'}`,
+                    border: `2px solid ${activeId === prog.id ? prog.color : 'var(--prado-border-medium)'}`,
                   }"
                 />
                 <div
@@ -189,13 +189,13 @@ onUnmounted(() => {
                   <component
                     :is="prog.icon"
                     :size="18"
-                    :style="{ color: activeId === prog.id ? prog.color : 'rgba(255,255,255,0.3)' }"
+                    :style="{ color: activeId === prog.id ? prog.color : 'var(--prado-text-faint)' }"
                     class="transition-colors duration-300"
                   />
                 </div>
                 <span
                   class="text-sm font-medium transition-colors duration-300"
-                  :style="{ color: activeId === prog.id ? prog.color : 'rgba(255,255,255,0.4)' }"
+                  :style="{ color: activeId === prog.id ? prog.color : 'var(--prado-text-muted)' }"
                 >
                   {{ prog.shortTitle }}
                 </span>
@@ -229,7 +229,7 @@ onUnmounted(() => {
             <div class="flex items-center gap-3 mb-6">
               <div
                 class="w-1 h-8 rounded-full transition-colors duration-300"
-                :style="{ backgroundColor: activeId === prog.id ? prog.color : 'rgba(255,255,255,0.1)' }"
+                :style="{ backgroundColor: activeId === prog.id ? prog.color : 'var(--prado-border-light)' }"
               />
               <h3 class="text-xl md:text-2xl text-prado-text">
                 {{ prog.title }}

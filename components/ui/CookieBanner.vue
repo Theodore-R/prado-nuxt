@@ -32,7 +32,7 @@ function refuse() {
       <div class="max-w-3xl mx-auto rounded-2xl border border-prado-border-light bg-prado-surface/95 backdrop-blur-xl shadow-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <div class="flex-1 text-sm text-prado-text-secondary leading-relaxed">
           Ce site utilise des cookies pour améliorer votre expérience.
-          <NuxtLink to="/politique-confidentialite" class="text-[#FB6223] underline ml-1">En savoir plus</NuxtLink>
+          <NuxtLink to="/politique-confidentialite" class="text-[var(--prado-signature-accent)] underline ml-1">En savoir plus</NuxtLink>
         </div>
         <div class="flex gap-2 shrink-0">
           <button
@@ -42,7 +42,7 @@ function refuse() {
             Refuser
           </button>
           <button
-            class="px-5 py-2 rounded-full text-sm bg-[#CF006C] text-white hover:bg-[#a80057] transition-colors"
+            class="px-5 py-2 rounded-full text-sm bg-[var(--prado-signature)] text-[var(--prado-signature-text)] hover:bg-[var(--prado-signature)]/80 transition-colors"
             @click="accept"
           >
             Accepter

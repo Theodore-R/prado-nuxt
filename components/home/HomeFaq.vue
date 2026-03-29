@@ -100,7 +100,7 @@ function toggle(index: number) {
 }
 
 .prismic-answer :deep(a) {
-  color: #CF006C;
+  color: var(--prado-signature-accent);
   text-decoration: underline;
 }
 </style>

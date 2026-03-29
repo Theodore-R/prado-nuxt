@@ -21,7 +21,7 @@ defineProps<{
       <FileText :size="22" class="text-red-500" />
     </div>
     <div class="flex-1 min-w-0">
-      <h3 class="text-prado-text font-medium mb-1 group-hover:text-[#CF006C] transition-colors">{{ title }}</h3>
+      <h3 class="text-prado-text font-medium mb-1 group-hover:text-[var(--prado-signature-accent)] transition-colors">{{ title }}</h3>
       <p v-if="description" class="text-sm text-prado-text-muted line-clamp-2 mb-2">{{ description }}</p>
       <div class="flex items-center gap-3 text-xs text-prado-text-faint">
         <span v-if="category" class="px-2 py-0.5 rounded-full bg-prado-tag-bg">{{ category }}</span>
@@ -29,6 +29,6 @@ defineProps<{
         <span>PDF</span>
       </div>
     </div>
-    <Download :size="18" class="text-prado-text-faint group-hover:text-[#FB6223] transition-colors shrink-0 mt-1" />
+    <Download :size="18" class="text-prado-text-faint group-hover:text-[var(--prado-signature-accent)] transition-colors shrink-0 mt-1" />
   </a>
 </template>

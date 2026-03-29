@@ -41,6 +41,19 @@ const scrollPartners = computed(() => [...partners.value, ...partners.value])
 </script>
 
 <template>
+  <!-- SVG filter for exact #FFD228 tint -->
+  <svg width="0" height="0" class="absolute">
+    <defs>
+      <filter id="tint-signature" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values="
+          0 0 0 0 1.0
+          0 0 0 0 0.824
+          0 0 0 0 0.157
+          0 0 0 1 0
+        " />
+      </filter>
+    </defs>
+  </svg>
   <section class="py-24">
     <div class="max-w-7xl mx-auto px-6">
       <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-4">
@@ -63,13 +76,13 @@ const scrollPartners = computed(() => [...partners.value, ...partners.value])
           :href="partner.url"
           target="_blank"
           rel="noopener noreferrer"
-          class="shrink-0 opacity-50 hover:opacity-100 transition-opacity duration-300"
+          class="shrink-0 transition-opacity duration-300"
           :title="partner.name"
         >
           <img
             :src="partner.logo"
             :alt="partner.name"
-            class="h-12 md:h-16 w-auto object-contain brightness-0 invert"
+            class="h-12 md:h-16 w-auto object-contain partner-logo-yellow"
           />
         </a>
       </div>
@@ -93,5 +106,14 @@ const scrollPartners = computed(() => [...partners.value, ...partners.value])
 
 .partner-scroll:hover {
   animation-play-state: paused;
+}
+
+/*
+  Tint logos to signature yellow #FFD228 = rgb(255, 210, 40)
+  → normalized: r=1.0, g=0.824, b=0.157
+  Uses SVG feColorMatrix to map any pixel to exact #FFD228 while preserving alpha.
+*/
+.partner-logo-yellow {
+  filter: url(#tint-signature);
 }
 </style>

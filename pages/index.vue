@@ -2,7 +2,6 @@
 const { data: homepage } = await useHomepage()
 
 const HERO_IMAGE = '/images/hero-jeunes.jpg'
-const HERO_BG = 'https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1920&auto=format&fit=crop'
 
 function findSlice(type: string) {
   return homepage.value?.data?.body?.find((s: any) => s.slice_type === type) ?? null
@@ -16,8 +15,10 @@ function findSlice(type: string) {
       <UiScrollExpandHero
         media-type="image"
         :media-src="HERO_IMAGE"
-        :bg-image-src="HERO_BG"
-        title="L'innovation sociale au service des jeunes et des familles"
+        title-line1="L'innovation sociale"
+        title-line2="au service"
+        :title-line2-rotating="['des jeunes', 'des familles']"
+        :highlight-line="1"
         subtitle="Prado Itinéraires"
         scroll-hint="Scrollez pour découvrir"
       >
