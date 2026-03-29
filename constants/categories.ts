@@ -23,10 +23,10 @@ export const PROGRAMMATION_CATEGORY_COLORS: Record<ProgrammationCategory, string
   'Vie quotidienne': '#93C1AF',
   'Formations': '#CF006C',
   'Formations & Ateliers': '#CF006C',
-  'Rencontres/Visites': '#004657',
+  'Rencontres/Visites': 'var(--prado-teal)',
   'Mobilité': '#93C1AF',
   'Emploi': '#FB6223',
-  'Numérique': '#004657',
+  'Numérique': 'var(--prado-teal)',
   'Droits': '#CF006C',
   'Bénévolat': '#C18ED8',
 };
@@ -48,5 +48,5 @@ export const RESSOURCE_CATEGORY_COLORS: Record<RessourceCategory, string> = {
   'Acces aux droits': '#FB6223',
   'Emploi/Formation': '#93C1AF',
   'Logement/Mobilite': '#C18ED8',
-  'Sante': '#004657',
+  'Sante': 'var(--prado-teal)',
 };

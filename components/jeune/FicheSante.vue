@@ -155,7 +155,7 @@ const labelClass = 'text-sm text-prado-text-muted mb-1 block'
           </div>
 
           <button
-            class="inline-flex items-center gap-1.5 text-xs text-[#004657] hover:underline"
+            class="inline-flex items-center gap-1.5 text-xs text-prado-teal hover:underline"
             @click="openAddSuivi"
           >
             <Plus :size="12" /> Ajouter un suivi
@@ -217,7 +217,7 @@ const labelClass = 'text-sm text-prado-text-muted mb-1 block'
                 <button
                   type="button"
                   :disabled="!suiviDraft.specialite"
-                  class="px-4 py-2 rounded-lg text-sm bg-[#004657] text-white hover:opacity-90 transition-opacity disabled:opacity-50"
+                  class="px-4 py-2 rounded-lg text-sm bg-prado-teal text-white hover:opacity-90 transition-opacity disabled:opacity-50"
                   @click="saveSuiviDraft"
                 >
                   {{ editingSuiviIndex !== null ? 'Modifier' : 'Ajouter' }}
@@ -249,7 +249,7 @@ const labelClass = 'text-sm text-prado-text-muted mb-1 block'
     <div class="flex justify-end pt-2">
       <button
         :disabled="saving"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#004657] text-white text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-prado-teal text-white text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
         @click="emit('save')"
       >
         <Loader2 v-if="saving" :size="14" class="animate-spin" />

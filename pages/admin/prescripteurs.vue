@@ -88,7 +88,7 @@ function handleExport() {
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       <h1 class="text-xl font-semibold text-prado-text italic">Prescripteurs</h1>
       <button
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#004657] text-white text-sm hover:opacity-90 transition-opacity"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-prado-teal text-white text-sm hover:opacity-90 transition-opacity"
         @click="handleExport"
       >
         <Download :size="16" />

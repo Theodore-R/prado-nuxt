@@ -107,7 +107,7 @@ function handleExport() {
         <NuxtLink
           v-if="row.actionId"
           :to="`/actions/${row.actionId}`"
-          class="text-[#004657] hover:underline"
+          class="text-prado-teal hover:underline"
         >
           {{ row.actionTitle }}
         </NuxtLink>

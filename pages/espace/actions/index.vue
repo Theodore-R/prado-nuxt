@@ -118,12 +118,12 @@ onMounted(() => {
     </div>
 
     <!-- Info banner for prescripteurs without jeunes -->
-    <div v-if="!hasJeunes" class="bg-[#004657]/10 border border-[#004657]/20 rounded-xl p-4 flex items-start gap-3">
-      <UserPlus :size="18" class="text-[#004657] mt-0.5 shrink-0" />
+    <div v-if="!hasJeunes" class="bg-prado-teal/10 border border-prado-teal/20 rounded-xl p-4 flex items-start gap-3">
+      <UserPlus :size="18" class="text-prado-teal mt-0.5 shrink-0" />
       <div class="text-sm">
         <p class="text-prado-text font-medium mb-1">Ajoutez un jeune pour inscrire</p>
         <p class="text-prado-text-muted">Vous devez d'abord ajouter un jeune avant de pouvoir l'inscrire a une action.</p>
-        <NuxtLink to="/espace/jeunes?add=1" class="inline-block mt-2 text-[#004657] hover:underline font-medium">
+        <NuxtLink to="/espace/jeunes?add=1" class="inline-block mt-2 text-prado-teal hover:underline font-medium">
           Ajouter un jeune
         </NuxtLink>
       </div>

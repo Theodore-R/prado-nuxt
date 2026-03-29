@@ -228,7 +228,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
 
     <div v-if="!jeune" class="text-center py-16">
       <p class="text-prado-text-muted">Jeune introuvable.</p>
-      <NuxtLink to="/espace/jeunes" class="text-sm text-[#004657] hover:underline mt-2 inline-block">
+      <NuxtLink to="/espace/jeunes" class="text-sm text-prado-teal hover:underline mt-2 inline-block">
         Retour
       </NuxtLink>
     </div>
@@ -257,11 +257,11 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
       <!-- Identity verification -->
       <div
         v-if="!jeune.identityVerified && veriffStatus !== 'submitted'"
-        class="bg-[#004657]/10 rounded-2xl p-5 border border-[#004657]/20"
+        class="bg-prado-teal/10 rounded-2xl p-5 border border-prado-teal/20"
       >
         <div class="flex items-start gap-3">
-          <div class="w-10 h-10 rounded-xl bg-[#004657]/15 flex items-center justify-center shrink-0">
-            <ShieldCheck :size="20" class="text-[#004657]" />
+          <div class="w-10 h-10 rounded-xl bg-prado-teal/15 flex items-center justify-center shrink-0">
+            <ShieldCheck :size="20" class="text-prado-teal" />
           </div>
           <div class="flex-1">
             <p class="text-prado-text font-medium mb-1">Vérifier l'identité de {{ jeune.firstName }}</p>
@@ -270,7 +270,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
             </p>
             <button
               :disabled="verifying"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#004657] text-white text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-prado-teal text-white text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
               @click="handleVerifyIdentity"
             >
               <Loader2 v-if="verifying" :size="14" class="animate-spin" />
@@ -302,7 +302,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
           :key="tab.key"
           class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors"
           :class="activeTab === tab.key
-            ? 'bg-[#004657] text-white font-medium shadow-sm'
+            ? 'bg-prado-teal text-white font-medium shadow-sm'
             : 'text-prado-text-muted hover:bg-prado-surface-hover'"
           @click="activeTab = tab.key"
         >
@@ -457,7 +457,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
             </button>
             <button
               :disabled="savingNotes"
-              class="px-3 py-1.5 rounded-lg text-sm bg-[#004657] text-white hover:opacity-90 transition-opacity flex items-center gap-1.5"
+              class="px-3 py-1.5 rounded-lg text-sm bg-prado-teal text-white hover:opacity-90 transition-opacity flex items-center gap-1.5"
               @click="saveNotes"
             >
               <Loader2 v-if="savingNotes" :size="14" class="animate-spin" />
@@ -489,7 +489,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
             Inscriptions ({{ jeuneInscriptions.length }})
           </h2>
           <button
-            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#004657] text-white text-sm hover:opacity-90 transition-opacity"
+            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-prado-teal text-white text-sm hover:opacity-90 transition-opacity"
             @click="showPicker = !showPicker"
           >
             <Plus :size="14" /> Inscrire a une action
@@ -535,7 +535,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
               <NuxtLink
                 v-if="insc.actionId"
                 :to="`/actions/${insc.actionId}`"
-                class="text-sm text-[#004657] hover:underline"
+                class="text-sm text-prado-teal hover:underline"
               >
                 {{ insc.actionTitle }}
               </NuxtLink>

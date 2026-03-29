@@ -125,7 +125,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
       <div class="flex items-start justify-between">
         <div>
           <p class="text-sm font-medium text-prado-text">{{ model.nom }}</p>
-          <p v-if="model.specialite" class="text-xs text-[#004657]">{{ model.specialite }}</p>
+          <p v-if="model.specialite" class="text-xs text-prado-teal">{{ model.specialite }}</p>
           <p v-if="model.adresse || model.codePostal" class="text-xs text-prado-text-muted mt-0.5">
             {{ model.adresse }}<span v-if="model.codePostal">, {{ model.codePostal }}</span>
           </p>
@@ -196,7 +196,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
         Recherchez dans l'Annuaire Sante ou
         <button
           type="button"
-          class="text-[#004657] hover:underline"
+          class="text-prado-teal hover:underline"
           @click="openManualForm"
         >
           saisissez manuellement
@@ -250,7 +250,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
         <button
           type="button"
           :disabled="!manualForm.nom.trim()"
-          class="px-3 py-1.5 rounded-lg text-xs bg-[#004657] text-white hover:opacity-90 transition-opacity disabled:opacity-50"
+          class="px-3 py-1.5 rounded-lg text-xs bg-prado-teal text-white hover:opacity-90 transition-opacity disabled:opacity-50"
           @click="saveManualForm"
         >
           Enregistrer

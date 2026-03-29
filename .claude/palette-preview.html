@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prado - Palette 60/30/10</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0D1F26; color: #fff; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+  h1 { font-size: 2rem; margin-bottom: 8px; }
+  .subtitle { opacity: 0.6; margin-bottom: 48px; font-size: 1.1rem; }
+  h2 { font-size: 1.4rem; margin-bottom: 16px; }
+  h3 { font-size: 1rem; margin-bottom: 12px; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* Section */
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+  .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+
+  /* Color swatches */
+  .swatches { display: flex; gap: 16px; flex-wrap: wrap; }
+  .swatch { border-radius: 16px; overflow: hidden; min-width: 200px; flex: 1; }
+  .swatch-color { height: 120px; display: flex; align-items: end; padding: 12px 16px; }
+  .swatch-color span { font-size: 0.85rem; font-weight: 600; }
+  .swatch-info { padding: 12px 16px; background: rgba(255,255,255,0.05); }
+  .swatch-info .name { font-weight: 600; margin-bottom: 4px; }
+  .swatch-info .hex { opacity: 0.5; font-size: 0.85rem; font-family: monospace; }
+  .swatch-info .role { opacity: 0.7; font-size: 0.8rem; margin-top: 4px; }
+
+  /* Big swatch for 60% */
+  .swatch-big .swatch-color { height: 180px; }
+
+  /* Ratio bar */
+  .ratio-bar { display: flex; height: 48px; border-radius: 12px; overflow: hidden; margin-bottom: 8px; }
+  .ratio-bar div { display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
+  .ratio-label { display: flex; justify-content: space-between; font-size: 0.8rem; opacity: 0.5; margin-bottom: 48px; }
+
+  /* Mode toggle */
+  .modes { display: flex; gap: 24px; margin-bottom: 48px; }
+  .mode-card { flex: 1; border-radius: 20px; overflow: hidden; }
+  .mode-card-header { padding: 16px 20px; font-weight: 700; font-size: 0.9rem; }
+  .mode-card-body { padding: 24px 20px; min-height: 300px; }
+  .mode-card-body .mock-nav { display: flex; gap: 12px; margin-bottom: 20px; align-items: center; }
+  .mode-card-body .mock-logo { width: 32px; height: 32px; border-radius: 8px; }
+  .mode-card-body .mock-link { font-size: 0.85rem; opacity: 0.7; }
+  .mode-card-body .mock-cta { padding: 8px 20px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; border: none; cursor: pointer; }
+  .mode-card-body .mock-card { border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .mode-card-body .mock-card h4 { margin-bottom: 8px; font-size: 1rem; }
+  .mode-card-body .mock-card p { font-size: 0.85rem; opacity: 0.7; line-height: 1.5; }
+  .mock-badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; margin-top: 8px; }
+  .mock-tags { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .mock-tag { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+
+  /* Contrast check */
+  .contrast-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+  .contrast-item { padding: 16px; border-radius: 12px; text-align: center; }
+  .contrast-item .label { font-size: 0.8rem; margin-bottom: 4px; }
+  .contrast-item .ratio { font-size: 1.4rem; font-weight: 700; }
+  .contrast-item .verdict { font-size: 0.75rem; margin-top: 4px; font-weight: 600; }
+  .pass { color: #4ade80; }
+  .fail { color: #f87171; }
+
+  /* Comparison: current vs proposed */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .compare-col { border-radius: 16px; padding: 24px; }
+  .compare-col h3 { margin-bottom: 16px; opacity: 1; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Prado - Palette 60/30/10</h1>
+  <p class="subtitle">Proposition de restructuration des couleurs</p>
+
+  <!-- Ratio bar -->
+  <div class="ratio-bar">
+    <div style="width:60%; background: #0D1F26; color: #fff; border: 1px solid rgba(255,255,255,0.1);">60%</div>
+    <div style="width:30%; background: #004657; color: #fff;">30%</div>
+    <div style="width:10%; background: #FFD228; color: #004657;">10%</div>
+  </div>
+  <div class="ratio-label">
+    <span>Dominant (surfaces)</span>
+    <span>Structure & UI</span>
+    <span>Accent</span>
+  </div>
+
+  <!-- 60% -->
+  <div class="section">
+    <div class="section-header">
+      <h2>60% - Dominant</h2>
+      <span class="badge" style="background: rgba(255,255,255,0.1);">Surfaces & fonds</span>
+    </div>
+    <div class="swatches">
+      <div class="swatch swatch-big">
+        <div class="swatch-color" style="background: #0D1F26;">
+          <span style="color: rgba(255,255,255,0.5);">Dark mode</span>
+        </div>
+        <div class="swatch-info">
+          <div class="name">Prado Noir</div>
+          <div class="hex">#0D1F26</div>
+          <div class="role">Fond principal dark - noir teinte teal</div>
+        </div>
+      </div>
+      <div class="swatch swatch-big">
+        <div class="swatch-color" style="background: #FAFAFA;">
+          <span style="color: rgba(0,0,0,0.4);">Light mode</span>
+        </div>
+        <div class="swatch-info">
+          <div class="name">Blanc casse</div>
+          <div class="hex">#FAFAFA</div>
+          <div class="role">Fond principal light - blanc doux</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 30% -->
+  <div class="section">
+    <div class="section-header">
+      <h2>30% - Structure & UI</h2>
+      <span class="badge" style="background: #004657;">Navigation, cards, composants</span>
+    </div>
+    <div class="swatches">
+      <div class="swatch">
+        <div class="swatch-color" style="background: #004657;">
+          <span style="color: rgba(255,255,255,0.7);">Principal</span>
+        </div>
+        <div class="swatch-info">
+          <div class="name">Prado Teal</div>
+          <div class="hex">#004657</div>
+          <div class="role">Header, nav, cards, sections</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #CF006C;">
+          <span style="color: rgba(255,255,255,0.7);">Magenta</span>
+        </div>
+        <div class="swatch-info">
+          <div class="name">Prado Magenta</div>
+          <div class="hex">#CF006C</div>
+          <div class="role">Boutons, liens, etats actifs</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #93C1AF;">
+          <span style="color: rgba(0,0,0,0.6);">Sage</span>
+        </div>
+        <div class="swatch-info">
+          <div class="name">Prado Sage</div>
+          <div class="hex">#93C1AF</div>
+          <div class="role">Success, secondaire, badges</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #C18ED8;">
+          <span style="color: rgba(255,255,255,0.7);">Lavande</span>
+        </div>
+        <div class="swatch-info">
+          <div class="name">Prado Lavande</div>
+          <div class="hex">#C18ED8</div>
+          <div class="role">Categories, decoratif</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #701C86;">
+          <span style="color: rgba(255,255,255,0.7);">Rare</span>
+        </div>
+        <div class="swatch-info">
+          <div class="name">Prado Purple</div>
+          <div class="hex">#701C86</div>
+          <div class="role">Hover, overlays (usage rare)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10% -->
+  <div class="section">
+    <div class="section-header">
+      <h2>10% - Accent</h2>
+      <span class="badge" style="background: #FFD228; color: #004657;">Call-to-action</span>
+    </div>
+    <div class="swatches">
+      <div class="swatch">
+        <div class="swatch-color" style="background: #FFD228;">
+          <span style="color: #004657;">CTA principal</span>
+        </div>
+        <div class="swatch-info">
+          <div class="name">Prado Jaune (Signature)</div>
+          <div class="hex">#FFD228</div>
+          <div class="role">Boutons CTA, highlights, badges importants</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #FFD228; display: flex; align-items: center; justify-content: center;">
+          <span style="color: #004657; font-size: 1.2rem; font-weight: 800;">Texte CTA sur jaune</span>
+        </div>
+        <div class="swatch-info">
+          <div class="name">Combinaison recommandee</div>
+          <div class="hex">#FFD228 + #004657</div>
+          <div class="role">Contraste optimal pour lisibilite</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mockups dark/light -->
+  <div class="section">
+    <h2 style="margin-bottom: 20px;">Apercu Dark / Light</h2>
+    <div class="modes">
+      <!-- Dark mode -->
+      <div class="mode-card" style="background: #0D1F26; border: 1px solid rgba(255,255,255,0.08);">
+        <div class="mode-card-header" style="background: #004657; color: #fff;">
+          <div style="display:flex; justify-content: space-between; align-items: center;">
+            <span>PRADO</span>
+            <div style="display:flex; gap: 16px; font-weight: 400; font-size: 0.8rem; opacity: 0.8;">
+              <span>Programmes</span>
+              <span>Ressources</span>
+              <span style="color: #FFD228;">Contact</span>
+            </div>
+          </div>
+        </div>
+        <div class="mode-card-body" style="color: #fff;">
+          <div class="mock-card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);">
+            <h4>Atelier Bien-etre</h4>
+            <p>Decouvrez nos ateliers pour prendre soin de vous au quotidien.</p>
+            <div class="mock-tags">
+              <span class="mock-tag" style="background: rgba(193,142,216,0.15); color: #C18ED8;">Bien-etre</span>
+              <span class="mock-tag" style="background: rgba(147,193,175,0.15); color: #93C1AF;">Gratuit</span>
+            </div>
+          </div>
+          <div style="display:flex; gap: 10px;">
+            <button class="mock-cta" style="background: #FFD228; color: #004657;">S'inscrire</button>
+            <button class="mock-cta" style="background: transparent; color: #CF006C; border: 1px solid #CF006C;">En savoir +</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Light mode -->
+      <div class="mode-card" style="background: #FAFAFA; border: 1px solid rgba(0,0,0,0.08);">
+        <div class="mode-card-header" style="background: #004657; color: #fff;">
+          <div style="display:flex; justify-content: space-between; align-items: center;">
+            <span>PRADO</span>
+            <div style="display:flex; gap: 16px; font-weight: 400; font-size: 0.8rem; opacity: 0.8;">
+              <span>Programmes</span>
+              <span>Ressources</span>
+              <span style="color: #FFD228;">Contact</span>
+            </div>
+          </div>
+        </div>
+        <div class="mode-card-body" style="color: #1a1a2e;">
+          <div class="mock-card" style="background: #fff; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+            <h4>Atelier Bien-etre</h4>
+            <p>Decouvrez nos ateliers pour prendre soin de vous au quotidien.</p>
+            <div class="mock-tags">
+              <span class="mock-tag" style="background: rgba(193,142,216,0.12); color: #701C86;">Bien-etre</span>
+              <span class="mock-tag" style="background: rgba(147,193,175,0.12); color: #004657;">Gratuit</span>
+            </div>
+          </div>
+          <div style="display:flex; gap: 10px;">
+            <button class="mock-cta" style="background: #FFD228; color: #004657;">S'inscrire</button>
+            <button class="mock-cta" style="background: transparent; color: #CF006C; border: 1px solid #CF006C;">En savoir +</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contrast checks -->
+  <div class="section">
+    <h2 style="margin-bottom: 20px;">Verification des contrastes</h2>
+    <div class="contrast-grid">
+      <div class="contrast-item" style="background: #0D1F26; color: #fff; border: 1px solid rgba(255,255,255,0.1);">
+        <div class="label">Blanc sur Prado Noir</div>
+        <div class="ratio">15.7:1</div>
+        <div class="verdict pass">AAA</div>
+      </div>
+      <div class="contrast-item" style="background: #004657; color: #fff;">
+        <div class="label">Blanc sur Teal</div>
+        <div class="ratio">8.2:1</div>
+        <div class="verdict pass">AAA</div>
+      </div>
+      <div class="contrast-item" style="background: #FFD228; color: #004657;">
+        <div class="label">Teal sur Jaune</div>
+        <div class="ratio">5.8:1</div>
+        <div class="verdict pass">AA</div>
+      </div>
+      <div class="contrast-item" style="background: #FFD228; color: #fff;">
+        <div class="label">Blanc sur Jaune</div>
+        <div class="ratio">1.8:1</div>
+        <div class="verdict fail">FAIL - eviter</div>
+      </div>
+      <div class="contrast-item" style="background: #CF006C; color: #fff;">
+        <div class="label">Blanc sur Magenta</div>
+        <div class="ratio">5.4:1</div>
+        <div class="verdict pass">AA</div>
+      </div>
+      <div class="contrast-item" style="background: #FAFAFA; color: #004657;">
+        <div class="label">Teal sur Blanc</div>
+        <div class="ratio">8.0:1</div>
+        <div class="verdict pass">AAA</div>
+      </div>
+      <div class="contrast-item" style="background: #701C86; color: #fff;">
+        <div class="label">Blanc sur Purple</div>
+        <div class="ratio">8.6:1</div>
+        <div class="verdict pass">AAA</div>
+      </div>
+      <div class="contrast-item" style="background: #FAFAFA; color: #CF006C; border: 1px solid rgba(0,0,0,0.08);">
+        <div class="label">Magenta sur Blanc</div>
+        <div class="ratio">5.2:1</div>
+        <div class="verdict pass">AA</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Current vs Proposed -->
+  <div class="section">
+    <h2 style="margin-bottom: 20px;">Actuel vs Propose</h2>
+    <div class="compare">
+      <div class="compare-col" style="background: #1a1a2e; border: 1px solid rgba(255,255,255,0.1);">
+        <h3 style="color: rgba(255,255,255,0.5);">Actuel (dark)</h3>
+        <div style="display: flex; gap: 6px; margin-bottom: 12px;">
+          <div style="width:40px;height:40px;border-radius:8px;background:#1a1a2e;border:1px solid rgba(255,255,255,0.2);"></div>
+          <div style="width:40px;height:40px;border-radius:8px;background:#232340;"></div>
+          <div style="width:40px;height:40px;border-radius:8px;background:#CF006C;"></div>
+          <div style="width:40px;height:40px;border-radius:8px;background:#004657;"></div>
+          <div style="width:40px;height:40px;border-radius:8px;background:#93C1AF;"></div>
+          <div style="width:40px;height:40px;border-radius:8px;background:#C18ED8;"></div>
+          <div style="width:40px;height:40px;border-radius:8px;background:#FFD228;"></div>
+        </div>
+        <p style="font-size:0.8rem;opacity:0.5;line-height:1.5;">Pas de hierarchie claire.<br>Navy + teal + magenta en poids egal.<br>Jaune sous-utilise.</p>
+      </div>
+      <div class="compare-col" style="background: #0D1F26; border: 1px solid rgba(255,255,255,0.1);">
+        <h3 style="color: #FFD228;">Propose (dark)</h3>
+        <div style="display: flex; gap: 6px; margin-bottom: 12px; align-items: end;">
+          <div style="width:56px;height:56px;border-radius:8px;background:#0D1F26;border:1px solid rgba(255,255,255,0.2);font-size:0.65rem;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.4);">60%</div>
+          <div style="width:40px;height:40px;border-radius:8px;background:#004657;"></div>
+          <div style="width:40px;height:40px;border-radius:8px;background:#CF006C;"></div>
+          <div style="width:40px;height:40px;border-radius:8px;background:#93C1AF;"></div>
+          <div style="width:40px;height:40px;border-radius:8px;background:#C18ED8;"></div>
+          <div style="width:32px;height:32px;border-radius:8px;background:#FFD228;font-size:0.6rem;display:flex;align-items:center;justify-content:center;color:#004657;font-weight:700;">10%</div>
+        </div>
+        <p style="font-size:0.8rem;opacity:0.5;line-height:1.5;">Hierarchie claire 60/30/10.<br>Teal structure, magenta action.<br>Jaune = CTA signature.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

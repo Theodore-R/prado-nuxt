@@ -40,7 +40,7 @@ const activityColors: Record<string, string> = {
   inscription: '#93C1AF',
   prescripteur: '#C18ED8',
   contact: '#FB6223',
-  newsletter: '#004657',
+  newsletter: 'var(--prado-teal)',
 }
 
 onMounted(async () => {

@@ -6,7 +6,7 @@ const state = useConfirmState()
 const variantClasses = {
   danger: 'bg-red-500 hover:bg-red-600',
   warning: 'bg-[#FB6223] hover:bg-[#FB6223]/90',
-  default: 'bg-[#004657] hover:bg-[#004657]/90',
+  default: 'bg-prado-teal hover:bg-prado-teal/90',
 }
 
 function handleConfirm() {

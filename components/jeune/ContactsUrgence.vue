@@ -72,7 +72,7 @@ const inputClass = 'w-full px-3 py-2 rounded-lg bg-prado-input-bg border border-
     </div>
 
     <button
-      class="inline-flex items-center gap-1.5 text-xs text-[#004657] hover:underline"
+      class="inline-flex items-center gap-1.5 text-xs text-prado-teal hover:underline"
       @click="addContact"
     >
       <Plus :size="12" /> Ajouter un contact d'urgence

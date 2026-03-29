@@ -119,7 +119,7 @@ const strokeDashoffset = computed(() =>
               step.done
                 ? 'border-[#93C1AF]/30 bg-[#93C1AF]/5'
                 : expandedStep === step.key
-                  ? 'border-[#004657]/40 bg-[#004657]/5'
+                  ? 'border-prado-teal/40 bg-prado-teal/5'
                   : 'border-prado-border bg-prado-surface',
             ]"
           >
@@ -167,7 +167,7 @@ const strokeDashoffset = computed(() =>
               <NuxtLink
                 v-if="step.link"
                 :to="step.link"
-                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#004657] text-white text-sm hover:opacity-90 transition-opacity ml-9"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-prado-teal text-white text-sm hover:opacity-90 transition-opacity ml-9"
                 @click="closePanel"
               >
                 Commencer <ArrowRight :size="14" />

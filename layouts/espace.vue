@@ -124,7 +124,7 @@ async function handleLogout() {
           :class="[
             'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors',
             isNavActive('/espace/parametres', false)
-              ? 'bg-[#004657] text-white'
+              ? 'bg-prado-teal text-white'
               : 'text-prado-text-muted hover:text-prado-text hover:bg-prado-surface-hover',
           ]"
           @click="sidebarOpen = false"

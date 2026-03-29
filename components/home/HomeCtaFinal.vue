@@ -72,7 +72,7 @@ onMounted(() => {
       >
         <NuxtLink
           :to="ctaPrimary.to"
-          class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white text-[#1a1a2e] hover:bg-white/90 transition-colors font-medium"
+          class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-white text-prado-black hover:bg-white/90 transition-colors font-medium"
         >
           {{ ctaPrimary.label }}
           <ArrowRight :size="16" />

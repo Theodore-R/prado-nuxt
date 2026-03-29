@@ -268,8 +268,8 @@ async function handleDesinscrire(inscriptionId: string) {
       class="rounded-xl border-2 border-dashed border-prado-border py-8 px-6"
     >
       <div class="text-center mb-5">
-        <div class="w-11 h-11 rounded-full bg-[#004657]/10 flex items-center justify-center mx-auto mb-3">
-          <UserPlus :size="18" class="text-[#004657]" />
+        <div class="w-11 h-11 rounded-full bg-prado-teal/10 flex items-center justify-center mx-auto mb-3">
+          <UserPlus :size="18" class="text-prado-teal" />
         </div>
         <p class="text-sm text-prado-text-secondary mb-1">Creez votre premier jeune</p>
         <p class="text-xs text-prado-text-muted max-w-xs mx-auto">
@@ -283,20 +283,20 @@ async function handleDesinscrire(inscriptionId: string) {
             type="text"
             placeholder="Prenom"
             required
-            class="flex-1 px-3 py-2.5 rounded-lg bg-prado-surface border border-prado-border text-sm text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-[#004657]/40 transition-colors"
+            class="flex-1 px-3 py-2.5 rounded-lg bg-prado-surface border border-prado-border text-sm text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-prado-teal/40 transition-colors"
           />
           <input
             v-model="quickAddLastName"
             type="text"
             placeholder="Nom"
             required
-            class="flex-1 px-3 py-2.5 rounded-lg bg-prado-surface border border-prado-border text-sm text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-[#004657]/40 transition-colors"
+            class="flex-1 px-3 py-2.5 rounded-lg bg-prado-surface border border-prado-border text-sm text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-prado-teal/40 transition-colors"
           />
         </div>
         <button
           type="submit"
           :disabled="quickAddLoading || !quickAddFirstName.trim() || !quickAddLastName.trim()"
-          class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#004657] text-white text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+          class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-prado-teal text-white text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
         >
           <Loader2 v-if="quickAddLoading" :size="14" class="animate-spin" />
           <UserPlus v-else :size="14" />
@@ -320,7 +320,7 @@ async function handleDesinscrire(inscriptionId: string) {
           @click="handleInscrire(j.id)"
         >
           <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-full bg-[#004657]/10 flex items-center justify-center text-[11px] font-medium text-[#004657]">
+            <div class="w-8 h-8 rounded-full bg-prado-teal/10 flex items-center justify-center text-[11px] font-medium text-prado-teal">
               {{ j.firstName[0] }}{{ j.lastName[0] }}
             </div>
             <span class="text-sm text-prado-text">{{ j.firstName }} {{ j.lastName }}</span>
@@ -332,19 +332,19 @@ async function handleDesinscrire(inscriptionId: string) {
       <div class="border-t border-prado-border pt-3">
         <button
           v-if="!showQuickAdd"
-          class="inline-flex items-center gap-1.5 text-xs text-prado-text-muted hover:text-[#004657] transition-colors"
+          class="inline-flex items-center gap-1.5 text-xs text-prado-text-muted hover:text-prado-teal transition-colors"
           @click="showQuickAdd = true"
         >
           <Plus :size="12" /> Nouveau jeune
         </button>
         <form v-else class="space-y-2" @submit.prevent="handleQuickAddJeune">
           <div class="flex gap-2">
-            <input v-model="quickAddFirstName" type="text" placeholder="Prenom" required class="flex-1 px-3 py-2 rounded-lg bg-prado-bg border border-prado-border text-sm text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-[#004657]/40 transition-colors" />
-            <input v-model="quickAddLastName" type="text" placeholder="Nom" required class="flex-1 px-3 py-2 rounded-lg bg-prado-bg border border-prado-border text-sm text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-[#004657]/40 transition-colors" />
+            <input v-model="quickAddFirstName" type="text" placeholder="Prenom" required class="flex-1 px-3 py-2 rounded-lg bg-prado-bg border border-prado-border text-sm text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-prado-teal/40 transition-colors" />
+            <input v-model="quickAddLastName" type="text" placeholder="Nom" required class="flex-1 px-3 py-2 rounded-lg bg-prado-bg border border-prado-border text-sm text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-prado-teal/40 transition-colors" />
             <button
               type="submit"
               :disabled="quickAddLoading || !quickAddFirstName.trim() || !quickAddLastName.trim()"
-              class="px-3 py-2 rounded-lg bg-[#004657] text-white text-xs hover:opacity-90 transition-opacity disabled:opacity-50 shrink-0"
+              class="px-3 py-2 rounded-lg bg-prado-teal text-white text-xs hover:opacity-90 transition-opacity disabled:opacity-50 shrink-0"
             >
               <Loader2 v-if="quickAddLoading" :size="14" class="animate-spin" />
               <Plus v-else :size="14" />
@@ -429,7 +429,7 @@ async function handleDesinscrire(inscriptionId: string) {
               @click="handleInscrire(j.id)"
             >
               <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-full bg-[#004657]/10 flex items-center justify-center text-[11px] font-medium text-[#004657]">
+                <div class="w-8 h-8 rounded-full bg-prado-teal/10 flex items-center justify-center text-[11px] font-medium text-prado-teal">
                   {{ j.firstName[0] }}{{ j.lastName[0] }}
                 </div>
                 <span class="text-sm text-prado-text">{{ j.firstName }} {{ j.lastName }}</span>
@@ -448,19 +448,19 @@ async function handleDesinscrire(inscriptionId: string) {
           <div class="border-t border-prado-border-light pt-3">
             <button
               v-if="!showQuickAdd"
-              class="inline-flex items-center gap-1.5 text-xs text-prado-text-muted hover:text-[#004657] transition-colors"
+              class="inline-flex items-center gap-1.5 text-xs text-prado-text-muted hover:text-prado-teal transition-colors"
               @click="showQuickAdd = true"
             >
               <Plus :size="12" /> Nouveau jeune
             </button>
             <form v-else class="space-y-2" @submit.prevent="handleQuickAddJeune">
               <div class="flex gap-2">
-                <input v-model="quickAddFirstName" type="text" placeholder="Prenom" required class="flex-1 px-3 py-2 rounded-lg bg-prado-bg border border-prado-border text-sm text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-[#004657]/40 transition-colors" />
-                <input v-model="quickAddLastName" type="text" placeholder="Nom" required class="flex-1 px-3 py-2 rounded-lg bg-prado-bg border border-prado-border text-sm text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-[#004657]/40 transition-colors" />
+                <input v-model="quickAddFirstName" type="text" placeholder="Prenom" required class="flex-1 px-3 py-2 rounded-lg bg-prado-bg border border-prado-border text-sm text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-prado-teal/40 transition-colors" />
+                <input v-model="quickAddLastName" type="text" placeholder="Nom" required class="flex-1 px-3 py-2 rounded-lg bg-prado-bg border border-prado-border text-sm text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-prado-teal/40 transition-colors" />
                 <button
                   type="submit"
                   :disabled="quickAddLoading || !quickAddFirstName.trim() || !quickAddLastName.trim()"
-                  class="px-3 py-2 rounded-lg bg-[#004657] text-white text-xs hover:opacity-90 transition-opacity disabled:opacity-50 shrink-0"
+                  class="px-3 py-2 rounded-lg bg-prado-teal text-white text-xs hover:opacity-90 transition-opacity disabled:opacity-50 shrink-0"
                 >
                   <Loader2 v-if="quickAddLoading" :size="14" class="animate-spin" />
                   <Plus v-else :size="14" />

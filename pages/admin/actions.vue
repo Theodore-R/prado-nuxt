@@ -107,7 +107,7 @@ async function duplicateAction(action: Record<string, any>) {
         <input
           v-model="showArchived"
           type="checkbox"
-          class="rounded border-prado-border text-[#004657] focus:ring-[#004657]"
+          class="rounded border-prado-border text-prado-teal focus:ring-prado-teal"
         />
         <Archive :size="14" />
         Voir les archives
@@ -170,7 +170,7 @@ async function duplicateAction(action: Record<string, any>) {
           <Infinity :size="16" />
         </button>
         <button
-          class="p-1.5 rounded-lg hover:bg-[#004657]/15 text-[#004657] dark:text-prado-text-muted transition-colors"
+          class="p-1.5 rounded-lg hover:bg-prado-teal/15 text-prado-teal dark:text-prado-text-muted transition-colors"
           title="Dupliquer cette action"
           :disabled="duplicating === row.id"
           @click="duplicateAction(row)"

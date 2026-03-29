@@ -121,7 +121,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
         <button
           type="submit"
           :disabled="saving"
-          class="px-5 py-2 rounded-full bg-[#004657] text-white text-sm disabled:opacity-50 flex items-center gap-2"
+          class="px-5 py-2 rounded-full bg-prado-teal text-white text-sm disabled:opacity-50 flex items-center gap-2"
         >
           <Loader2 v-if="saving" :size="14" class="animate-spin" />
           Enregistrer les modifications

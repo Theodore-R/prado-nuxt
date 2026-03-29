@@ -165,7 +165,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
       <button
         v-if="hasJeunes"
         :disabled="isRestricted"
-        class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#004657] text-white text-sm hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+        class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-prado-teal text-white text-sm hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
         @click="showAdd = !showAdd"
       >
         <UserPlus :size="14" /> Ajouter
@@ -258,7 +258,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
       <template #actions="{ row }">
         <NuxtLink
           :to="`/espace/jeunes/${row.id}`"
-          class="p-1.5 rounded-lg hover:bg-prado-surface-hover text-prado-text-muted hover:text-[#004657] transition-colors"
+          class="p-1.5 rounded-lg hover:bg-prado-surface-hover text-prado-text-muted hover:text-prado-teal transition-colors"
           title="Voir la fiche"
         >
           <Eye :size="15" />

@@ -41,7 +41,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
         <Key :size="16" /> Securite
       </h2>
       <button
-        class="text-sm text-[#004657] hover:underline"
+        class="text-sm text-prado-teal hover:underline"
         @click="showForm = !showForm"
       >
         {{ showForm ? 'Annuler' : 'Changer le mot de passe' }}

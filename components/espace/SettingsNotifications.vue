@@ -64,7 +64,7 @@ const toggles = [
           type="button"
           :class="[
             'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200',
-            prefs[toggle.key] ? 'bg-[#004657]' : 'bg-prado-border',
+            prefs[toggle.key] ? 'bg-prado-teal' : 'bg-prado-border',
           ]"
           role="switch"
           :aria-checked="prefs[toggle.key]"
@@ -83,7 +83,7 @@ const toggles = [
     <div class="mt-5">
       <button
         :disabled="saving"
-        class="px-5 py-2 rounded-full bg-[#004657] text-white text-sm disabled:opacity-50"
+        class="px-5 py-2 rounded-full bg-prado-teal text-white text-sm disabled:opacity-50"
         @click="save"
       >
         Enregistrer les preferences

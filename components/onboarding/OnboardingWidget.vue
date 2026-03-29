@@ -12,7 +12,7 @@ const strokeDashoffset = computed(() =>
   <Teleport to="body">
     <button
       v-if="showWidget"
-      class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#004657] text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center group"
+      class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-prado-teal text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center group"
       :class="{ 'animate-pulse-subtle': completedCount < totalSteps }"
       title="Démarrage rapide"
       @click="openPanel"

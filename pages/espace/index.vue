@@ -53,8 +53,8 @@ const actionCards = computed(() => {
   if (jeunes.value.length === 0) {
     cards.push({
       icon: UserPlus,
-      color: '#004657',
-      bgColor: '#004657',
+      color: 'var(--prado-teal)',
+      bgColor: 'var(--prado-teal)',
       title: 'Créer votre première fiche jeune',
       description: 'Commencez par enregistrer un jeune pour accéder à toutes les fonctionnalités.',
       link: '/espace/jeunes?add=1',
@@ -65,8 +65,8 @@ const actionCards = computed(() => {
   for (const j of jeunes.value.filter(j => !j.identityVerified)) {
     cards.push({
       icon: ShieldCheck,
-      color: '#004657',
-      bgColor: '#004657',
+      color: 'var(--prado-teal)',
+      bgColor: 'var(--prado-teal)',
       title: `Vérifier l'identité de ${j.firstName}`,
       description: 'En présence du jeune, lancez la vérification avec une pièce d\'identité valide.',
       link: `/espace/jeunes/${j.id}`,
@@ -132,8 +132,8 @@ function formatDate(dateStr: string) {
     <!-- Stat cards -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div class="bg-prado-surface rounded-2xl border border-prado-border p-5 flex items-center gap-4">
-        <div class="w-11 h-11 rounded-xl flex items-center justify-center bg-[#004657]/15">
-          <Users :size="20" class="text-[#004657]" />
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center bg-prado-teal/15">
+          <Users :size="20" class="text-prado-teal" />
         </div>
         <div>
           <p class="text-2xl font-semibold text-prado-text">{{ jeunesCount }}</p>
@@ -205,7 +205,7 @@ function formatDate(dateStr: string) {
               <NuxtLink
                 v-if="insc.actionId"
                 :to="`/actions/${insc.actionId}`"
-                class="text-[#004657] hover:underline"
+                class="text-prado-teal hover:underline"
               >
                 {{ insc.actionTitle }}
               </NuxtLink>
