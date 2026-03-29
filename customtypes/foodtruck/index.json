@@ -1,0 +1,106 @@
+{
+  "id": "foodtruck",
+  "label": "Foodtruck",
+  "repeatable": false,
+  "status": true,
+  "json": {
+    "Main": {
+      "surtitle": { "type": "Text", "config": { "label": "Sur-titre", "placeholder": "Foodtruck solidaire" } },
+      "title": { "type": "Text", "config": { "label": "Titre principal" } },
+      "tagline": { "type": "Text", "config": { "label": "Accroche" } },
+      "hero_image": { "type": "Image", "config": { "label": "Image hero" } },
+      "brand_color": { "type": "Color", "config": { "label": "Couleur dominante" } },
+      "intro_title": { "type": "Text", "config": { "label": "Titre section projet" } },
+      "intro_body": { "type": "StructuredText", "config": { "label": "Description du projet", "multi": "paragraph,strong,em,hyperlink" } }
+    },
+    "Highlights": {
+      "highlights": {
+        "type": "Group",
+        "config": {
+          "label": "Points forts",
+          "fields": {
+            "icon_name": { "type": "Select", "config": { "label": "Icone", "options": ["ChefHat", "Users", "Heart", "Truck", "Utensils"] } },
+            "label": { "type": "Text", "config": { "label": "Libelle" } },
+            "desc": { "type": "Text", "config": { "label": "Description" } }
+          }
+        }
+      }
+    },
+    "Tournee": {
+      "tournee": {
+        "type": "Group",
+        "config": {
+          "label": "Planning de tournee",
+          "fields": {
+            "jour": { "type": "Text", "config": { "label": "Jour" } },
+            "lieu": { "type": "Text", "config": { "label": "Lieu" } },
+            "precision": { "type": "Text", "config": { "label": "Precision (frequence)" } }
+          }
+        }
+      }
+    },
+    "Menu": {
+      "menu_title": { "type": "Text", "config": { "label": "Titre section menu", "placeholder": "Menu du mois" } },
+      "menu_subtitle": { "type": "Text", "config": { "label": "Sous-titre menu", "placeholder": "Menu de saison, a prix reduit. Mis a jour chaque mois." } },
+      "menu_quote": { "type": "Text", "config": { "label": "Citation menu (optionnel)", "placeholder": "D'Lieb geht durich de Maawe" } },
+      "entrees": {
+        "type": "Group",
+        "config": {
+          "label": "Entrees",
+          "fields": {
+            "name": { "type": "Text", "config": { "label": "Nom" } },
+            "desc": { "type": "Text", "config": { "label": "Description / ingredients" } }
+          }
+        }
+      },
+      "plats": {
+        "type": "Group",
+        "config": {
+          "label": "Plats",
+          "fields": {
+            "name": { "type": "Text", "config": { "label": "Nom du plat" } },
+            "desc": { "type": "Text", "config": { "label": "Description / ingredients" } }
+          }
+        }
+      },
+      "desserts": {
+        "type": "Group",
+        "config": {
+          "label": "Desserts",
+          "fields": {
+            "name": { "type": "Text", "config": { "label": "Nom" } },
+            "desc": { "type": "Text", "config": { "label": "Description / ingredients" } }
+          }
+        }
+      },
+      "prix_solidaire_menu": { "type": "Text", "config": { "label": "Prix solidaire — Menu", "placeholder": "9" } },
+      "prix_solidaire_plat": { "type": "Text", "config": { "label": "Prix solidaire — Plat", "placeholder": "6" } },
+      "prix_solidaire_dessert": { "type": "Text", "config": { "label": "Prix solidaire — Dessert/Entree", "placeholder": "3" } },
+      "prix_normal_menu": { "type": "Text", "config": { "label": "Prix normal — Menu", "placeholder": "13" } },
+      "prix_normal_plat": { "type": "Text", "config": { "label": "Prix normal — Plat", "placeholder": "8" } },
+      "prix_normal_dessert": { "type": "Text", "config": { "label": "Prix normal — Dessert/Entree", "placeholder": "3" } },
+      "tarif_note": { "type": "Text", "config": { "label": "Note tarifs", "placeholder": "Boisson gratuite et a volonte" } },
+      "phone_label": { "type": "Text", "config": { "label": "Libelle telephone", "placeholder": "Renseignements menus & tournees" } },
+      "phone_numbers": { "type": "Text", "config": { "label": "Numeros de telephone", "placeholder": "06 24 68 52 04 / 06 81 44 37 13" } }
+    },
+    "Etapes": {
+      "steps": {
+        "type": "Group",
+        "config": {
+          "label": "Etapes d'inscription",
+          "fields": {
+            "step_number": { "type": "Text", "config": { "label": "Numero", "placeholder": "01" } },
+            "title": { "type": "Text", "config": { "label": "Titre" } },
+            "desc": { "type": "Text", "config": { "label": "Description" } },
+            "color": { "type": "Color", "config": { "label": "Couleur" } }
+          }
+        }
+      }
+    },
+    "SEO": {
+      "meta_title": { "type": "Text", "config": { "label": "Meta Title" } },
+      "meta_description": { "type": "Text", "config": { "label": "Meta Description" } },
+      "og_image": { "type": "Image", "config": { "label": "OG Image" } }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "educolab",
+  "label": "Educolab",
+  "repeatable": false,
+  "status": true,
+  "json": {
+    "Main": {
+      "surtitle": { "type": "Text", "config": { "label": "Sur-titre", "placeholder": "Competences parentales" } },
+      "title": { "type": "Text", "config": { "label": "Titre" } },
+      "hero_image": { "type": "Image", "config": { "label": "Image hero" } },
+      "brand_color": { "type": "Color", "config": { "label": "Couleur dominante" } },
+      "card_title": { "type": "Text", "config": { "label": "Titre de la carte" } },
+      "card_body": { "type": "StructuredText", "config": { "label": "Contenu de la carte", "multi": "paragraph,strong,em,hyperlink" } },
+      "cta_label": { "type": "Text", "config": { "label": "Texte du bouton" } },
+      "cta_link": { "type": "Link", "config": { "label": "Lien externe" } }
+    },
+    "SEO": {
+      "meta_title": { "type": "Text", "config": { "label": "Meta Title" } },
+      "meta_description": { "type": "Text", "config": { "label": "Meta Description" } }
+    }
+  }
+}

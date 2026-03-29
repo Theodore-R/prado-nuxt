@@ -1,6 +1,6 @@
 {
   "id": "actualite",
-  "label": "Actualité",
+  "label": "Blog — Actualite",
   "repeatable": true,
   "status": true,
   "json": {

@@ -1,0 +1,65 @@
+{
+  "id": "fresque",
+  "label": "Fresque",
+  "repeatable": false,
+  "status": true,
+  "json": {
+    "Main": {
+      "surtitle": { "type": "Text", "config": { "label": "Sur-titre", "placeholder": "Atelier pedagogique et collaboratif" } },
+      "title": { "type": "Text", "config": { "label": "Titre principal" } },
+      "description": { "type": "Text", "config": { "label": "Description courte (hero)" } },
+      "hero_image": { "type": "Image", "config": { "label": "Image hero" } },
+      "brand_color": { "type": "Color", "config": { "label": "Couleur dominante" } },
+      "intro_title": { "type": "Text", "config": { "label": "Titre section intro" } },
+      "intro_body": { "type": "StructuredText", "config": { "label": "Texte d'introduction", "multi": "paragraph,strong,em,hyperlink" } },
+      "testimonial_quote": { "type": "StructuredText", "config": { "label": "Citation temoignage", "multi": "paragraph,strong,em" } },
+      "testimonial_author": { "type": "Text", "config": { "label": "Auteur temoignage" } }
+    },
+    "Objectifs": {
+      "objectives": {
+        "type": "Group",
+        "config": {
+          "label": "Objectifs",
+          "fields": {
+            "icon_name": { "type": "Select", "config": { "label": "Icone", "options": ["BookOpen", "Lightbulb", "Shield", "Users", "Heart"] } },
+            "label": { "type": "Text", "config": { "label": "Libelle" } },
+            "desc": { "type": "Text", "config": { "label": "Description" } }
+          }
+        }
+      }
+    },
+    "Parcours": {
+      "parcours": {
+        "type": "Group",
+        "config": {
+          "label": "Parcours de vie",
+          "fields": {
+            "nom": { "type": "Text", "config": { "label": "Nom et age" } },
+            "desc": { "type": "Text", "config": { "label": "Description" } },
+            "color": { "type": "Color", "config": { "label": "Couleur" } }
+          }
+        }
+      }
+    },
+    "Sessions": {
+      "sessions": {
+        "type": "Group",
+        "config": {
+          "label": "Prochaines sessions",
+          "fields": {
+            "date": { "type": "Text", "config": { "label": "Date" } },
+            "version": { "type": "Text", "config": { "label": "Version (Pro/Grand public)" } },
+            "lieu": { "type": "Text", "config": { "label": "Lieu" } },
+            "duree": { "type": "Text", "config": { "label": "Duree" } },
+            "places": { "type": "Text", "config": { "label": "Places restantes" } }
+          }
+        }
+      }
+    },
+    "SEO": {
+      "meta_title": { "type": "Text", "config": { "label": "Meta Title" } },
+      "meta_description": { "type": "Text", "config": { "label": "Meta Description" } },
+      "og_image": { "type": "Image", "config": { "label": "OG Image" } }
+    }
+  }
+}

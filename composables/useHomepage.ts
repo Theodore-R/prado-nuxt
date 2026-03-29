@@ -6,7 +6,8 @@ export const useHomepage = () => {
       return await client.getSingle('homepage')
     } catch {
       console.warn('[useHomepage] Prismic fetch failed, using fallback data')
-      return null
+      // useAsyncData requires non-null return; empty object signals fetch failure (consumers check .data)
+      return {} as Record<string, never>
     }
   }, {
     server: true,

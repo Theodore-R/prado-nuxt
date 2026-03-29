@@ -1,0 +1,23 @@
+{
+  "id": "page_legale",
+  "label": "Page legale",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "uid": { "type": "UID", "config": { "label": "URL Slug", "placeholder": "mentions-legales" } },
+      "title": { "type": "Text", "config": { "label": "Titre de la page" } },
+      "body": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Contenu",
+          "multi": "paragraph,heading2,heading3,heading4,list-item,o-list-item,strong,em,hyperlink"
+        }
+      }
+    },
+    "SEO": {
+      "meta_title": { "type": "Text", "config": { "label": "Meta Title" } },
+      "meta_description": { "type": "Text", "config": { "label": "Meta Description" } }
+    }
+  }
+}
