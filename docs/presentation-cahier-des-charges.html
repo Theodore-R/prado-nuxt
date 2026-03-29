@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prado Itineraires — Cahier des charges</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Poppins (corps) + Archivo Black (fallback titres si Neulis Neue non dispo) -->
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.474.0/dist/umd/lucide.min.js"></script>
+<style>
+/* ===========================================================
+   FONT: Neulis Bold
+   =========================================================== */
+@font-face {
+    font-family: 'Neulis';
+    src: url('./Neulis-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ===========================================================
+   ONE-PAGE STATIC LAYOUT (Figma import)
+   Each slide = 1920x1080 fixed frame
+   =========================================================== */
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #111;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 40px 0;
+}
+.slide {
+    width: 1920px;
+    height: 1080px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+.slide-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-height: 100%;
+    overflow: hidden;
+    padding: var(--slide-padding);
+}
+
+/* ===========================================================
+   PRADO THEME — CUSTOM PROPERTIES
+   =========================================================== */
+:root {
+    /* Couleurs Prado */
+    --magenta: #CF006C;
+    --yellow: #FFD228;
+    --teal: #93C1AF;
+    --purple: #C18ED8;
+    --orange: #FB6223;
+    --blue-dark: #004657;
+    --bg: #1a1a2e;
+    --surface: #232340;
+    --surface-light: #2d2d50;
+    --text: #f0f0f5;
+    --text-muted: #9999b8;
+
+    /* Typographie fixe (1920x1080) */
+    --title-size: 3.5rem;
+    --h2-size: 2.4rem;
+    --h3-size: 1.5rem;
+    --body-size: 1.05rem;
+    --small-size: 0.82rem;
+
+    /* Espacement fixe */
+    --slide-padding: 80px;
+    --content-gap: 32px;
+    --element-gap: 14px;
+
+    /* Icones */
+    --icon-size: 26px;
+    --icon-size-lg: 40px;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+/* Titres : Neulis Neue Bold > Archivo Black > fallback */
+h1, h2, h3, .heading {
+    font-family: 'Neulis', 'Archivo Black', sans-serif;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    font-style: normal;
+}
+
+/* ===========================================================
+   LUCIDE ICONS
+   =========================================================== */
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    flex-shrink: 0;
+}
+.icon svg {
+    width: 100%;
+    height: 100%;
+}
+.icon-lg {
+    --icon-size: var(--icon-size-lg);
+}
+.icon-xl {
+    --icon-size: 64px;
+}
+.icon-card {
+    --icon-size: 34px;
+    color: var(--yellow);
+}
+
+/* ===========================================================
+   SLIDE LAYOUTS
+   =========================================================== */
+.slide-title {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.slide-title .slide-content {
+    align-items: center;
+}
+.slide-section .slide-content {
+    gap: var(--content-gap);
+}
+
+/* Tags / badges */
+.tag {
+    display: inline-block;
+    padding: 5px 16px;
+    border-radius: 100px;
+    font-size: var(--small-size);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+.tag--magenta { background: var(--magenta); color: #fff; }
+.tag--yellow { background: var(--yellow); color: #1a1a2e; }
+.tag--teal { background: var(--teal); color: #1a1a2e; }
+.tag--orange { background: var(--orange); color: #fff; }
+.tag--blue { background: var(--blue-dark); color: #fff; }
+.tag--purple { background: var(--purple); color: #1a1a2e; }
+
+/* Titres de slide */
+.slide h2 {
+    font-size: var(--h2-size);
+    margin: 0 0 var(--content-gap);
+}
+.slide h2 .accent { color: var(--yellow); }
+
+/* Grilles */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1100px;
+}
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1100px;
+}
+.grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    width: 100%;
+    max-width: 1100px;
+}
+
+/* Cards */
+.card {
+    background: var(--surface);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+.card--accent { border-color: var(--yellow); border-width: 2px; }
+.card--magenta { border-left: 3px solid var(--magenta); }
+.card--teal { border-left: 3px solid var(--teal); }
+.card--orange { border-left: 3px solid var(--orange); }
+.card--blue { border-left: 3px solid var(--blue-dark); }
+.card--purple { border-left: 3px solid var(--purple); }
+
+.card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--yellow);
+}
+.card-icon svg { width: var(--icon-size-lg); height: var(--icon-size-lg); }
+
+.card-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text);
+}
+.card-desc {
+    font-size: var(--small-size);
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* Bullet list */
+.bullet-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+.bullet-list li {
+    font-size: var(--body-size);
+    line-height: 1.4;
+    padding-left: 1.5em;
+    position: relative;
+}
+.bullet-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    background: var(--yellow);
+}
+
+/* Separator */
+.sep {
+    width: 80px;
+    height: 3px;
+    background: var(--yellow);
+    border-radius: 3px;
+    margin: 0.5rem 0;
+}
+
+/* Two column layout */
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+    width: 100%;
+    max-width: 1100px;
+}
+
+/* Cost table */
+.cost-table {
+    width: 100%;
+    max-width: 900px;
+    border-collapse: collapse;
+}
+.cost-table th, .cost-table td {
+    padding: 0.6rem 1rem;
+    text-align: left;
+    font-size: var(--small-size);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.cost-table th {
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.7rem;
+}
+.cost-table td:nth-child(2) {
+    font-family: 'Neulis', 'Archivo Black', sans-serif;
+    font-weight: 700;
+    color: var(--yellow);
+    text-align: center;
+}
+.cost-table .total-row td {
+    border-top: 2px solid var(--yellow);
+    border-bottom: none;
+    font-weight: 600;
+    font-size: var(--body-size);
+    padding-top: 0.8rem;
+}
+
+/* Diagram box */
+.diagram-box {
+    padding: 1rem 1.5rem;
+    border-radius: 0.8rem;
+    text-align: center;
+    font-weight: 500;
+    font-size: var(--small-size);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.diagram-arrow {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+}
+
+/* Slide number */
+.slide-number {
+    position: absolute;
+    bottom: 1rem;
+    right: 1.5rem;
+    font-size: var(--small-size);
+    color: var(--text-muted);
+    opacity: 0.5;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Background decorations */
+.deco-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.08;
+    pointer-events: none;
+}
+.deco-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+}
+
+/* Inline icon list item */
+.icon-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--small-size);
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+.icon-item .icon { color: var(--yellow); --icon-size: 18px; }
+.icon-item--text { color: var(--text); }
+
+/* Dot marker */
+.dot { display: inline-block; width: 0.5em; height: 0.5em; border-radius: 50%; flex-shrink: 0; }
+
+/* No animations, no nav, no responsive — static Figma export */
+.reveal { opacity: 1; transform: none; }
+.glow { filter: drop-shadow(0 0 30px rgba(207,0,108,0.4)); }
+.progress-bar, .nav-dots { display: none; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots" aria-label="Navigation des slides"></nav>
+
+<!-- ===================== SLIDE 1 — TITRE ===================== -->
+<section class="slide slide-title" data-slide="0">
+    <div class="deco-grid"></div>
+    <div class="deco-circle" style="width:600px;height:600px;background:var(--magenta);top:-15%;right:-10%;"></div>
+    <div class="deco-circle" style="width:400px;height:400px;background:var(--yellow);bottom:-10%;left:-5%;"></div>
+    <div class="slide-content" style="gap:var(--content-gap);z-index:1;">
+        <div class="reveal">
+            <span class="tag tag--magenta">Cahier des charges</span>
+        </div>
+        <h1 class="reveal reveal-delay-1" style="font-size:var(--title-size);margin:0;">Prado <span style="color:var(--yellow);">Itineraires</span></h1>
+        <p class="reveal reveal-delay-2" style="font-size:var(--body-size);color:var(--text-muted);margin:0;max-width:min(80vw,500px);">
+            Plateforme numerique socio-educative pour l'association Le Prado
+        </p>
+        <div class="sep reveal reveal-delay-3"></div>
+        <p class="reveal reveal-delay-4" style="font-size:var(--small-size);color:var(--text-muted);margin:0;">
+            Version 1.0 — Mars 2026 &middot; Prestataire : Devops
+        </p>
+    </div>
+    <span class="slide-number">1 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 2 — CONTEXTE ===================== -->
+<section class="slide slide-section" data-slide="1">
+    <div class="deco-circle" style="width:700px;height:700px;background:var(--blue-dark);top:-30%;left:-20%;"></div>
+    <div class="slide-content" style="z-index:1;">
+        <span class="tag tag--blue reveal">Contexte</span>
+        <h2 class="reveal reveal-delay-1">Pourquoi cette <span class="accent">plateforme</span> ?</h2>
+        <div class="two-col reveal reveal-delay-2">
+            <div class="card" style="border-left:3px solid var(--magenta);">
+                <div class="card-title" style="color:var(--magenta);">Aujourd'hui</div>
+                <ul class="bullet-list" style="--bullet-color:var(--magenta);">
+                    <li style="font-size:var(--small-size);">Outils disperses, processus papier</li>
+                    <li style="font-size:var(--small-size);">Pas de suivi centralise des jeunes</li>
+                    <li style="font-size:var(--small-size);">Contenu fige, dependance technique</li>
+                    <li style="font-size:var(--small-size);">Donnees de sante non securisees</li>
+                </ul>
+            </div>
+            <div class="card card--accent">
+                <div class="card-title" style="color:var(--yellow);">Demain</div>
+                <ul class="bullet-list">
+                    <li style="font-size:var(--small-size);">Plateforme unifiee et securisee</li>
+                    <li style="font-size:var(--small-size);">Gestion complete en ligne</li>
+                    <li style="font-size:var(--small-size);">Contenu modifiable en autonomie</li>
+                    <li style="font-size:var(--small-size);">Conformite RGPD et HDS</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <span class="slide-number">2 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 3 — LES 3 ESPACES ===================== -->
+<section class="slide slide-section" data-slide="2">
+    <div class="deco-grid"></div>
+    <div class="slide-content" style="align-items:center;z-index:1;">
+        <span class="tag tag--yellow reveal">Architecture</span>
+        <h2 class="reveal reveal-delay-1">Les trois <span class="accent">espaces</span></h2>
+        <div class="grid-3 reveal reveal-delay-2">
+            <div class="card" style="border-top:3px solid var(--teal);text-align:center;">
+                <div class="card-icon"><i data-lucide="globe" style="color:var(--teal);"></i></div>
+                <div class="card-title">Site vitrine</div>
+                <div class="card-desc">Tout le monde</div>
+                <div style="margin-top:auto;"><span class="tag tag--teal" style="font-size:0.65rem;">Public</span></div>
+            </div>
+            <div class="card" style="border-top:3px solid var(--yellow);text-align:center;">
+                <div class="card-icon"><i data-lucide="user-check" style="color:var(--yellow);"></i></div>
+                <div class="card-title">Espace prescripteur</div>
+                <div class="card-desc">Professionnels valides</div>
+                <div style="margin-top:auto;"><span class="tag tag--yellow" style="font-size:0.65rem;">Authentifie</span></div>
+            </div>
+            <div class="card" style="border-top:3px solid var(--magenta);text-align:center;">
+                <div class="card-icon"><i data-lucide="settings" style="color:var(--magenta);"></i></div>
+                <div class="card-title">Panel admin</div>
+                <div class="card-desc">Equipe Prado uniquement</div>
+                <div style="margin-top:auto;"><span class="tag tag--magenta" style="font-size:0.65rem;">Admin</span></div>
+            </div>
+        </div>
+    </div>
+    <span class="slide-number">3 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 4 — UTILISATEURS ===================== -->
+<section class="slide slide-section" data-slide="3">
+    <div class="deco-circle" style="width:500px;height:500px;background:var(--purple);bottom:-20%;right:-10%;"></div>
+    <div class="slide-content" style="align-items:center;z-index:1;">
+        <span class="tag tag--purple reveal">Utilisateurs</span>
+        <h2 class="reveal reveal-delay-1">Trois <span class="accent">profils</span> cibles</h2>
+        <div class="grid-3 reveal reveal-delay-2">
+            <div class="card" style="text-align:center;gap:0.6rem;">
+                <div class="card-icon" style="margin:0 auto;"><i data-lucide="building-2" style="width:48px;height:48px;color:var(--teal);"></i></div>
+                <div class="card-title">Visiteur</div>
+                <div class="sep" style="margin:0 auto;"></div>
+                <div class="card-desc" style="color:var(--text);">Grand public, partenaires, financeurs</div>
+                <div class="card-desc" style="color:var(--teal);">Consulte, s'abonne, contacte</div>
+            </div>
+            <div class="card card--accent" style="text-align:center;gap:0.6rem;">
+                <div class="card-icon" style="margin:0 auto;"><i data-lucide="graduation-cap" style="width:48px;height:48px;color:var(--yellow);"></i></div>
+                <div class="card-title">Prescripteur</div>
+                <div class="sep" style="margin:0 auto;"></div>
+                <div class="card-desc" style="color:var(--text);">Educateur, referent ASE/PJJ, conseiller insertion</div>
+                <div class="card-desc" style="color:var(--yellow);">Gere ses jeunes, inscrit aux actions</div>
+            </div>
+            <div class="card" style="text-align:center;gap:0.6rem;">
+                <div class="card-icon" style="margin:0 auto;"><i data-lucide="shield" style="width:48px;height:48px;color:var(--magenta);"></i></div>
+                <div class="card-title">Admin</div>
+                <div class="sep" style="margin:0 auto;"></div>
+                <div class="card-desc" style="color:var(--text);">Equipe Prado — Direction Itineraires</div>
+                <div class="card-desc" style="color:var(--magenta);">Valide, supervise, administre</div>
+            </div>
+        </div>
+    </div>
+    <span class="slide-number">4 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 5 — SITE VITRINE ===================== -->
+<section class="slide slide-section" data-slide="4">
+    <div class="deco-grid"></div>
+    <div class="slide-content" style="align-items:center;z-index:1;">
+        <span class="tag tag--teal reveal">Espace public</span>
+        <h2 class="reveal reveal-delay-1">Site <span class="accent">vitrine</span></h2>
+        <div class="grid-3 reveal reveal-delay-2" style="max-width:950px;">
+            <div class="card" style="padding:1rem;">
+                <div class="card-icon"><i data-lucide="home"></i></div>
+                <div class="card-title">Page d'accueil</div>
+                <div class="card-desc">Hero, programmes, chiffres, FAQ, partenaires</div>
+            </div>
+            <div class="card" style="padding:1rem;">
+                <div class="card-icon"><i data-lucide="calendar"></i></div>
+                <div class="card-title">Catalogue d'actions</div>
+                <div class="card-desc">Cartes, filtres, places restantes</div>
+            </div>
+            <div class="card" style="padding:1rem;">
+                <div class="card-icon"><i data-lucide="book-open"></i></div>
+                <div class="card-title">Ressources</div>
+                <div class="card-desc">Documents, guides, fiches pratiques</div>
+            </div>
+            <div class="card" style="padding:1rem;">
+                <div class="card-icon"><i data-lucide="utensils-crossed"></i></div>
+                <div class="card-title">Programmes</div>
+                <div class="card-desc">Foodtruck, Fresque, EduColab</div>
+            </div>
+            <div class="card" style="padding:1rem;">
+                <div class="card-icon"><i data-lucide="mail"></i></div>
+                <div class="card-title">Contact</div>
+                <div class="card-desc">Formulaire vers itineraires@le-prado.fr</div>
+            </div>
+            <div class="card" style="padding:1rem;">
+                <div class="card-icon"><i data-lucide="newspaper"></i></div>
+                <div class="card-title">Newsletter</div>
+                <div class="card-desc">Inscription avec double opt-in</div>
+            </div>
+        </div>
+    </div>
+    <span class="slide-number">5 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 6 — CMS PRISMIC ===================== -->
+<section class="slide slide-section" data-slide="5">
+    <div class="deco-circle" style="width:500px;height:500px;background:var(--teal);top:-20%;right:-15%;"></div>
+    <div class="slide-content" style="align-items:center;z-index:1;">
+        <span class="tag tag--teal reveal">Autonomie</span>
+        <h2 class="reveal reveal-delay-1">Contenu modifiable <span class="accent">sans developpeur</span></h2>
+        <div class="two-col reveal reveal-delay-2" style="max-width:900px;">
+            <div style="display:flex;flex-direction:column;gap:var(--element-gap);">
+                <div class="card" style="padding:0.8rem;flex-direction:row;align-items:center;gap:0.5rem;">
+                    <span class="icon" style="color:var(--yellow);"><i data-lucide="pencil"></i></span>
+                    <div class="card-desc" style="color:var(--text);">Modifier les textes comme dans Word</div>
+                </div>
+                <div class="card" style="padding:0.8rem;flex-direction:row;align-items:center;gap:0.5rem;">
+                    <span class="icon" style="color:var(--yellow);"><i data-lucide="file-plus"></i></span>
+                    <div class="card-desc" style="color:var(--text);">Ajouter ressources et documents</div>
+                </div>
+                <div class="card" style="padding:0.8rem;flex-direction:row;align-items:center;gap:0.5rem;">
+                    <span class="icon" style="color:var(--yellow);"><i data-lucide="eye"></i></span>
+                    <div class="card-desc" style="color:var(--text);">Previsualiser avant publication</div>
+                </div>
+                <div class="card" style="padding:0.8rem;flex-direction:row;align-items:center;gap:0.5rem;">
+                    <span class="icon" style="color:var(--yellow);"><i data-lucide="chef-hat"></i></span>
+                    <div class="card-desc" style="color:var(--text);">Menu Foodtruck du mois</div>
+                </div>
+            </div>
+            <div class="card card--accent" style="text-align:center;justify-content:center;min-height:200px;">
+                <div class="card-icon" style="margin:0 auto;"><i data-lucide="layout-template" style="width:60px;height:60px;"></i></div>
+                <div class="card-title" style="font-size:1.4rem;">Prismic</div>
+                <div class="card-desc">CMS headless — interface visuelle intuitive</div>
+                <div class="card-desc" style="color:var(--yellow);">Formation incluse</div>
+            </div>
+        </div>
+    </div>
+    <span class="slide-number">6 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 7 — ESPACE PRESCRIPTEUR ===================== -->
+<section class="slide slide-section" data-slide="6">
+    <div class="deco-grid"></div>
+    <div class="slide-content" style="align-items:center;z-index:1;">
+        <span class="tag tag--yellow reveal">Espace connecte</span>
+        <h2 class="reveal reveal-delay-1">Espace <span class="accent">prescripteur</span></h2>
+        <div class="grid-4 reveal reveal-delay-2" style="max-width:1000px;">
+            <div class="card card--magenta" style="text-align:center;padding:1rem;">
+                <div class="card-icon"><i data-lucide="bar-chart-3" style="color:var(--magenta);"></i></div>
+                <div class="card-title">Dashboard</div>
+                <div class="card-desc">Compteurs, raccourcis, inscriptions recentes</div>
+            </div>
+            <div class="card card--teal" style="text-align:center;padding:1rem;">
+                <div class="card-icon"><i data-lucide="users" style="color:var(--teal);"></i></div>
+                <div class="card-title">Mes jeunes</div>
+                <div class="card-desc">Fiches completes, sante, famille, identite</div>
+            </div>
+            <div class="card card--orange" style="text-align:center;padding:1rem;">
+                <div class="card-icon"><i data-lucide="clipboard-list" style="color:var(--orange);"></i></div>
+                <div class="card-title">Inscriptions</div>
+                <div class="card-desc">Places, conflits horaires, confirmation</div>
+            </div>
+            <div class="card card--blue" style="text-align:center;padding:1rem;">
+                <div class="card-icon"><i data-lucide="rocket" style="color:var(--blue-dark);"></i></div>
+                <div class="card-title">Onboarding</div>
+                <div class="card-desc">Guide de demarrage en 5 etapes</div>
+            </div>
+        </div>
+        <div class="reveal reveal-delay-3" style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:0.5rem;">
+            <span class="tag tag--yellow" style="font-size:0.65rem;">Validation manuelle par Prado</span>
+            <span class="tag tag--teal" style="font-size:0.65rem;">Magic link + mot de passe</span>
+            <span class="tag tag--purple" style="font-size:0.65rem;">Export &amp; suppression RGPD</span>
+        </div>
+    </div>
+    <span class="slide-number">7 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 8 — FICHE JEUNE ===================== -->
+<section class="slide slide-section" data-slide="7">
+    <div class="deco-circle" style="width:400px;height:400px;background:var(--orange);bottom:-15%;left:-10%;"></div>
+    <div class="slide-content" style="align-items:center;z-index:1;">
+        <span class="tag tag--orange reveal">Gestion des jeunes</span>
+        <h2 class="reveal reveal-delay-1">La fiche <span class="accent">jeune</span></h2>
+        <div class="grid-4 reveal reveal-delay-2" style="max-width:1000px;">
+            <div class="card" style="border-top:3px solid var(--yellow);text-align:center;">
+                <div class="card-icon"><i data-lucide="id-card" style="color:var(--yellow);"></i></div>
+                <div class="card-title">Identite</div>
+                <ul style="list-style:none;padding:0;margin:0;">
+                    <li class="card-desc">Nom, prenom</li>
+                    <li class="card-desc">Date de naissance</li>
+                    <li class="card-desc">Adresse (autocompletion)</li>
+                    <li class="card-desc">Situation, notes</li>
+                </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--magenta);text-align:center;">
+                <div class="card-icon"><i data-lucide="heart-pulse" style="color:var(--magenta);"></i></div>
+                <div class="card-title">Sante</div>
+                <ul style="list-style:none;padding:0;margin:0;">
+                    <li class="card-desc">Medecin traitant</li>
+                    <li class="card-desc">Allergies, handicap</li>
+                    <li class="card-desc">Suivi psy / medical</li>
+                    <li class="card-desc">Traitements, regime</li>
+                </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--purple);text-align:center;">
+                <div class="card-icon"><i data-lucide="users" style="color:var(--purple);"></i></div>
+                <div class="card-title">Famille</div>
+                <ul style="list-style:none;padding:0;margin:0;">
+                    <li class="card-desc">Mesure de protection</li>
+                    <li class="card-desc">Referent ASE</li>
+                    <li class="card-desc">Composition familiale</li>
+                    <li class="card-desc">Hebergement</li>
+                </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--teal);text-align:center;">
+                <div class="card-icon"><i data-lucide="scan-line" style="color:var(--teal);"></i></div>
+                <div class="card-title">Verification</div>
+                <ul style="list-style:none;padding:0;margin:0;">
+                    <li class="card-desc">Scan piece d'identite</li>
+                    <li class="card-desc">Resultat automatique</li>
+                    <li class="card-desc">Badge "verifie"</li>
+                    <li class="card-desc">En presence du jeune</li>
+                </ul>
+            </div>
+        </div>
+        <p class="reveal reveal-delay-3" style="font-size:var(--small-size);color:var(--magenta);margin:0;text-align:center;">
+            Sante + Famille = donnees sensibles chiffrees sur serveur HDS certifie
+        </p>
+    </div>
+    <span class="slide-number">8 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 9 — VERIFICATION D'IDENTITE ===================== -->
+<section class="slide slide-section" data-slide="8">
+    <div class="deco-grid"></div>
+    <div class="slide-content" style="align-items:center;z-index:1;">
+        <span class="tag tag--teal reveal">KYC</span>
+        <h2 class="reveal reveal-delay-1">Verification <span class="accent">d'identite</span></h2>
+        <div class="grid-2 reveal reveal-delay-2" style="max-width:850px;">
+            <div class="card card--accent" style="gap:0.7rem;">
+                <div style="display:flex;align-items:center;gap:0.5rem;">
+                    <span class="tag tag--yellow" style="font-size:0.6rem;">V1</span>
+                    <span class="card-title">Veriff</span>
+                </div>
+                <div class="sep"></div>
+                <div class="icon-item icon-item--text"><span class="icon"><i data-lucide="camera"></i></span>Scan de piece d'identite par camera</div>
+                <div class="icon-item"><span class="icon"><i data-lucide="credit-card"></i></span>Toute piece : CNI, passeport, titre de sejour</div>
+                <div class="icon-item"><span class="icon"><i data-lucide="zap"></i></span>Analyse automatique, resultat instantane</div>
+                <div class="icon-item"><span class="icon"><i data-lucide="coins"></i></span>~1 EUR/verification</div>
+                <div class="card-desc" style="color:var(--teal);">Disponible immediatement</div>
+            </div>
+            <div class="card" style="gap:0.7rem;border:1px dashed rgba(255,255,255,0.15);">
+                <div style="display:flex;align-items:center;gap:0.5rem;">
+                    <span class="tag tag--blue" style="font-size:0.6rem;">V2</span>
+                    <span class="card-title">France Identite</span>
+                </div>
+                <div class="sep" style="background:var(--blue-dark);"></div>
+                <div class="icon-item icon-item--text"><span class="icon"><i data-lucide="fingerprint"></i></span>Identite numerique regalienne</div>
+                <div class="icon-item"><span class="icon"><i data-lucide="shield-check"></i></span>FranceConnect+ (niveau eIDAS substantiel)</div>
+                <div class="icon-item"><span class="icon"><i data-lucide="smartphone"></i></span>App France Identite sur smartphone</div>
+                <div class="icon-item"><span class="icon"><i data-lucide="badge-check"></i></span>Gratuit (service public)</div>
+                <div class="card-desc" style="color:var(--text-muted);">Necessite nouvelle CNI + habilitation DINUM</div>
+            </div>
+        </div>
+    </div>
+    <span class="slide-number">9 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 10 — PANEL ADMIN ===================== -->
+<section class="slide slide-section" data-slide="9">
+    <div class="deco-circle" style="width:550px;height:550px;background:var(--magenta);top:-25%;left:-15%;"></div>
+    <div class="slide-content" style="align-items:center;z-index:1;">
+        <span class="tag tag--magenta reveal">Administration</span>
+        <h2 class="reveal reveal-delay-1">Panel <span class="accent">admin</span></h2>
+        <div class="grid-3 reveal reveal-delay-2" style="max-width:950px;">
+            <div class="card" style="padding:1rem;">
+                <div class="card-icon"><i data-lucide="trending-up"></i></div>
+                <div class="card-title">Tableau de bord</div>
+                <div class="card-desc">Compteurs globaux, journal d'activite</div>
+            </div>
+            <div class="card" style="padding:1rem;">
+                <div class="card-icon"><i data-lucide="user-check"></i></div>
+                <div class="card-title">Validation comptes</div>
+                <div class="card-desc">Approuver ou refuser les prescripteurs</div>
+            </div>
+            <div class="card" style="padding:1rem;">
+                <div class="card-icon"><i data-lucide="target"></i></div>
+                <div class="card-title">Gestion actions</div>
+                <div class="card-desc">Creer, modifier, publier, archiver</div>
+            </div>
+            <div class="card" style="padding:1rem;">
+                <div class="card-icon"><i data-lucide="users"></i></div>
+                <div class="card-title">Vue jeunes</div>
+                <div class="card-desc">Tous les jeunes (lecture seule)</div>
+            </div>
+            <div class="card" style="padding:1rem;">
+                <div class="card-icon"><i data-lucide="message-circle"></i></div>
+                <div class="card-title">Messages</div>
+                <div class="card-desc">Formulaire de contact, export CSV</div>
+            </div>
+            <div class="card" style="padding:1rem;">
+                <div class="card-icon"><i data-lucide="send"></i></div>
+                <div class="card-title">Newsletter</div>
+                <div class="card-desc">Abonnes, synchronisation Mailchimp</div>
+            </div>
+        </div>
+    </div>
+    <span class="slide-number">10 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 11 — ISOLATION DES DONNEES ===================== -->
+<section class="slide slide-section" data-slide="10">
+    <div class="deco-grid"></div>
+    <div class="slide-content" style="align-items:center;z-index:1;">
+        <span class="tag tag--magenta reveal">Securite</span>
+        <h2 class="reveal reveal-delay-1">Isolation par <span class="accent">organisme</span></h2>
+        <div class="grid-2 reveal reveal-delay-2" style="max-width:800px;gap:3rem;">
+            <div class="card" style="border:2px solid var(--teal);text-align:center;gap:0.5rem;">
+                <div class="card-title" style="color:var(--teal);">Organisme A</div>
+                <div class="card-desc" style="color:var(--text);">Foyer Saint-Jean</div>
+                <div class="sep" style="margin:0 auto;background:var(--teal);"></div>
+                <div class="card-desc">Prescripteur A1 &middot; Prescripteur A2</div>
+                <div style="display:flex;gap:0.5rem;justify-content:center;">
+                    <span class="tag tag--teal" style="font-size:0.55rem;">Jeune 1</span>
+                    <span class="tag tag--teal" style="font-size:0.55rem;">Jeune 2</span>
+                </div>
+                <div class="card-desc" style="color:var(--teal);">Acces partage au sein de l'organisme</div>
+            </div>
+            <div class="card" style="border:2px solid var(--yellow);text-align:center;gap:0.5rem;">
+                <div class="card-title" style="color:var(--yellow);">Organisme B</div>
+                <div class="card-desc" style="color:var(--text);">MECS Lyon</div>
+                <div class="sep" style="margin:0 auto;"></div>
+                <div class="card-desc">Prescripteur B1</div>
+                <div style="display:flex;gap:0.5rem;justify-content:center;">
+                    <span class="tag tag--yellow" style="font-size:0.55rem;">Jeune 3</span>
+                    <span class="tag tag--yellow" style="font-size:0.55rem;">Jeune 4</span>
+                </div>
+                <div class="card-desc" style="color:var(--yellow);">Acces partage au sein de l'organisme</div>
+            </div>
+        </div>
+        <div class="reveal reveal-delay-3" style="text-align:center;margin-top:0.5rem;">
+            <div style="font-size:var(--body-size);color:var(--magenta);font-weight:600;">A ne voit jamais les jeunes de B</div>
+            <div style="font-size:var(--small-size);color:var(--text-muted);">Garanti par Row Level Security (RLS) — au niveau base de donnees</div>
+        </div>
+    </div>
+    <span class="slide-number">11 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 12 — ARCHITECTURE TECHNIQUE ===================== -->
+<section class="slide slide-section" data-slide="11">
+    <div class="deco-circle" style="width:600px;height:600px;background:var(--blue-dark);bottom:-25%;right:-15%;"></div>
+    <div class="slide-content" style="align-items:center;z-index:1;">
+        <span class="tag tag--blue reveal">Stack</span>
+        <h2 class="reveal reveal-delay-1">Architecture <span class="accent">technique</span></h2>
+        <div class="reveal reveal-delay-2" style="display:flex;flex-direction:column;gap:0.8rem;align-items:center;width:100%;max-width:900px;">
+            <!-- Client -->
+            <div class="diagram-box" style="border:2px solid var(--yellow);width:80%;">
+                <i data-lucide="monitor" style="width:18px;height:18px;color:var(--yellow);flex-shrink:0;"></i>
+                <span>Navigateur — <strong>Nuxt 3</strong> + Vue 3 + Tailwind CSS 4</span>
+            </div>
+            <div class="diagram-arrow">
+                <i data-lucide="arrow-down" style="width:20px;height:20px;"></i>
+            </div>
+            <!-- Protection -->
+            <div class="diagram-box" style="border:2px solid var(--orange);width:70%;">
+                <i data-lucide="shield" style="width:18px;height:18px;color:var(--orange);flex-shrink:0;"></i>
+                <span><strong>Cloudflare</strong> — DDoS, WAF, CDN, SSL</span>
+            </div>
+            <div class="diagram-arrow">
+                <i data-lucide="arrow-down" style="width:20px;height:20px;"></i>
+            </div>
+            <!-- Server -->
+            <div class="diagram-box" style="border:2px solid var(--blue-dark);width:70%;">
+                <i data-lucide="server" style="width:18px;height:18px;color:var(--blue-dark);flex-shrink:0;"></i>
+                <span><strong>Vercel</strong> — Serverless, API, Cron</span>
+            </div>
+            <div class="diagram-arrow">
+                <i data-lucide="arrow-down" style="width:20px;height:20px;"></i>
+            </div>
+            <!-- Services -->
+            <div style="display:flex;gap:0.8rem;flex-wrap:wrap;justify-content:center;">
+                <div class="diagram-box" style="border:1px solid var(--teal);min-width:auto;padding:0.5rem 0.8rem;flex-direction:column;">
+                    <strong>Supabase</strong>
+                    <span style="color:var(--text-muted);font-size:0.65rem;">Auth + PostgreSQL</span>
+                </div>
+                <div class="diagram-box" style="border:1px solid var(--magenta);min-width:auto;padding:0.5rem 0.8rem;flex-direction:column;">
+                    <strong style="color:var(--magenta);">HDS</strong>
+                    <span style="color:var(--text-muted);font-size:0.65rem;">Sante chiffree</span>
+                </div>
+                <div class="diagram-box" style="border:1px solid var(--purple);min-width:auto;padding:0.5rem 0.8rem;flex-direction:column;">
+                    <strong>Prismic</strong>
+                    <span style="color:var(--text-muted);font-size:0.65rem;">CMS contenu</span>
+                </div>
+                <div class="diagram-box" style="border:1px solid var(--teal);min-width:auto;padding:0.5rem 0.8rem;flex-direction:column;">
+                    <strong>Veriff</strong>
+                    <span style="color:var(--text-muted);font-size:0.65rem;">Identite KYC</span>
+                </div>
+                <div class="diagram-box" style="border:1px solid var(--yellow);min-width:auto;padding:0.5rem 0.8rem;flex-direction:column;">
+                    <strong>Resend</strong>
+                    <span style="color:var(--text-muted);font-size:0.65rem;">Emails</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <span class="slide-number">12 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 13 — SECURITE ===================== -->
+<section class="slide slide-section" data-slide="12">
+    <div class="deco-grid"></div>
+    <div class="slide-content" style="align-items:center;z-index:1;">
+        <span class="tag tag--magenta reveal">Protection</span>
+        <h2 class="reveal reveal-delay-1">Securite <span class="accent">multicouche</span></h2>
+        <div class="grid-3 reveal reveal-delay-2" style="max-width:950px;">
+            <div class="card" style="border-top:3px solid var(--orange);text-align:center;gap:0.6rem;">
+                <div class="card-icon"><i data-lucide="shield-alert" style="color:var(--orange);width:40px;height:40px;"></i></div>
+                <div class="card-title">Reseau</div>
+                <div class="sep" style="margin:0 auto;background:var(--orange);"></div>
+                <ul style="list-style:none;padding:0;margin:0;">
+                    <li class="card-desc">Anti-DDoS Cloudflare</li>
+                    <li class="card-desc">WAF (OWASP)</li>
+                    <li class="card-desc">SSL/TLS automatique</li>
+                    <li class="card-desc">Rate limiting</li>
+                </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--teal);text-align:center;gap:0.6rem;">
+                <div class="card-icon"><i data-lucide="lock" style="color:var(--teal);width:40px;height:40px;"></i></div>
+                <div class="card-title">Application</div>
+                <div class="sep" style="margin:0 auto;background:var(--teal);"></div>
+                <ul style="list-style:none;padding:0;margin:0;">
+                    <li class="card-desc">JWT + bcrypt</li>
+                    <li class="card-desc">Validation serveur</li>
+                    <li class="card-desc">CSRF / CORS</li>
+                    <li class="card-desc">Sanitisation entrees</li>
+                </ul>
+            </div>
+            <div class="card" style="border-top:3px solid var(--magenta);text-align:center;gap:0.6rem;">
+                <div class="card-icon"><i data-lucide="database" style="color:var(--magenta);width:40px;height:40px;"></i></div>
+                <div class="card-title">Donnees</div>
+                <div class="sep" style="margin:0 auto;background:var(--magenta);"></div>
+                <ul style="list-style:none;padding:0;margin:0;">
+                    <li class="card-desc">RLS PostgreSQL</li>
+                    <li class="card-desc">Chiffrement AES-256</li>
+                    <li class="card-desc">Journalisation acces</li>
+                    <li class="card-desc">Secrets en env vars</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <span class="slide-number">13 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 14 — HDS ===================== -->
+<section class="slide slide-section" data-slide="13">
+    <div class="deco-circle" style="width:500px;height:500px;background:var(--magenta);top:-20%;right:-15%;"></div>
+    <div class="slide-content" style="align-items:center;z-index:1;">
+        <span class="tag tag--magenta reveal">Obligation legale</span>
+        <h2 class="reveal reveal-delay-1">Hebergement <span class="accent">HDS</span></h2>
+        <div class="two-col reveal reveal-delay-2" style="max-width:850px;">
+            <div class="card" style="border:2px solid var(--teal);text-align:center;">
+                <div class="card-icon" style="margin:0 auto;"><i data-lucide="database" style="color:var(--teal);width:36px;height:36px;"></i></div>
+                <div class="card-title" style="color:var(--teal);">Supabase</div>
+                <div class="card-desc" style="color:var(--text);">Base principale — Europe</div>
+                <div class="sep" style="margin:0 auto;background:var(--teal);"></div>
+                <ul style="list-style:none;padding:0;margin:0;">
+                    <li class="card-desc">Comptes prescripteurs</li>
+                    <li class="card-desc">Identite des jeunes</li>
+                    <li class="card-desc">Inscriptions aux actions</li>
+                    <li class="card-desc">Contacts, newsletter</li>
+                </ul>
+            </div>
+            <div class="card" style="border:2px solid var(--magenta);text-align:center;">
+                <div class="card-icon" style="margin:0 auto;"><i data-lucide="heart-pulse" style="color:var(--magenta);width:36px;height:36px;"></i></div>
+                <div class="card-title" style="color:var(--magenta);">Serveur HDS</div>
+                <div class="card-desc" style="color:var(--text);">Certifie — France</div>
+                <div class="sep" style="margin:0 auto;background:var(--magenta);"></div>
+                <ul style="list-style:none;padding:0;margin:0;">
+                    <li class="card-desc">Donnees de sante</li>
+                    <li class="card-desc">Situation familiale</li>
+                    <li class="card-desc">Chiffrement AES-256</li>
+                    <li class="card-desc">Acces journalise</li>
+                </ul>
+            </div>
+        </div>
+        <div class="reveal reveal-delay-3" style="text-align:center;">
+            <div style="font-size:var(--small-size);color:var(--text-muted);">Liaison par identifiant unique — jamais le nom du jeune</div>
+            <div style="font-size:var(--small-size);color:var(--text-muted);margin-top:0.25rem;">Art. L1111-8 du Code de la Sante Publique</div>
+        </div>
+    </div>
+    <span class="slide-number">14 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 15 — RGPD ===================== -->
+<section class="slide slide-section" data-slide="14">
+    <div class="deco-grid"></div>
+    <div class="slide-content" style="align-items:center;z-index:1;">
+        <span class="tag tag--blue reveal">Conformite</span>
+        <h2 class="reveal reveal-delay-1">RGPD <span class="accent">integre</span></h2>
+        <div class="grid-2 reveal reveal-delay-2" style="max-width:850px;">
+            <div class="card" style="padding:0.8rem;flex-direction:row;align-items:center;gap:0.6rem;">
+                <span class="icon icon-lg" style="color:var(--yellow);"><i data-lucide="cookie"></i></span>
+                <div>
+                    <div class="card-title" style="font-size:var(--small-size);">Bandeau cookies</div>
+                    <div class="card-desc">Consentement explicite (Art. 7)</div>
+                </div>
+            </div>
+            <div class="card" style="padding:0.8rem;flex-direction:row;align-items:center;gap:0.6rem;">
+                <span class="icon icon-lg" style="color:var(--yellow);"><i data-lucide="trash-2"></i></span>
+                <div>
+                    <div class="card-title" style="font-size:var(--small-size);">Droit a l'effacement</div>
+                    <div class="card-desc">Suppression complete du compte (Art. 17)</div>
+                </div>
+            </div>
+            <div class="card" style="padding:0.8rem;flex-direction:row;align-items:center;gap:0.6rem;">
+                <span class="icon icon-lg" style="color:var(--yellow);"><i data-lucide="download"></i></span>
+                <div>
+                    <div class="card-title" style="font-size:var(--small-size);">Portabilite des donnees</div>
+                    <div class="card-desc">Export en un clic (Art. 20)</div>
+                </div>
+            </div>
+            <div class="card" style="padding:0.8rem;flex-direction:row;align-items:center;gap:0.6rem;">
+                <span class="icon icon-lg" style="color:var(--yellow);"><i data-lucide="mail-check"></i></span>
+                <div>
+                    <div class="card-title" style="font-size:var(--small-size);">Double opt-in newsletter</div>
+                    <div class="card-desc">Confirmation par email (Art. 7)</div>
+                </div>
+            </div>
+            <div class="card" style="padding:0.8rem;flex-direction:row;align-items:center;gap:0.6rem;">
+                <span class="icon icon-lg" style="color:var(--yellow);"><i data-lucide="shield-check"></i></span>
+                <div>
+                    <div class="card-title" style="font-size:var(--small-size);">Protection des mineurs</div>
+                    <div class="card-desc">Pas de collecte directe (Art. 8)</div>
+                </div>
+            </div>
+            <div class="card" style="padding:0.8rem;flex-direction:row;align-items:center;gap:0.6rem;">
+                <span class="icon icon-lg" style="color:var(--yellow);"><i data-lucide="minimize-2"></i></span>
+                <div>
+                    <div class="card-title" style="font-size:var(--small-size);">Minimisation des donnees</div>
+                    <div class="card-desc">Seul le necessaire est collecte (Art. 5)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <span class="slide-number">15 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 16 — COUTS ===================== -->
+<section class="slide slide-section" data-slide="15">
+    <div class="deco-circle" style="width:400px;height:400px;background:var(--yellow);opacity:0.05;bottom:-15%;left:-10%;"></div>
+    <div class="slide-content" style="align-items:center;z-index:1;">
+        <span class="tag tag--yellow reveal">Budget</span>
+        <h2 class="reveal reveal-delay-1">Couts <span class="accent">recurrents</span></h2>
+        <table class="cost-table reveal reveal-delay-2">
+            <thead>
+                <tr><th>Service</th><th>Cout/mois</th><th>Detail</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Supabase (BDD)</td><td>25 EUR</td><td>Plan Pro — requis en production</td></tr>
+                <tr><td>Serveur HDS</td><td>30-50 EUR</td><td>Donnees de sante certifiees</td></tr>
+                <tr><td>Vercel (hebergement)</td><td>0 EUR</td><td>Gratuit au lancement</td></tr>
+                <tr><td>Prismic (CMS)</td><td>0 EUR</td><td>Gratuit (1 utilisateur)</td></tr>
+                <tr><td>Resend (emails)</td><td>0 EUR</td><td>Gratuit jusqu'a 3 000/mois</td></tr>
+                <tr><td>Cloudflare (securite)</td><td>0 EUR</td><td>Plan gratuit largement suffisant</td></tr>
+                <tr><td>Clarity (analytics)</td><td>0 EUR</td><td>Entierement gratuit</td></tr>
+            </tbody>
+            <tbody>
+                <tr class="total-row">
+                    <td>Total au lancement</td>
+                    <td style="font-size:1.2rem;">55-75 EUR</td>
+                    <td style="color:var(--text-muted);">Monte a 95-135 EUR en phase de maturite</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="reveal reveal-delay-3" style="margin-top:0.5rem;">
+            <span style="font-size:var(--small-size);color:var(--text-muted);">Veriff : ~1 EUR/verification &middot; Tous les comptes au nom du Prado</span>
+        </div>
+    </div>
+    <span class="slide-number">16 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 17 — ROADMAP ===================== -->
+<section class="slide slide-section" data-slide="16">
+    <div class="deco-grid"></div>
+    <div class="slide-content" style="align-items:center;z-index:1;">
+        <span class="tag tag--orange reveal">Planning</span>
+        <h2 class="reveal reveal-delay-1"><span class="accent">Roadmap</span></h2>
+        <div class="two-col reveal reveal-delay-2" style="max-width:900px;gap:3rem;">
+            <div>
+                <div style="font-family:'Neulis Neue','Archivo Black',sans-serif;font-weight:700;font-style:normal;font-size:var(--h3-size);color:var(--yellow);margin-bottom:0.5rem;">V1 — Lancement</div>
+                <div class="card" style="gap:0.3rem;">
+                    <div class="icon-item icon-item--text"><span class="dot" style="background:var(--magenta);"></span>Site vitrine complet + CMS</div>
+                    <div class="icon-item icon-item--text"><span class="dot" style="background:var(--magenta);"></span>Authentification securisee</div>
+                    <div class="icon-item icon-item--text"><span class="dot" style="background:var(--magenta);"></span>Espace prescripteur complet</div>
+                    <div class="icon-item icon-item--text"><span class="dot" style="background:var(--magenta);"></span>Panel admin</div>
+                    <div class="icon-item icon-item--text"><span class="dot" style="background:var(--magenta);"></span>Fiches sante + HDS</div>
+                    <div class="icon-item icon-item--text"><span class="dot" style="background:var(--yellow);"></span>Verification identite (Veriff)</div>
+                    <div class="icon-item icon-item--text"><span class="dot" style="background:var(--yellow);"></span>Onboarding, newsletter, rappels</div>
+                    <div class="icon-item icon-item--text"><span class="dot" style="background:var(--yellow);"></span>Responsive multi-appareils</div>
+                </div>
+            </div>
+            <div>
+                <div style="font-family:'Neulis Neue','Archivo Black',sans-serif;font-weight:700;font-style:normal;font-size:var(--h3-size);color:var(--text-muted);margin-bottom:0.5rem;">V2+ — Evolutions</div>
+                <div class="card" style="border:1px dashed rgba(255,255,255,0.15);gap:0.3rem;">
+                    <div class="icon-item icon-item--text"><span class="dot" style="background:var(--blue-dark);"></span>France Identite (FranceConnect+)</div>
+                    <div class="icon-item icon-item--text"><span class="dot" style="background:var(--blue-dark);"></span>Notifications in-app</div>
+                    <div class="icon-item icon-item--text"><span class="dot" style="background:var(--blue-dark);"></span>Statistiques avancees</div>
+                    <div class="icon-item icon-item--text"><span class="dot" style="background:var(--blue-dark);"></span>Reassignation de jeunes</div>
+                    <div class="icon-item icon-item--text"><span class="dot" style="background:var(--text-muted);"></span>Cartographie interactive</div>
+                    <div class="icon-item icon-item--text"><span class="dot" style="background:var(--text-muted);"></span>Application mobile (PWA)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <span class="slide-number">17 / 18</span>
+</section>
+
+<!-- ===================== SLIDE 18 — QUESTIONS ===================== -->
+<section class="slide slide-title" data-slide="17">
+    <div class="deco-grid"></div>
+    <div class="deco-circle" style="width:600px;height:600px;background:var(--yellow);top:-20%;left:-15%;"></div>
+    <div class="deco-circle" style="width:400px;height:400px;background:var(--magenta);bottom:-15%;right:-10%;"></div>
+    <div class="slide-content" style="gap:var(--content-gap);z-index:1;">
+        <div class="reveal glow" style="color:var(--yellow);">
+            <i data-lucide="help-circle" style="width:100px;height:100px;"></i>
+        </div>
+        <h2 class="reveal reveal-delay-1" style="font-size:var(--title-size);">Questions</h2>
+        <div class="sep reveal reveal-delay-2" style="margin:0 auto;"></div>
+        <p class="reveal reveal-delay-3" style="font-size:var(--body-size);color:var(--text-muted);margin:0;">
+            itineraires@le-prado.fr
+        </p>
+    </div>
+    <span class="slide-number">18 / 18</span>
+</section>
+
+<script>lucide.createIcons();</script>
+</body>
+</html>

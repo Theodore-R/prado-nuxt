@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prado Itinéraires — Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════════ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* ── Brand Colors ── */
+      --primary: #CF006C;
+      --secondary: #93C1AF;
+      --accent: #C18ED8;
+      --orange: #FB6223;
+      --dark-teal: #004657;
+      --destructive: #d4183d;
+
+      /* ── Dark Theme (Default) ── */
+      --bg: #1a1a2e;
+      --bg-deep: #12122a;
+      --surface: #232340;
+      --text: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.6);
+      --text-muted: rgba(255, 255, 255, 0.4);
+      --text-faint: rgba(255, 255, 255, 0.25);
+      --border: rgba(255, 255, 255, 0.05);
+      --border-light: rgba(255, 255, 255, 0.1);
+      --border-medium: rgba(255, 255, 255, 0.2);
+      --header-bg: rgba(26, 26, 46, 0.95);
+      --input-bg: rgba(255, 255, 255, 0.05);
+      --tag-bg: rgba(255, 255, 255, 0.08);
+
+      /* ── Tinted Backgrounds ── */
+      --bg-pink: #1e172f;
+      --bg-teal: #161e2d;
+      --bg-purple: #1c172f;
+      --bg-orange: #1e1828;
+
+      /* ── Gradient ── */
+      --gradient: linear-gradient(135deg, #CF006C, #FB6223);
+
+      /* ── Spacing ── */
+      --radius: 0.625rem;
+      --radius-sm: calc(0.625rem - 4px);
+      --radius-md: calc(0.625rem - 2px);
+      --radius-lg: 0.625rem;
+      --radius-xl: calc(0.625rem + 4px);
+      --radius-2xl: 1rem;
+      --radius-full: 9999px;
+    }
+
+    [data-theme="light"] {
+      --bg: #f5f5f7;
+      --bg-deep: #eaeaef;
+      --surface: #ffffff;
+      --text: #1a1a2e;
+      --text-secondary: rgba(26, 26, 46, 0.7);
+      --text-muted: rgba(26, 26, 46, 0.5);
+      --text-faint: rgba(26, 26, 46, 0.3);
+      --border: rgba(0, 0, 0, 0.06);
+      --border-light: rgba(0, 0, 0, 0.08);
+      --border-medium: rgba(0, 0, 0, 0.15);
+      --header-bg: rgba(245, 245, 247, 0.95);
+      --input-bg: rgba(0, 0, 0, 0.04);
+      --tag-bg: rgba(0, 0, 0, 0.06);
+      --bg-pink: #f8f0f4;
+      --bg-teal: #f0f5f3;
+      --bg-purple: #f4f0f6;
+      --bg-orange: #f6f2ef;
+    }
+
+    [data-theme="dark"] {
+      --bg: #1a1a2e;
+      --bg-deep: #12122a;
+      --surface: #232340;
+      --text: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.6);
+      --text-muted: rgba(255, 255, 255, 0.4);
+      --text-faint: rgba(255, 255, 255, 0.25);
+      --border: rgba(255, 255, 255, 0.05);
+      --border-light: rgba(255, 255, 255, 0.1);
+      --border-medium: rgba(255, 255, 255, 0.2);
+      --header-bg: rgba(26, 26, 46, 0.95);
+      --input-bg: rgba(255, 255, 255, 0.05);
+      --tag-bg: rgba(255, 255, 255, 0.08);
+      --bg-pink: #1e172f;
+      --bg-teal: #161e2d;
+      --bg-purple: #1c172f;
+      --bg-orange: #1e1828;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: 'Poppins', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ═══════════════════════════════════════════════
+       LAYOUT
+    ═══════════════════════════════════════════════ */
+    .ds-wrapper { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+
+    .ds-header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--header-bg);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-light);
+      padding: 1rem 0;
+    }
+    .ds-header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1280px; margin: 0 auto; padding: 0 2rem;
+    }
+    .ds-logo {
+      font-size: 1.125rem; font-weight: 600; color: var(--text);
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .ds-logo-mark {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: var(--gradient);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 700; font-size: 0.75rem;
+    }
+    .ds-badge {
+      font-size: 0.625rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--tag-bg); color: var(--text-muted);
+      padding: 0.25rem 0.75rem; border-radius: var(--radius-full);
+    }
+
+    /* Theme toggle */
+    .ds-theme-toggle {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: var(--surface); border: 1px solid var(--border-light);
+      border-radius: var(--radius-full);
+      padding: 0.25rem; cursor: pointer;
+    }
+    .ds-theme-btn {
+      width: 2rem; height: 2rem; border-radius: 50%;
+      border: none; cursor: pointer; font-size: 0.875rem;
+      background: transparent; color: var(--text-muted);
+      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ds-theme-btn.active {
+      background: var(--primary); color: white;
+    }
+
+    /* ── Sidebar Nav ── */
+    .ds-layout { display: flex; gap: 3rem; padding: 3rem 0; }
+    .ds-sidebar {
+      width: 220px; flex-shrink: 0;
+      position: sticky; top: 5rem; align-self: flex-start;
+      max-height: calc(100vh - 6rem); overflow-y: auto;
+    }
+    .ds-sidebar nav { display: flex; flex-direction: column; gap: 0.125rem; }
+    .ds-sidebar a {
+      display: block; padding: 0.5rem 1rem; border-radius: var(--radius-lg);
+      color: var(--text-muted); text-decoration: none;
+      font-size: 0.8125rem; font-weight: 500;
+      transition: all 0.15s;
+    }
+    .ds-sidebar a:hover { color: var(--text); background: var(--input-bg); }
+    .ds-sidebar a.active { color: var(--primary); background: rgba(207, 0, 108, 0.08); }
+    .ds-sidebar .nav-label {
+      font-size: 0.625rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-faint);
+      padding: 1.5rem 1rem 0.5rem;
+    }
+
+    .ds-main { flex: 1; min-width: 0; }
+
+    /* ── Sections ── */
+    .ds-section { margin-bottom: 5rem; }
+    .ds-section-title {
+      font-size: 1.75rem; font-weight: 600; color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .ds-section-desc {
+      font-size: 0.9375rem; color: var(--text-secondary);
+      margin-bottom: 2.5rem; max-width: 640px;
+    }
+    .ds-subsection { margin-bottom: 3rem; }
+    .ds-subsection-title {
+      font-size: 1rem; font-weight: 600; color: var(--text);
+      margin-bottom: 1rem; padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ds-label {
+      font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.05em;
+      text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    /* ═══════════════════════════════════════════════
+       COLOR SWATCHES
+    ═══════════════════════════════════════════════ */
+    .color-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    .color-swatch {
+      border-radius: var(--radius-xl); overflow: hidden;
+      border: 1px solid var(--border-light);
+      background: var(--surface);
+    }
+    .color-swatch-preview {
+      height: 80px; width: 100%;
+      position: relative;
+    }
+    .color-swatch-info {
+      padding: 0.75rem 1rem;
+    }
+    .color-swatch-name {
+      font-size: 0.8125rem; font-weight: 600; color: var(--text);
+    }
+    .color-swatch-value {
+      font-size: 0.6875rem; color: var(--text-muted);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+    .color-swatch-var {
+      font-size: 0.625rem; color: var(--text-faint);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    /* Category colors grid */
+    .cat-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 0.5rem;
+    }
+    .cat-chip {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.625rem 1rem; border-radius: var(--radius-lg);
+      border: 1px solid var(--border); font-size: 0.8125rem;
+      color: var(--text-secondary);
+    }
+    .cat-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* Gradient showcase */
+    .gradient-bar {
+      height: 64px; border-radius: var(--radius-xl);
+      background: var(--gradient);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 600; font-size: 0.875rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* ═══════════════════════════════════════════════
+       TYPOGRAPHY
+    ═══════════════════════════════════════════════ */
+    .typo-row {
+      display: flex; align-items: baseline; gap: 2rem;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .typo-meta {
+      width: 140px; flex-shrink: 0;
+      font-size: 0.6875rem; color: var(--text-muted);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      line-height: 1.6;
+    }
+    .typo-sample { flex: 1; color: var(--text); }
+
+    /* ═══════════════════════════════════════════════
+       SPACING & RADIUS
+    ═══════════════════════════════════════════════ */
+    .spacing-grid {
+      display: flex; align-items: flex-end; gap: 1rem; flex-wrap: wrap;
+    }
+    .spacing-item {
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    }
+    .spacing-block {
+      background: var(--primary); opacity: 0.5; border-radius: 4px;
+    }
+    .spacing-label {
+      font-size: 0.625rem; color: var(--text-muted);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    .radius-grid { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .radius-item { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+    .radius-box {
+      width: 64px; height: 64px;
+      border: 2px solid var(--primary);
+      background: transparent;
+    }
+
+    /* ═══════════════════════════════════════════════
+       COMPONENT SHOWCASES
+    ═══════════════════════════════════════════════ */
+    .component-row {
+      display: flex; flex-wrap: wrap; gap: 1rem;
+      align-items: center;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 2rem; border-radius: var(--radius-full);
+      font-size: 1rem; font-weight: 600; font-family: inherit;
+      line-height: 1.5; cursor: pointer; border: none;
+      transition: all 0.2s; text-decoration: none;
+    }
+    .btn:active { transform: scale(0.95); }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border-medium); }
+    .btn-secondary:hover { background: var(--input-bg); }
+    .btn-orange { background: var(--orange); color: white; }
+    .btn-orange:hover { opacity: 0.9; }
+    .btn-destructive { background: var(--destructive); color: white; }
+    .btn-destructive:hover { opacity: 0.9; }
+    .btn-ghost { background: rgba(207, 0, 108, 0.1); color: var(--primary); }
+    .btn-ghost:hover { background: rgba(207, 0, 108, 0.15); }
+    .btn-sm { padding: 0.5rem 1.25rem; font-size: 0.875rem; }
+    .btn-lg { padding: 1rem 2.5rem; font-size: 1.125rem; }
+
+    .btn-icon {
+      width: 2.5rem; height: 2.5rem; padding: 0;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 1rem; overflow: hidden;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--border-medium); }
+    .card-body { padding: 1.5rem; }
+    .card-img {
+      width: 100%; height: 180px; object-fit: cover;
+      background: var(--bg-deep);
+    }
+    .card-title { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+    .card-desc { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .card-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Tags / Badges */
+    .tag {
+      display: inline-flex; align-items: center; gap: 0.375rem;
+      padding: 0.25rem 0.75rem; border-radius: var(--radius-full);
+      font-size: 0.75rem; font-weight: 500;
+    }
+    .tag-default { background: var(--tag-bg); color: var(--text-secondary); }
+
+    .badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 1.25rem; height: 1.25rem; padding: 0 0.375rem;
+      border-radius: var(--radius-full);
+      font-size: 0.625rem; font-weight: 600;
+    }
+    .badge-primary { background: var(--primary); color: white; }
+    .badge-orange { background: var(--orange); color: white; }
+
+    /* Inputs */
+    .input-group { display: flex; flex-direction: column; gap: 0.375rem; max-width: 360px; }
+    .input-label { font-size: 0.875rem; font-weight: 600; color: var(--text); }
+    .input-field {
+      padding: 0.75rem 1rem; border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light); background: var(--input-bg);
+      color: var(--text); font-family: inherit; font-size: 1rem;
+      outline: none; transition: all 0.15s;
+    }
+    .input-field::placeholder { color: var(--text-muted); }
+    .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(207, 0, 108, 0.15); }
+
+    /* Accordion */
+    .accordion { display: flex; flex-direction: column; gap: 0.75rem; max-width: 640px; }
+    .accordion-item {
+      border: 1px solid var(--border);
+      border-radius: 1rem; overflow: hidden;
+      transition: background 0.2s;
+    }
+    .accordion-trigger {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 1.5rem; background: transparent; border: none;
+      cursor: pointer; font-family: inherit; font-size: 1rem;
+      font-weight: 600; color: var(--text); text-align: left;
+    }
+    .accordion-trigger svg { transition: transform 0.3s; color: var(--text-muted); }
+    .accordion-item.open { background: var(--surface); }
+    .accordion-item.open .accordion-trigger svg { transform: rotate(180deg); }
+    .accordion-content {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .accordion-item.open .accordion-content { max-height: 200px; }
+    .accordion-content-inner {
+      padding: 0 1.5rem 1.25rem;
+      color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.6;
+    }
+
+    /* Skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, var(--surface) 25%, var(--border-light) 50%, var(--surface) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: var(--radius-lg);
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Testimonial Card */
+    .testimonial-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 1.5rem; padding: 2rem; max-width: 320px;
+    }
+    .testimonial-text {
+      font-size: 0.875rem; color: var(--text-secondary);
+      line-height: 1.6; font-style: italic; margin-bottom: 1.25rem;
+    }
+    .testimonial-author {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .testimonial-avatar {
+      width: 2.5rem; height: 2.5rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.875rem;
+    }
+    .testimonial-name { font-size: 0.875rem; font-weight: 600; color: var(--text); }
+    .testimonial-role { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* Step Card */
+    .step-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 1rem; padding: 2rem;
+    }
+    .step-number {
+      font-size: 3rem; font-weight: 700; color: var(--text-faint);
+      line-height: 1; margin-bottom: 1rem;
+    }
+    .step-title {
+      font-size: 1.125rem; font-weight: 600; color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+    .step-desc {
+      font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;
+    }
+
+    /* Stat Card */
+    .stat-bar {
+      background: var(--gradient); border-radius: var(--radius-xl);
+      padding: 2.5rem; display: flex; justify-content: space-around;
+      text-align: center; flex-wrap: wrap; gap: 1.5rem;
+    }
+    .stat-value { font-size: 2.5rem; font-weight: 700; color: white; }
+    .stat-label { font-size: 0.875rem; color: rgba(255,255,255,0.7); margin-top: 0.25rem; }
+
+    /* Header component */
+    .header-preview {
+      background: var(--header-bg); backdrop-filter: blur(20px);
+      border: 1px solid var(--border-light); border-radius: var(--radius-xl);
+      padding: 1rem 1.5rem; display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 1.5rem;
+    }
+    .header-logo {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-weight: 600; font-size: 0.9375rem; color: var(--text);
+    }
+    .header-logo-img { width: 28px; height: 28px; border-radius: 6px; background: var(--gradient); }
+    .header-nav { display: flex; gap: 1.5rem; }
+    .header-nav a {
+      color: var(--text-secondary); text-decoration: none;
+      font-size: 0.875rem; font-weight: 500;
+      transition: color 0.15s;
+    }
+    .header-nav a:hover { color: var(--text); }
+    .header-actions { display: flex; gap: 0.75rem; align-items: center; }
+
+    /* Sidebar component */
+    .sidebar-preview {
+      background: var(--surface); border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl); width: 260px; padding: 1.5rem 1rem;
+    }
+    .sidebar-link {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.625rem 0.75rem; border-radius: var(--radius-lg);
+      font-size: 0.875rem; font-weight: 500; color: var(--text-secondary);
+      text-decoration: none; transition: all 0.15s;
+      cursor: default;
+    }
+    .sidebar-link:hover { background: var(--input-bg); color: var(--text); }
+    .sidebar-link.active { background: rgba(207, 0, 108, 0.08); color: var(--primary); }
+    .sidebar-icon {
+      width: 1.125rem; height: 1.125rem; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ═══════════════════════════════════════════════
+       ICON GRID
+    ═══════════════════════════════════════════════ */
+    .icon-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 0.5rem;
+    }
+    .icon-item {
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      padding: 1rem 0.5rem; border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      transition: all 0.15s;
+    }
+    .icon-item:hover { background: var(--input-bg); border-color: var(--border-medium); }
+    .icon-item svg { color: var(--text-secondary); }
+    .icon-item span { font-size: 0.625rem; color: var(--text-muted); text-align: center; }
+
+    /* ═══════════════════════════════════════════════
+       ANIMATION DEMOS
+    ═══════════════════════════════════════════════ */
+    .anim-row { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .anim-box {
+      width: 120px; height: 80px; border-radius: var(--radius-lg);
+      background: var(--surface); border: 1px solid var(--border-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; color: var(--text-muted); font-weight: 500;
+      cursor: pointer; position: relative; overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .anim-box:hover { border-color: var(--primary); transform: translateY(-4px); }
+    .anim-box.pulse { animation: pulse-anim 2s ease-in-out infinite; }
+    @keyframes pulse-anim {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(207, 0, 108, 0.3); }
+      50% { box-shadow: 0 0 0 12px rgba(207, 0, 108, 0); }
+    }
+    .anim-box.reveal {
+      opacity: 0; transform: translateY(18px);
+      animation: reveal-anim 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes reveal-anim {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .anim-box.reveal:nth-child(2) { animation-delay: 0.15s; }
+    .anim-box.reveal:nth-child(3) { animation-delay: 0.3s; }
+
+    /* ═══════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .ds-layout { flex-direction: column; }
+      .ds-sidebar { display: none; }
+      .color-grid { grid-template-columns: repeat(2, 1fr); }
+      .typo-row { flex-direction: column; gap: 0.5rem; }
+      .typo-meta { width: auto; }
+      .component-row { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ═══════════════════════════════════════════════
+       HERO SECTION
+    ═══════════════════════════════════════════════ */
+    .ds-hero {
+      padding: 4rem 0; text-align: center;
+      border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .ds-hero::before {
+      content: '';
+      position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(207, 0, 108, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .ds-hero h1 {
+      font-size: 2.5rem; font-weight: 700; color: var(--text);
+      position: relative;
+    }
+    .ds-hero h1 span { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .ds-hero p {
+      font-size: 1.125rem; color: var(--text-secondary);
+      margin-top: 1rem; position: relative;
+    }
+    .ds-hero .ds-meta {
+      display: flex; gap: 2rem; justify-content: center;
+      margin-top: 2rem; position: relative;
+    }
+    .ds-hero .ds-meta-item {
+      font-size: 0.75rem; color: var(--text-muted);
+      display: flex; align-items: center; gap: 0.375rem;
+    }
+    .ds-hero .ds-meta-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+    }
+
+    /* Code block */
+    .code-block {
+      background: var(--bg-deep); border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg); padding: 1rem 1.25rem;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.8125rem; color: var(--text-secondary);
+      overflow-x: auto; line-height: 1.7;
+    }
+    .code-block .comment { color: var(--text-faint); }
+    .code-block .prop { color: var(--accent); }
+    .code-block .value { color: var(--secondary); }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════ HEADER ═══════════════ -->
+  <header class="ds-header">
+    <div class="ds-header-inner">
+      <div class="ds-logo">
+        <div class="ds-logo-mark">PI</div>
+        <span>Design System</span>
+        <span class="ds-badge">v1.0</span>
+      </div>
+      <div style="display:flex;gap:1rem;align-items:center">
+        <div class="ds-theme-toggle">
+          <button class="ds-theme-btn active" id="darkBtn" onclick="setTheme('dark')">&#9790;</button>
+          <button class="ds-theme-btn" id="lightBtn" onclick="setTheme('light')">&#9728;</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <div class="ds-wrapper">
+    <div class="ds-hero">
+      <h1>Prado Itinéraires <span>Design System</span></h1>
+      <p>Bibliothèque de référence des composants, tokens et patterns pour Figma</p>
+      <div class="ds-meta">
+        <div class="ds-meta-item"><div class="ds-meta-dot" style="background:var(--primary)"></div> Poppins</div>
+        <div class="ds-meta-item"><div class="ds-meta-dot" style="background:var(--secondary)"></div> TailwindCSS 4</div>
+        <div class="ds-meta-item"><div class="ds-meta-dot" style="background:var(--accent)"></div> Lucide Icons</div>
+        <div class="ds-meta-item"><div class="ds-meta-dot" style="background:var(--orange)"></div> Nuxt 3 + Vue 3</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ CONTENT ═══════════════ -->
+  <div class="ds-wrapper">
+    <div class="ds-layout">
+
+      <!-- Sidebar -->
+      <aside class="ds-sidebar">
+        <nav>
+          <div class="nav-label">Fondations</div>
+          <a href="#colors" class="active">Couleurs</a>
+          <a href="#typography">Typographie</a>
+          <a href="#spacing">Espacement & Rayons</a>
+          <a href="#icons">Icônes</a>
+          <div class="nav-label">Composants</div>
+          <a href="#buttons">Boutons</a>
+          <a href="#inputs">Champs de saisie</a>
+          <a href="#cards">Cartes</a>
+          <a href="#tags">Tags & Badges</a>
+          <a href="#accordion">Accordéon (FAQ)</a>
+          <a href="#skeleton">Skeleton Loading</a>
+          <div class="nav-label">Patterns</div>
+          <a href="#header-comp">Header</a>
+          <a href="#sidebar-comp">Sidebar</a>
+          <a href="#stats">Statistiques</a>
+          <a href="#steps">Étapes</a>
+          <a href="#testimonials">Témoignages</a>
+          <a href="#animations">Animations</a>
+          <div class="nav-label">Tokens</div>
+          <a href="#tokens">CSS Variables</a>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="ds-main">
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ COLORS ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="colors" class="ds-section">
+          <h2 class="ds-section-title">Couleurs</h2>
+          <p class="ds-section-desc">La palette Prado Itinéraires associe des couleurs vives et sémantiques à des fonds profonds. Chaque couleur a un rôle spécifique dans l'interface.</p>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Couleurs de marque</h3>
+            <div class="color-grid">
+              <div class="color-swatch">
+                <div class="color-swatch-preview" style="background:#CF006C"></div>
+                <div class="color-swatch-info">
+                  <div class="color-swatch-name">Primary Pink</div>
+                  <div class="color-swatch-value">#CF006C</div>
+                  <div class="color-swatch-var">--primary</div>
+                </div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-swatch-preview" style="background:#93C1AF"></div>
+                <div class="color-swatch-info">
+                  <div class="color-swatch-name">Secondary Teal</div>
+                  <div class="color-swatch-value">#93C1AF</div>
+                  <div class="color-swatch-var">--secondary</div>
+                </div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-swatch-preview" style="background:#C18ED8"></div>
+                <div class="color-swatch-info">
+                  <div class="color-swatch-name">Accent Purple</div>
+                  <div class="color-swatch-value">#C18ED8</div>
+                  <div class="color-swatch-var">--accent</div>
+                </div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-swatch-preview" style="background:#FB6223"></div>
+                <div class="color-swatch-info">
+                  <div class="color-swatch-name">Orange</div>
+                  <div class="color-swatch-value">#FB6223</div>
+                  <div class="color-swatch-var">--orange</div>
+                </div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-swatch-preview" style="background:#004657"></div>
+                <div class="color-swatch-info">
+                  <div class="color-swatch-name">Dark Teal</div>
+                  <div class="color-swatch-value">#004657</div>
+                  <div class="color-swatch-var">--dark-teal</div>
+                </div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-swatch-preview" style="background:#d4183d"></div>
+                <div class="color-swatch-info">
+                  <div class="color-swatch-name">Destructive</div>
+                  <div class="color-swatch-value">#d4183d</div>
+                  <div class="color-swatch-var">--destructive</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Fonds & Surfaces (Mode sombre)</h3>
+            <div class="color-grid">
+              <div class="color-swatch">
+                <div class="color-swatch-preview" style="background:#1a1a2e"></div>
+                <div class="color-swatch-info">
+                  <div class="color-swatch-name">Background</div>
+                  <div class="color-swatch-value">#1a1a2e</div>
+                  <div class="color-swatch-var">--prado-bg</div>
+                </div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-swatch-preview" style="background:#12122a"></div>
+                <div class="color-swatch-info">
+                  <div class="color-swatch-name">Background Deep</div>
+                  <div class="color-swatch-value">#12122a</div>
+                  <div class="color-swatch-var">--prado-bg-deep</div>
+                </div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-swatch-preview" style="background:#232340"></div>
+                <div class="color-swatch-info">
+                  <div class="color-swatch-name">Surface</div>
+                  <div class="color-swatch-value">#232340</div>
+                  <div class="color-swatch-var">--prado-surface</div>
+                </div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-swatch-preview" style="background:#2a2a45"></div>
+                <div class="color-swatch-info">
+                  <div class="color-swatch-name">Muted</div>
+                  <div class="color-swatch-value">#2a2a45</div>
+                  <div class="color-swatch-var">--muted</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Fonds teintés (Sections)</h3>
+            <div class="color-grid">
+              <div class="color-swatch">
+                <div class="color-swatch-preview" style="background:#1e172f"></div>
+                <div class="color-swatch-info">
+                  <div class="color-swatch-name">Pink Tint</div>
+                  <div class="color-swatch-value">#1e172f</div>
+                  <div class="color-swatch-var">--prado-bg-pink</div>
+                </div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-swatch-preview" style="background:#161e2d"></div>
+                <div class="color-swatch-info">
+                  <div class="color-swatch-name">Teal Tint</div>
+                  <div class="color-swatch-value">#161e2d</div>
+                  <div class="color-swatch-var">--prado-bg-teal</div>
+                </div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-swatch-preview" style="background:#1c172f"></div>
+                <div class="color-swatch-info">
+                  <div class="color-swatch-name">Purple Tint</div>
+                  <div class="color-swatch-value">#1c172f</div>
+                  <div class="color-swatch-var">--prado-bg-purple</div>
+                </div>
+              </div>
+              <div class="color-swatch">
+                <div class="color-swatch-preview" style="background:#1e1828"></div>
+                <div class="color-swatch-info">
+                  <div class="color-swatch-name">Orange Tint</div>
+                  <div class="color-swatch-value">#1e1828</div>
+                  <div class="color-swatch-var">--prado-bg-orange</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Dégradé principal</h3>
+            <div class="gradient-bar">#CF006C → #FB6223</div>
+          </div>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Couleurs par catégorie — Actions</h3>
+            <div class="cat-grid">
+              <div class="cat-chip"><div class="cat-dot" style="background:#C18ED8"></div> Bien-être</div>
+              <div class="cat-chip"><div class="cat-dot" style="background:#FB6223"></div> Découverte</div>
+              <div class="cat-chip"><div class="cat-dot" style="background:#93C1AF"></div> Vie quotidienne</div>
+              <div class="cat-chip"><div class="cat-dot" style="background:#CF006C"></div> Formations</div>
+              <div class="cat-chip"><div class="cat-dot" style="background:#004657"></div> Rencontres</div>
+              <div class="cat-chip"><div class="cat-dot" style="background:#93C1AF"></div> Mobilité</div>
+              <div class="cat-chip"><div class="cat-dot" style="background:#FB6223"></div> Emploi</div>
+              <div class="cat-chip"><div class="cat-dot" style="background:#004657"></div> Numérique</div>
+              <div class="cat-chip"><div class="cat-dot" style="background:#CF006C"></div> Droits</div>
+              <div class="cat-chip"><div class="cat-dot" style="background:#C18ED8"></div> Bénévolat</div>
+            </div>
+          </div>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Couleurs par catégorie — Ressources</h3>
+            <div class="cat-grid">
+              <div class="cat-chip"><div class="cat-dot" style="background:#CF006C"></div> Accompagnement</div>
+              <div class="cat-chip"><div class="cat-dot" style="background:#FB6223"></div> Accès aux droits</div>
+              <div class="cat-chip"><div class="cat-dot" style="background:#93C1AF"></div> Emploi/Formation</div>
+              <div class="cat-chip"><div class="cat-dot" style="background:#C18ED8"></div> Logement/Mobilité</div>
+              <div class="cat-chip"><div class="cat-dot" style="background:#004657"></div> Santé</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ TYPOGRAPHY ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="typography" class="ds-section">
+          <h2 class="ds-section-title">Typographie</h2>
+          <p class="ds-section-desc">Poppins est la police unique du projet. Elle est utilisée dans tous les styles avec les graisses 400 (normal), 500 et 600 (medium).</p>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Échelle typographique</h3>
+            <div>
+              <div class="typo-row">
+                <div class="typo-meta">h1 hero<br>text-3xl / 600<br>1.875rem</div>
+                <div class="typo-sample" style="font-size:1.875rem;font-weight:600;">Accompagner les jeunes vers l'autonomie</div>
+              </div>
+              <div class="typo-row">
+                <div class="typo-meta">h1<br>text-2xl / 600<br>1.5rem</div>
+                <div class="typo-sample" style="font-size:1.5rem;font-weight:600;">Titre de section principal</div>
+              </div>
+              <div class="typo-row">
+                <div class="typo-meta">h2<br>text-xl / 600<br>1.25rem</div>
+                <div class="typo-sample" style="font-size:1.25rem;font-weight:600;">Sous-titre de section</div>
+              </div>
+              <div class="typo-row">
+                <div class="typo-meta">h3<br>text-lg / 600<br>1.125rem</div>
+                <div class="typo-sample" style="font-size:1.125rem;font-weight:600;">Titre de carte ou de bloc</div>
+              </div>
+              <div class="typo-row">
+                <div class="typo-meta">body<br>text-base / 400<br>1rem</div>
+                <div class="typo-sample" style="font-size:1rem;font-weight:400;">Texte courant sur les pages, descriptions, paragraphes. Line-height 1.5 pour une bonne lisibilité.</div>
+              </div>
+              <div class="typo-row">
+                <div class="typo-meta">button/label<br>text-base / 600<br>1rem</div>
+                <div class="typo-sample" style="font-size:1rem;font-weight:600;">Bouton ou label de formulaire</div>
+              </div>
+              <div class="typo-row">
+                <div class="typo-meta">small<br>text-sm / 400<br>0.875rem</div>
+                <div class="typo-sample" style="font-size:0.875rem;font-weight:400;">Texte secondaire, métadonnées, légendes, descriptions de témoignages.</div>
+              </div>
+              <div class="typo-row">
+                <div class="typo-meta">overline<br>text-sm / 600<br>tracking-wide</div>
+                <div class="typo-sample" style="font-size:0.875rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange);">ASSOCIATION DE LA FONDATION DU PRADO</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Couleurs de texte</h3>
+            <div style="display:flex;flex-direction:column;gap:0.75rem">
+              <div style="display:flex;align-items:center;gap:1rem">
+                <div style="width:120px;font-size:0.75rem;color:var(--text-muted);font-family:monospace">--text</div>
+                <span style="color:var(--text)">Texte principal — titres, contenu important</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:1rem">
+                <div style="width:120px;font-size:0.75rem;color:var(--text-muted);font-family:monospace">--text-secondary</div>
+                <span style="color:var(--text-secondary)">Texte secondaire — descriptions, paragraphes</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:1rem">
+                <div style="width:120px;font-size:0.75rem;color:var(--text-muted);font-family:monospace">--text-muted</div>
+                <span style="color:var(--text-muted)">Texte atténué — placeholders, légendes</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:1rem">
+                <div style="width:120px;font-size:0.75rem;color:var(--text-muted);font-family:monospace">--text-faint</div>
+                <span style="color:var(--text-faint)">Texte très discret — numéros d'étapes, déco</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ SPACING ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="spacing" class="ds-section">
+          <h2 class="ds-section-title">Espacement & Rayons de bordure</h2>
+          <p class="ds-section-desc">L'échelle d'espacement Tailwind standard est utilisée. Les rayons de bordure sont dérivés de la variable --radius (0.625rem).</p>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Échelle d'espacement</h3>
+            <div class="spacing-grid">
+              <div class="spacing-item"><div class="spacing-block" style="width:4px;height:4px"></div><div class="spacing-label">1 · 4px</div></div>
+              <div class="spacing-item"><div class="spacing-block" style="width:8px;height:8px"></div><div class="spacing-label">2 · 8px</div></div>
+              <div class="spacing-item"><div class="spacing-block" style="width:12px;height:12px"></div><div class="spacing-label">3 · 12px</div></div>
+              <div class="spacing-item"><div class="spacing-block" style="width:16px;height:16px"></div><div class="spacing-label">4 · 16px</div></div>
+              <div class="spacing-item"><div class="spacing-block" style="width:20px;height:20px"></div><div class="spacing-label">5 · 20px</div></div>
+              <div class="spacing-item"><div class="spacing-block" style="width:24px;height:24px"></div><div class="spacing-label">6 · 24px</div></div>
+              <div class="spacing-item"><div class="spacing-block" style="width:32px;height:32px"></div><div class="spacing-label">8 · 32px</div></div>
+              <div class="spacing-item"><div class="spacing-block" style="width:40px;height:40px"></div><div class="spacing-label">10 · 40px</div></div>
+              <div class="spacing-item"><div class="spacing-block" style="width:48px;height:48px"></div><div class="spacing-label">12 · 48px</div></div>
+              <div class="spacing-item"><div class="spacing-block" style="width:64px;height:64px"></div><div class="spacing-label">16 · 64px</div></div>
+              <div class="spacing-item"><div class="spacing-block" style="width:96px;height:48px"></div><div class="spacing-label">24 · 96px</div></div>
+            </div>
+          </div>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Rayons de bordure</h3>
+            <div class="radius-grid">
+              <div class="radius-item"><div class="radius-box" style="border-radius:var(--radius-sm)"></div><div class="spacing-label">sm · 6px</div></div>
+              <div class="radius-item"><div class="radius-box" style="border-radius:var(--radius-md)"></div><div class="spacing-label">md · 8px</div></div>
+              <div class="radius-item"><div class="radius-box" style="border-radius:var(--radius-lg)"></div><div class="spacing-label">lg · 10px</div></div>
+              <div class="radius-item"><div class="radius-box" style="border-radius:var(--radius-xl)"></div><div class="spacing-label">xl · 14px</div></div>
+              <div class="radius-item"><div class="radius-box" style="border-radius:1rem"></div><div class="spacing-label">2xl · 16px</div></div>
+              <div class="radius-item"><div class="radius-box" style="border-radius:1.5rem"></div><div class="spacing-label">3xl · 24px</div></div>
+              <div class="radius-item"><div class="radius-box" style="border-radius:var(--radius-full)"></div><div class="spacing-label">full · 9999px</div></div>
+            </div>
+          </div>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Breakpoints</h3>
+            <div style="display:flex;flex-direction:column;gap:0.5rem">
+              <div style="display:flex;align-items:center;gap:1rem">
+                <div style="width:60px;font-size:0.75rem;color:var(--text-muted);font-family:monospace">sm</div>
+                <div style="width:60px;font-size:0.75rem;color:var(--text-secondary);font-family:monospace">640px</div>
+                <div style="height:4px;width:160px;background:var(--secondary);border-radius:2px;opacity:0.4"></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:1rem">
+                <div style="width:60px;font-size:0.75rem;color:var(--text-muted);font-family:monospace">md</div>
+                <div style="width:60px;font-size:0.75rem;color:var(--text-secondary);font-family:monospace">768px</div>
+                <div style="height:4px;width:192px;background:var(--secondary);border-radius:2px;opacity:0.5"></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:1rem">
+                <div style="width:60px;font-size:0.75rem;color:var(--text-muted);font-family:monospace">lg</div>
+                <div style="width:60px;font-size:0.75rem;color:var(--text-secondary);font-family:monospace">1024px</div>
+                <div style="height:4px;width:256px;background:var(--secondary);border-radius:2px;opacity:0.7"></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:1rem">
+                <div style="width:60px;font-size:0.75rem;color:var(--text-muted);font-family:monospace">xl</div>
+                <div style="width:60px;font-size:0.75rem;color:var(--text-secondary);font-family:monospace">1280px</div>
+                <div style="height:4px;width:320px;background:var(--secondary);border-radius:2px;opacity:0.9"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ ICONS ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="icons" class="ds-section">
+          <h2 class="ds-section-title">Icônes</h2>
+          <p class="ds-section-desc">Lucide (lucide-vue-next v0.487). Taille par défaut 18-20px. Couleur héritée du texte parent.</p>
+
+          <div class="icon-grid">
+            <div class="icon-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span>Users</span>
+            </div>
+            <div class="icon-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span>User</span>
+            </div>
+            <div class="icon-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+              <span>Menu</span>
+            </div>
+            <div class="icon-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <span>X (close)</span>
+            </div>
+            <div class="icon-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+              <span>ArrowUp</span>
+            </div>
+            <div class="icon-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              <span>ArrowRight</span>
+            </div>
+            <div class="icon-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              <span>ChevronDown</span>
+            </div>
+            <div class="icon-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              <span>Heart</span>
+            </div>
+            <div class="icon-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <span>Search</span>
+            </div>
+            <div class="icon-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <span>Mail</span>
+            </div>
+            <div class="icon-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span>Lock</span>
+            </div>
+            <div class="icon-item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              <span>Github</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ BUTTONS ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="buttons" class="ds-section">
+          <h2 class="ds-section-title">Boutons</h2>
+          <p class="ds-section-desc">Les boutons utilisent border-radius: full (pill shape). Font-weight: 600. Transition: 0.2s.</p>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Variantes</h3>
+            <div class="component-row">
+              <button class="btn btn-primary">Découvrir nos actions →</button>
+              <button class="btn btn-secondary">Inscrire un jeune</button>
+              <button class="btn btn-orange">Faire un don ♥</button>
+              <button class="btn btn-ghost">En savoir plus →</button>
+              <button class="btn btn-destructive">Supprimer</button>
+            </div>
+          </div>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Tailles</h3>
+            <div class="component-row">
+              <button class="btn btn-primary btn-sm">Petit</button>
+              <button class="btn btn-primary">Normal</button>
+              <button class="btn btn-primary btn-lg">Grand</button>
+            </div>
+          </div>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Boutons catégorie (ghost teinté)</h3>
+            <div class="component-row">
+              <button class="btn btn-sm" style="background:rgba(207,0,108,0.1);color:#CF006C">Formations →</button>
+              <button class="btn btn-sm" style="background:rgba(251,98,35,0.1);color:#FB6223">Découverte →</button>
+              <button class="btn btn-sm" style="background:rgba(193,142,216,0.1);color:#C18ED8">Bien-être →</button>
+              <button class="btn btn-sm" style="background:rgba(147,193,175,0.1);color:#93C1AF">Mobilité →</button>
+              <button class="btn btn-sm" style="background:rgba(0,70,87,0.15);color:#004657">Numérique →</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ INPUTS ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="inputs" class="ds-section">
+          <h2 class="ds-section-title">Champs de saisie</h2>
+          <p class="ds-section-desc">Inputs avec fond subtil, bordure discrète, focus ring en primary.</p>
+
+          <div class="ds-subsection">
+            <div style="display:flex;flex-wrap:wrap;gap:2rem">
+              <div class="input-group">
+                <label class="input-label">Adresse e-mail</label>
+                <input type="email" class="input-field" placeholder="votre@email.fr">
+              </div>
+              <div class="input-group">
+                <label class="input-label">Rechercher une action</label>
+                <input type="text" class="input-field" placeholder="Mot-clé, catégorie...">
+              </div>
+              <div class="input-group">
+                <label class="input-label">Mot de passe</label>
+                <input type="password" class="input-field" placeholder="••••••••">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ CARDS ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="cards" class="ds-section">
+          <h2 class="ds-section-title">Cartes</h2>
+          <p class="ds-section-desc">Les cartes d'action et de ressource utilisent surface + border + rounded-2xl. Hover: border plus visible.</p>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Carte Action</h3>
+            <div class="card-grid">
+              <div class="card">
+                <div class="card-img" style="background:linear-gradient(135deg, #CF006C20, #FB622320)"></div>
+                <div class="card-body">
+                  <div style="display:flex;gap:0.5rem;margin-bottom:0.75rem">
+                    <span class="tag" style="background:rgba(207,0,108,0.1);color:#CF006C">Formations</span>
+                  </div>
+                  <div class="card-title">Atelier découverte des métiers du numérique</div>
+                  <div class="card-desc">Découvrez les opportunités professionnelles dans le numérique à travers des ateliers pratiques et des rencontres avec des professionnels.</div>
+                  <div style="margin-top:1rem;font-size:0.75rem;color:var(--text-muted)">📍 Lyon 3e · 14–18 ans · Places : 12/15</div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-img" style="background:linear-gradient(135deg, #93C1AF20, #004657 20)"></div>
+                <div class="card-body">
+                  <div style="display:flex;gap:0.5rem;margin-bottom:0.75rem">
+                    <span class="tag" style="background:rgba(147,193,175,0.1);color:#93C1AF">Vie quotidienne</span>
+                  </div>
+                  <div class="card-title">Budget et vie quotidienne : gérer son argent</div>
+                  <div class="card-desc">Apprendre à construire un budget, comprendre ses droits de consommateur et développer son autonomie financière.</div>
+                  <div style="margin-top:1rem;font-size:0.75rem;color:var(--text-muted)">📍 Villeurbanne · 16–25 ans · Places : 8/10</div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-img" style="background:linear-gradient(135deg, #C18ED820, #C18ED840)"></div>
+                <div class="card-body">
+                  <div style="display:flex;gap:0.5rem;margin-bottom:0.75rem">
+                    <span class="tag" style="background:rgba(193,142,216,0.1);color:#C18ED8">Bien-être</span>
+                  </div>
+                  <div class="card-title">Médiation animale : confiance en soi</div>
+                  <div class="card-desc">Un atelier en pleine nature pour développer la confiance en soi à travers le contact avec les animaux.</div>
+                  <div style="margin-top:1rem;font-size:0.75rem;color:var(--text-muted)">📍 Caluire · 11–18 ans · Places : 6/8</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ TAGS & BADGES ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="tags" class="ds-section">
+          <h2 class="ds-section-title">Tags & Badges</h2>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Tags de catégorie</h3>
+            <div class="component-row">
+              <span class="tag" style="background:rgba(207,0,108,0.1);color:#CF006C">Formations</span>
+              <span class="tag" style="background:rgba(251,98,35,0.1);color:#FB6223">Emploi</span>
+              <span class="tag" style="background:rgba(193,142,216,0.1);color:#C18ED8">Bien-être</span>
+              <span class="tag" style="background:rgba(147,193,175,0.1);color:#93C1AF">Mobilité</span>
+              <span class="tag" style="background:rgba(0,70,87,0.15);color:#004657">Numérique</span>
+              <span class="tag tag-default">Par défaut</span>
+            </div>
+          </div>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Badges de notification</h3>
+            <div class="component-row">
+              <div style="display:flex;align-items:center;gap:0.5rem">
+                <span>Prescripteurs</span>
+                <span class="badge badge-orange">3</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.5rem">
+                <span>Contacts</span>
+                <span class="badge badge-primary">12</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.5rem">
+                <span>Jeunes</span>
+                <span class="badge" style="background:#004657;color:white">5</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ ACCORDION ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="accordion" class="ds-section">
+          <h2 class="ds-section-title">Accordéon (FAQ)</h2>
+          <p class="ds-section-desc">Composant de FAQ avec animation grid-rows pour le contenu. Bordure subtile, fond surface quand ouvert.</p>
+
+          <div class="accordion">
+            <div class="accordion-item open" onclick="toggleAccordion(this)">
+              <button class="accordion-trigger">
+                C'est pour qui ?
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-content-inner">Les actions Prado Itinéraires s'adressent aux jeunes de 11 à 25 ans bénéficiant d'un accompagnement éducatif sur le territoire de la Métropole de Lyon.</div>
+              </div>
+            </div>
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+              <button class="accordion-trigger">
+                C'est gratuit ?
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-content-inner">Oui, entièrement. Toutes les actions, ateliers, formations et ressources sont 100 % gratuits.</div>
+              </div>
+            </div>
+            <div class="accordion-item" onclick="toggleAccordion(this)">
+              <button class="accordion-trigger">
+                Comment nous contacter ?
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="accordion-content">
+                <div class="accordion-content-inner">Par email à itineraires@le-prado.fr ou par téléphone au 04 72 XX XX XX.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ SKELETON ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="skeleton" class="ds-section">
+          <h2 class="ds-section-title">Skeleton Loading</h2>
+          <p class="ds-section-desc">Composant de chargement avec animation shimmer. Remplace les spinners partout dans l'application.</p>
+
+          <div class="card-grid">
+            <div class="card" style="border:1px solid var(--border)">
+              <div class="skeleton" style="height:180px;border-radius:0"></div>
+              <div class="card-body">
+                <div class="skeleton" style="height:12px;width:40%;margin-bottom:0.75rem"></div>
+                <div class="skeleton" style="height:16px;width:80%;margin-bottom:0.5rem"></div>
+                <div class="skeleton" style="height:12px;width:100%;margin-bottom:0.25rem"></div>
+                <div class="skeleton" style="height:12px;width:60%"></div>
+              </div>
+            </div>
+            <div class="card" style="border:1px solid var(--border)">
+              <div class="skeleton" style="height:180px;border-radius:0"></div>
+              <div class="card-body">
+                <div class="skeleton" style="height:12px;width:35%;margin-bottom:0.75rem"></div>
+                <div class="skeleton" style="height:16px;width:70%;margin-bottom:0.5rem"></div>
+                <div class="skeleton" style="height:12px;width:90%;margin-bottom:0.25rem"></div>
+                <div class="skeleton" style="height:12px;width:50%"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ HEADER COMP ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="header-comp" class="ds-section">
+          <h2 class="ds-section-title">Header</h2>
+          <p class="ds-section-desc">Header sticky avec backdrop-blur. Logo, navigation principale, CTAs et toggle thème.</p>
+
+          <div class="header-preview">
+            <div class="header-logo">
+              <div class="header-logo-img"></div>
+              <span>Prado <span style="color:var(--text-secondary);font-weight:400">Itinéraires</span></span>
+            </div>
+            <div class="header-nav">
+              <a href="#">Nos actions</a>
+              <a href="#">Ressources</a>
+              <a href="#">Nos programmes ▾</a>
+            </div>
+            <div class="header-actions">
+              <button class="btn btn-sm btn-secondary" style="padding:0.375rem 1rem;font-size:0.8125rem">Se connecter</button>
+              <button class="btn btn-sm btn-orange" style="padding:0.375rem 1rem;font-size:0.8125rem">Faire un don ♥</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ SIDEBAR COMP ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="sidebar-comp" class="ds-section">
+          <h2 class="ds-section-title">Sidebar (Admin & Espace)</h2>
+          <p class="ds-section-desc">Navigation latérale fixe. 260px de large. Badges pour les compteurs d'items en attente.</p>
+
+          <div style="display:flex;gap:2rem;flex-wrap:wrap">
+            <!-- Admin sidebar -->
+            <div>
+              <div class="ds-label">Admin</div>
+              <div class="sidebar-preview">
+                <div style="font-weight:600;font-size:0.9375rem;padding:0 0.75rem 1rem;color:var(--text)">Admin</div>
+                <div class="sidebar-link active">
+                  <span class="sidebar-icon">📊</span> Dashboard
+                </div>
+                <div class="sidebar-link">
+                  <span class="sidebar-icon">📋</span> Actions
+                </div>
+                <div class="sidebar-link">
+                  <span class="sidebar-icon">👥</span> Prescripteurs
+                  <span class="badge badge-orange" style="margin-left:auto">3</span>
+                </div>
+                <div class="sidebar-link">
+                  <span class="sidebar-icon">✉️</span> Contacts
+                  <span class="badge badge-primary" style="margin-left:auto">12</span>
+                </div>
+                <div class="sidebar-link">
+                  <span class="sidebar-icon">📰</span> Newsletter
+                </div>
+                <div class="sidebar-link">
+                  <span class="sidebar-icon">📝</span> Inscriptions
+                </div>
+              </div>
+            </div>
+
+            <!-- Espace sidebar -->
+            <div>
+              <div class="ds-label">Mon Espace</div>
+              <div class="sidebar-preview">
+                <div style="font-weight:600;font-size:0.9375rem;padding:0 0.75rem 1rem;color:var(--text)">Mon espace</div>
+                <div class="sidebar-link active">
+                  <span class="sidebar-icon">🏠</span> Tableau de bord
+                </div>
+                <div class="sidebar-link">
+                  <span class="sidebar-icon">👤</span> Mes jeunes
+                  <span class="badge" style="background:#004657;color:white;margin-left:auto">5</span>
+                </div>
+                <div class="sidebar-link">
+                  <span class="sidebar-icon">📋</span> Inscriptions
+                  <span class="badge" style="background:#004657;color:white;margin-left:auto">2</span>
+                </div>
+                <div style="border-top:1px solid var(--border);margin:0.75rem 0"></div>
+                <div class="sidebar-link">
+                  <span class="sidebar-icon">⚙️</span> Paramètres
+                </div>
+                <div class="sidebar-link">
+                  <span class="sidebar-icon">📖</span> Catalogue
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ STATS ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="stats" class="ds-section">
+          <h2 class="ds-section-title">Barre de statistiques</h2>
+          <p class="ds-section-desc">Section pleine largeur avec fond dégradé. Compteurs animés avec GSAP (2s, power2.out).</p>
+
+          <div class="stat-bar">
+            <div><div class="stat-value">89</div><div class="stat-label">actions programmées</div></div>
+            <div><div class="stat-value">183</div><div class="stat-label">ressources en accès libre</div></div>
+            <div><div class="stat-value">500+</div><div class="stat-label">jeunes accompagnés/an</div></div>
+            <div><div class="stat-value">50+</div><div class="stat-label">structures partenaires</div></div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ STEPS ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="steps" class="ds-section">
+          <h2 class="ds-section-title">Cartes d'étapes</h2>
+          <p class="ds-section-desc">3 cartes numérotées pour expliquer le parcours d'inscription. Numéro en text-faint très grand (3rem).</p>
+
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem">
+            <div class="step-card">
+              <div class="step-number">01</div>
+              <div class="step-title">Créez votre compte</div>
+              <div class="step-desc">Vous êtes éducateur, travailleur social, référent ? Créez votre compte prescripteur en 2 minutes.</div>
+            </div>
+            <div class="step-card">
+              <div class="step-number">02</div>
+              <div class="step-title">Ajoutez un jeune</div>
+              <div class="step-desc">Créez la fiche du jeune : prénom, nom, date de naissance, situation. Données sécurisées RGPD.</div>
+            </div>
+            <div class="step-card">
+              <div class="step-number">03</div>
+              <div class="step-title">Inscrivez-le à une action</div>
+              <div class="step-desc">Parcourez les 89 actions, choisissez celle qui correspond, confirmez. Inscription immédiate.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ TESTIMONIALS ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="testimonials" class="ds-section">
+          <h2 class="ds-section-title">Carte de témoignage</h2>
+          <p class="ds-section-desc">Cartes avec texte italic en guillemets français. Avatar rond avec initiale sur fond teinté. Colonnes animées en scroll vertical.</p>
+
+          <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
+            <div class="testimonial-card">
+              <div class="testimonial-text">« Les actions Prado Itinéraires nous permettent de proposer des activités variées et de qualité aux jeunes que nous accompagnons. »</div>
+              <div class="testimonial-author">
+                <div class="testimonial-avatar" style="background:rgba(207,0,108,0.15);color:#CF006C">M</div>
+                <div>
+                  <div class="testimonial-name">Marie D.</div>
+                  <div class="testimonial-role">Éducatrice spécialisée, MECS du Rhône</div>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-card">
+              <div class="testimonial-text">« La Fresque de la Protection de l'Enfance a été un moment fort pour notre équipe. Nous recommandons cet atelier à toutes les structures. »</div>
+              <div class="testimonial-author">
+                <div class="testimonial-avatar" style="background:rgba(251,98,35,0.15);color:#FB6223">T</div>
+                <div>
+                  <div class="testimonial-name">Thomas R.</div>
+                  <div class="testimonial-role">Chef de service, Département du Rhône</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ ANIMATIONS ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="animations" class="ds-section">
+          <h2 class="ds-section-title">Animations</h2>
+          <p class="ds-section-desc">Le site utilise CSS transitions + IntersectionObserver pour les reveals, et GSAP pour les compteurs.</p>
+
+          <div class="ds-subsection">
+            <h3 class="ds-subsection-title">Patterns d'animation</h3>
+            <div class="anim-row">
+              <div class="anim-box">Hover ↑</div>
+              <div class="anim-box pulse">Pulse</div>
+              <div class="anim-box reveal">Reveal 1</div>
+              <div class="anim-box reveal">Reveal 2</div>
+              <div class="anim-box reveal">Reveal 3</div>
+            </div>
+          </div>
+
+          <div class="ds-subsection" style="margin-top:2rem">
+            <h3 class="ds-subsection-title">Paramètres d'animation</h3>
+            <div class="code-block">
+<span class="comment">/* Reveal on scroll (hero, sections, cards) */</span>
+<span class="prop">.reveal</span> {
+  <span class="prop">opacity</span>: <span class="value">0</span>;
+  <span class="prop">transform</span>: <span class="value">translateY(18px)</span>;
+  <span class="prop">filter</span>: <span class="value">blur(4px)</span>;       <span class="comment">/* hero seulement */</span>
+  <span class="prop">transition</span>: <span class="value">all 0.7s cubic-bezier(0.16, 1, 0.3, 1)</span>;
+  <span class="prop">transition-delay</span>: <span class="value">var(--delay, 0s)</span>;
+}
+
+<span class="comment">/* Stagger delays: 0s, 0.12s, 0.24s, ... */</span>
+<span class="comment">/* IntersectionObserver threshold: 0.2 to 0.3 */</span>
+
+<span class="comment">/* GSAP counter animation */</span>
+<span class="prop">duration</span>: <span class="value">2s</span>
+<span class="prop">ease</span>: <span class="value">'power2.out'</span>
+<span class="prop">delay per item</span>: <span class="value">0.15s</span>
+
+<span class="comment">/* Testimonial columns scroll */</span>
+<span class="prop">animation</span>: <span class="value">scroll-up 25-30s linear infinite</span>
+<span class="prop">hover</span>: <span class="value">animation-play-state: paused</span>
+
+<span class="comment">/* Partner logos scroll */</span>
+<span class="prop">animation</span>: <span class="value">scroll-left 30s linear infinite</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ╌╌╌╌╌╌╌╌╌╌ TOKENS ╌╌╌╌╌╌╌╌╌╌ -->
+        <section id="tokens" class="ds-section">
+          <h2 class="ds-section-title">Design Tokens (CSS Variables)</h2>
+          <p class="ds-section-desc">Liste complète des variables CSS à reproduire dans Figma sous forme de styles et variables.</p>
+
+          <div class="code-block">
+<span class="comment">/* ═══ Brand Colors ═══ */</span>
+<span class="prop">--primary</span>: <span class="value">#CF006C</span>;
+<span class="prop">--secondary</span>: <span class="value">#93C1AF</span>;
+<span class="prop">--accent</span>: <span class="value">#C18ED8</span>;
+<span class="prop">--orange</span>: <span class="value">#FB6223</span>;
+<span class="prop">--dark-teal</span>: <span class="value">#004657</span>;
+<span class="prop">--destructive</span>: <span class="value">#d4183d</span>;
+
+<span class="comment">/* ═══ Dark Theme ═══ */</span>
+<span class="prop">--prado-bg</span>: <span class="value">#1a1a2e</span>;
+<span class="prop">--prado-bg-deep</span>: <span class="value">#12122a</span>;
+<span class="prop">--prado-surface</span>: <span class="value">#232340</span>;
+<span class="prop">--prado-text</span>: <span class="value">#ffffff</span>;
+<span class="prop">--prado-text-secondary</span>: <span class="value">rgba(255, 255, 255, 0.6)</span>;
+<span class="prop">--prado-text-muted</span>: <span class="value">rgba(255, 255, 255, 0.4)</span>;
+<span class="prop">--prado-text-faint</span>: <span class="value">rgba(255, 255, 255, 0.25)</span>;
+<span class="prop">--prado-border</span>: <span class="value">rgba(255, 255, 255, 0.05)</span>;
+<span class="prop">--prado-border-light</span>: <span class="value">rgba(255, 255, 255, 0.1)</span>;
+<span class="prop">--prado-border-medium</span>: <span class="value">rgba(255, 255, 255, 0.2)</span>;
+<span class="prop">--prado-header-bg</span>: <span class="value">rgba(26, 26, 46, 0.95)</span>;
+<span class="prop">--prado-input-bg</span>: <span class="value">rgba(255, 255, 255, 0.05)</span>;
+<span class="prop">--prado-tag-bg</span>: <span class="value">rgba(255, 255, 255, 0.08)</span>;
+<span class="prop">--prado-gradient-start</span>: <span class="value">#CF006C</span>;
+<span class="prop">--prado-gradient-end</span>: <span class="value">#FB6223</span>;
+
+<span class="comment">/* ═══ Light Theme ═══ */</span>
+<span class="prop">--prado-bg</span>: <span class="value">#f5f5f7</span>;
+<span class="prop">--prado-bg-deep</span>: <span class="value">#eaeaef</span>;
+<span class="prop">--prado-surface</span>: <span class="value">#ffffff</span>;
+<span class="prop">--prado-text</span>: <span class="value">#1a1a2e</span>;
+<span class="prop">--prado-text-secondary</span>: <span class="value">rgba(26, 26, 46, 0.7)</span>;
+
+<span class="comment">/* ═══ Typography ═══ */</span>
+<span class="prop">font-family</span>: <span class="value">'Poppins', sans-serif</span>;
+<span class="prop">--font-weight-normal</span>: <span class="value">400</span>;
+<span class="prop">--font-weight-medium</span>: <span class="value">600</span>;
+<span class="prop">--font-size</span>: <span class="value">16px</span>;
+
+<span class="comment">/* ═══ Radius ═══ */</span>
+<span class="prop">--radius</span>: <span class="value">0.625rem</span>;   <span class="comment">/* 10px */</span>
+<span class="prop">--radius-sm</span>: <span class="value">0.375rem</span>;  <span class="comment">/* 6px  */</span>
+<span class="prop">--radius-md</span>: <span class="value">0.5rem</span>;    <span class="comment">/* 8px  */</span>
+<span class="prop">--radius-lg</span>: <span class="value">0.625rem</span>;  <span class="comment">/* 10px */</span>
+<span class="prop">--radius-xl</span>: <span class="value">0.875rem</span>;  <span class="comment">/* 14px */</span>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="text-align:center;padding:3rem;border-top:1px solid var(--border);color:var(--text-faint);font-size:0.75rem">
+    Prado Itinéraires Design System · Généré pour servir de référence Figma · Mars 2026
+  </footer>
+
+  <script>
+    function setTheme(theme) {
+      if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        document.getElementById('lightBtn').classList.add('active');
+        document.getElementById('darkBtn').classList.remove('active');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('darkBtn').classList.add('active');
+        document.getElementById('lightBtn').classList.remove('active');
+      }
+    }
+
+    function toggleAccordion(item) {
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
+
+    // Sidebar active state on scroll
+    const sections = document.querySelectorAll('.ds-section');
+    const navLinks = document.querySelectorAll('.ds-sidebar a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const top = section.offsetTop - 120;
+        if (window.scrollY >= top) current = section.id;
+      });
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
