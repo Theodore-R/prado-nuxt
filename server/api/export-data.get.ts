@@ -13,9 +13,14 @@ export default defineEventHandler(async (event) => {
     config.supabaseServiceRoleKey,
   )
 
-  const [prescripteur, jeunes, inscriptions] = await Promise.all([
-    adminClient.from('prescripteurs').select('*').eq('id', user.id).single(),
-    adminClient.from('jeunes').select('*').eq('prescripteur_id', user.id),
+  const prescripteur = await adminClient.from('prescripteurs').select('*').eq('id', user.id).single()
+  const structureId = prescripteur.data?.structure_id
+
+  // Export all jeunes and inscriptions from the same structure (not just own)
+  const [jeunes, inscriptions] = await Promise.all([
+    structureId
+      ? adminClient.from('jeunes').select('*').eq('structure_id', structureId)
+      : adminClient.from('jeunes').select('*').eq('prescripteur_id', user.id),
     adminClient.from('inscriptions').select('*').eq('prescripteur_id', user.id),
   ])
 

@@ -146,10 +146,10 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const supabase = createClient(config.public.supabase.url, config.supabaseServiceRoleKey)
 
-  // Verify ownership
+  // Verify ownership (by structure or admin)
   const { data: jeune } = await supabase
     .from('jeunes')
-    .select('prescripteur_id')
+    .select('prescripteur_id, structure_id')
     .eq('id', jeuneId)
     .single()
 
@@ -157,11 +157,12 @@ export default defineEventHandler(async (event) => {
 
   const { data: prescripteur } = await supabase
     .from('prescripteurs')
-    .select('role')
+    .select('role, structure_id')
     .eq('id', user.id)
     .single()
 
-  if (jeune.prescripteur_id !== user.id && prescripteur?.role !== 'admin') {
+  const sameStructure = prescripteur?.structure_id && jeune.structure_id && prescripteur.structure_id === jeune.structure_id
+  if (!sameStructure && prescripteur?.role !== 'admin') {
     throw createError({ statusCode: 403, message: 'Accès refusé' })
   }
 
@@ -184,18 +185,18 @@ export default defineEventHandler(async (event) => {
 
   const row = {
     jeune_id: jeuneId,
-    allergies: JSON.stringify(allergies),
+    allergies,
     handicap,
     taux_invalidite: tauxInvalidite,
-    suivi_psychologique: JSON.stringify(suiviPsy),
-    suivi_medical: JSON.stringify(suiviMed),
-    traitements_en_cours: JSON.stringify(traitements),
-    regime_alimentaire: JSON.stringify(regimes),
+    suivi_psychologique: suiviPsy,
+    suivi_medical: suiviMed,
+    traitements_en_cours: traitements,
+    regime_alimentaire: regimes,
     contacts_urgence: contacts,
-    medecin_traitant: JSON.stringify(medecin),
-    mesure_protection: JSON.stringify(mesures),
-    referent_ase: JSON.stringify(referent),
-    composition_familiale: JSON.stringify(compoFamiliale),
+    medecin_traitant: medecin,
+    mesure_protection: mesures,
+    referent_ase: referent,
+    composition_familiale: compoFamiliale,
     lieu_hebergement: lieuHebergement,
     droits_parentaux: droitsParentaux,
     notes_confidentielles: notesConfidentielles,

@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     config.supabaseServiceRoleKey,
   )
 
-  // Delete inscriptions
+  // Delete inscriptions created by this prescripteur
   const { error: err1 } = await adminClient
     .from('inscriptions')
     .delete()
@@ -29,14 +29,8 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 500, message: 'Erreur lors de la suppression des inscriptions' })
   }
 
-  // Delete jeunes
-  const { error: err2 } = await adminClient
-    .from('jeunes')
-    .delete()
-    .eq('prescripteur_id', user.id)
-  if (err2) {
-    throw createError({ statusCode: 500, message: 'Erreur lors de la suppression des jeunes' })
-  }
+  // NOTE: Jeunes are NOT deleted — they belong to the structure, not the prescripteur.
+  // prescripteur_id on jeunes is kept for traceability (who created the record).
 
   // Delete prescripteur row
   const { error: err3 } = await adminClient

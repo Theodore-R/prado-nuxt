@@ -3,6 +3,41 @@ export function useVeriff() {
   const error = ref<string | null>(null)
   const status = ref<'idle' | 'started' | 'submitted' | 'finished' | 'canceled'>('idle')
 
+  let pollInterval: ReturnType<typeof setInterval> | null = null
+  let pollCount = 0
+  const MAX_POLLS = 24 // 24 × 5s = 2 minutes
+
+  const onVerifiedCallback = ref<(() => void) | null>(null)
+
+  function stopPolling() {
+    if (pollInterval) {
+      clearInterval(pollInterval)
+      pollInterval = null
+    }
+    pollCount = 0
+  }
+
+  function startPolling(jeuneId: string) {
+    stopPolling()
+    pollInterval = setInterval(async () => {
+      pollCount++
+      if (pollCount > MAX_POLLS) {
+        stopPolling()
+        return
+      }
+      try {
+        const result = await $fetch<{ identityVerified: boolean }>(`/api/jeunes/${jeuneId}/verification-status`)
+        if (result.identityVerified) {
+          stopPolling()
+          status.value = 'finished'
+          onVerifiedCallback.value?.()
+        }
+      } catch {
+        // Silently continue polling on error
+      }
+    }, 5000)
+  }
+
   const startVerification = async (jeuneId: string, firstName?: string, lastName?: string) => {
     verifying.value = true
     error.value = null
@@ -10,7 +45,7 @@ export function useVeriff() {
 
     try {
       // Create session server-side, linked to the jeune
-      const session = await $fetch('/api/veriff/session', {
+      const session = await $fetch<{ sessionUrl: string; sessionId: string }>('/api/veriff/session', {
         method: 'POST',
         body: { jeuneId, firstName, lastName },
       })
@@ -27,14 +62,17 @@ export function useVeriff() {
               break
             case MESSAGES.SUBMITTED:
               status.value = 'submitted'
+              startPolling(jeuneId)
               break
             case MESSAGES.FINISHED:
               status.value = 'finished'
               verifying.value = false
+              if (!pollInterval) startPolling(jeuneId)
               break
             case MESSAGES.CANCELED:
               status.value = 'canceled'
               verifying.value = false
+              stopPolling()
               break
           }
         },
@@ -49,6 +87,27 @@ export function useVeriff() {
     verifying.value = false
     error.value = null
     status.value = 'idle'
+    stopPolling()
+  }
+
+  // Check if a verification is pending (e.g. on page load after refresh)
+  const checkPending = async (jeuneId: string) => {
+    try {
+      const result = await $fetch<{ identityVerified: boolean; verificationPending: boolean }>(`/api/jeunes/${jeuneId}/verification-status`)
+      if (result.identityVerified) {
+        status.value = 'finished'
+        onVerifiedCallback.value?.()
+      } else if (result.verificationPending) {
+        status.value = 'submitted'
+        startPolling(jeuneId)
+      }
+    } catch {
+      // Silent
+    }
+  }
+
+  if (import.meta.client) {
+    onUnmounted(() => stopPolling())
   }
 
   return {
@@ -57,5 +116,7 @@ export function useVeriff() {
     status,
     startVerification,
     reset,
+    checkPending,
+    onVerified: (cb: () => void) => { onVerifiedCallback.value = cb },
   }
 }

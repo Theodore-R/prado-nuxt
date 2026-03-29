@@ -153,7 +153,7 @@ onMounted(() => {
               {{ r.category }}
             </span>
           </div>
-          <h3 class="text-sm text-prado-text font-medium line-clamp-1 group-hover:text-[#93C1AF] transition-colors">{{ r.title }}</h3>
+          <h3 class="text-sm text-prado-text font-medium line-clamp-1 group-hover:text-[var(--prado-signature-accent)] transition-colors">{{ r.title }}</h3>
           <p class="text-xs text-prado-text-muted line-clamp-1 mt-0.5">{{ r.description }}</p>
         </div>
 
@@ -170,7 +170,7 @@ onMounted(() => {
       </p>
       <button
         v-if="search || catFilter !== 'all'"
-        class="mt-4 text-xs text-[#CF006C] hover:underline"
+        class="mt-4 text-xs text-[var(--prado-signature-accent)] hover:underline"
         @click="search = ''; catFilter = 'all'; visibleCount = BATCH_SIZE"
       >
         Reinitialiser les filtres

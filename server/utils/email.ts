@@ -1,6 +1,7 @@
 import { Resend } from 'resend'
+import { getSettings } from '~/server/utils/settings'
 
-const DEFAULT_FROM = 'Prado Itinéraires <noreply@prado-itineraires.fr>'
+const FALLBACK_FROM = 'Prado Itinéraires <noreply@prado-itineraires.fr>'
 
 let resendClient: Resend | null = null
 
@@ -14,13 +15,36 @@ function getResendClient(): Resend {
   return resendClient
 }
 
+async function getSenderFrom(): Promise<string> {
+  try {
+    const emailSettings = await getSettings<{ senderName?: string; senderEmail?: string }>('email')
+    if (emailSettings.senderName && emailSettings.senderEmail) {
+      return `${emailSettings.senderName} <${emailSettings.senderEmail}>`
+    }
+  } catch {
+    // Fall back to default if settings table doesn't exist yet
+  }
+  return FALLBACK_FROM
+}
+
 export async function sendEmail(to: string | string[], subject: string, html: string) {
   const resend = getResendClient()
+  const from = await getSenderFrom()
+
+  let replyTo: string | undefined
+  try {
+    const emailSettings = await getSettings<{ replyToEmail?: string }>('email')
+    replyTo = emailSettings.replyToEmail || undefined
+  } catch {
+    // ignore
+  }
+
   const { data, error } = await resend.emails.send({
-    from: DEFAULT_FROM,
+    from,
     to,
     subject,
     html,
+    ...(replyTo ? { reply_to: replyTo } : {}),
   })
   if (error) {
     throw new Error(error.message)

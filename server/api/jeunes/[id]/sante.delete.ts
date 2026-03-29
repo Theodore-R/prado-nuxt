@@ -11,10 +11,10 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const supabase = createClient(config.public.supabase.url, config.supabaseServiceRoleKey)
 
-  // Verify ownership
+  // Verify ownership (by structure or admin)
   const { data: jeune } = await supabase
     .from('jeunes')
-    .select('prescripteur_id')
+    .select('prescripteur_id, structure_id')
     .eq('id', jeuneId)
     .single()
 
@@ -22,11 +22,12 @@ export default defineEventHandler(async (event) => {
 
   const { data: prescripteur } = await supabase
     .from('prescripteurs')
-    .select('role')
+    .select('role, structure_id')
     .eq('id', user.id)
     .single()
 
-  if (jeune.prescripteur_id !== user.id && prescripteur?.role !== 'admin') {
+  const sameStructure = prescripteur?.structure_id && jeune.structure_id && prescripteur.structure_id === jeune.structure_id
+  if (!sameStructure && prescripteur?.role !== 'admin') {
     throw createError({ statusCode: 403, message: 'Accès refusé' })
   }
 

@@ -22,7 +22,8 @@ const { data: ressourceDoc, status } = await useAsyncData(`espace-ressource-${id
       filters: [prismicH.filter.at('my.ressource.original_id', Number(id))],
       pageSize: 1,
     })
-    return res.results?.[0] ?? null
+    // useAsyncData requires non-null return; empty object signals fetch failure (consumers check .data)
+    return res.results?.[0] ?? ({} as Record<string, never>)
   }
 })
 
@@ -30,7 +31,7 @@ const loading = computed(() => status.value === 'pending')
 
 const ressource = computed(() => {
   const doc = ressourceDoc.value
-  if (!doc) return null
+  if (!doc?.data) return null
   return {
     id: doc.uid ?? doc.data.original_id,
     title: doc.data.title as string,
@@ -55,7 +56,7 @@ const color = computed(() =>
 
   <div v-else-if="!ressource" class="max-w-3xl mx-auto py-16 text-center">
     <h1 class="text-xl text-prado-text mb-3">Ressource non trouvee</h1>
-    <NuxtLink to="/espace/ressources" class="text-[#FB6223] text-sm">Retour aux ressources</NuxtLink>
+    <NuxtLink to="/espace/ressources" class="text-[var(--prado-signature-accent)] text-sm">Retour aux ressources</NuxtLink>
   </div>
 
   <div v-else class="max-w-3xl mx-auto space-y-6">
@@ -87,7 +88,7 @@ const color = computed(() =>
       :href="ressource.url"
       target="_blank"
       rel="noopener noreferrer"
-      class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#CF006C] text-white text-sm hover:bg-[#a80057] transition-colors"
+      class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] text-sm hover:bg-[var(--prado-signature)]/80 transition-colors"
     >
       <ExternalLink :size="15" />
       Acceder a la ressource
