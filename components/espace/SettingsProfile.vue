@@ -57,7 +57,7 @@ async function handleSave() {
   saving.value = true
   const result = await updateProfile({
     name: `${form.value.firstName} ${form.value.lastName}`,
-    structure,
+    structure_id: structure,
     fonction: form.value.fonction,
     phone: form.value.phone,
   })

@@ -79,7 +79,7 @@ onMounted(() => {
           :key="step.number"
           class="bg-prado-surface rounded-2xl p-8 border border-prado-border reveal"
           :class="isVisible && 'is-visible'"
-          :style="{ '--delay': `${0.1 + idx * 0.12}s` }"
+          :style="{ '--delay': `${0.1 + (idx as number) * 0.12}s` }"
         >
           <div class="text-5xl font-bold text-prado-orange mb-4">
             {{ step.number }}

@@ -108,7 +108,7 @@ onMounted(() => {
               :key="idx"
               class="flex items-start gap-3 reveal"
               :class="isVisible && 'is-visible'"
-              :style="{ '--delay': `${0.3 + idx * 0.07}s` }"
+              :style="{ '--delay': `${0.3 + (idx as number) * 0.07}s` }"
             >
               <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 bg-[var(--prado-signature)]/15">
                 <Check :size="12" class="text-[var(--prado-signature-accent)]" />
@@ -136,7 +136,7 @@ onMounted(() => {
               :key="idx"
               class="flex items-start gap-3 reveal"
               :class="isVisible && 'is-visible'"
-              :style="{ '--delay': `${0.4 + idx * 0.07}s` }"
+              :style="{ '--delay': `${0.4 + (idx as number) * 0.07}s` }"
             >
               <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 bg-[#024266]/15">
                 <Check :size="12" class="text-[#024266]" />

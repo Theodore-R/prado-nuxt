@@ -93,13 +93,13 @@ async function handleSave() {
   try {
     const requests: Promise<unknown>[] = []
     if (presentIds.length > 0) {
-      requests.push($fetch('/api/admin/inscriptions/presence', {
+      requests.push(($fetch as any)('/api/admin/inscriptions/presence', {
         method: 'PATCH',
         body: { inscriptionIds: presentIds, presence: 'present' },
       }))
     }
     if (absentIds.length > 0) {
-      requests.push($fetch('/api/admin/inscriptions/presence', {
+      requests.push(($fetch as any)('/api/admin/inscriptions/presence', {
         method: 'PATCH',
         body: { inscriptionIds: absentIds, presence: 'absent' },
       }))
