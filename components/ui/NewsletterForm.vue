@@ -61,7 +61,6 @@ async function handleSubmit(source?: string) {
       >
         <Loader2 v-if="submitting" :size="14" class="animate-spin" />
         <Send v-else :size="14" />
-        <span class="hidden sm:inline">S'abonner</span>
       </button>
     </div>
 
