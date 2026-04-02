@@ -174,7 +174,7 @@ function handleExport() {
           Ajouter
         </button>
         <button
-          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] text-sm hover:opacity-90 transition-opacity"
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-prado-sage text-white text-sm hover:opacity-90 transition-opacity"
           @click="handleExport"
         >
           <Download :size="16" />
@@ -245,7 +245,7 @@ function handleExport() {
                 required
                 autofocus
                 placeholder="Ex: MECS Saint-Vincent"
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
               />
             </div>
             <div>
@@ -254,7 +254,7 @@ function handleExport() {
                 v-model="newType"
                 type="text"
                 placeholder="Ex: MECS, Foyer, IME..."
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
               />
             </div>
             <div class="grid grid-cols-2 gap-3">
@@ -265,7 +265,7 @@ function handleExport() {
                   type="text"
                   placeholder="69000"
                   maxlength="10"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
                 />
               </div>
               <div>
@@ -274,7 +274,7 @@ function handleExport() {
                   v-model="newCity"
                   type="text"
                   placeholder="Lyon"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
                 />
               </div>
             </div>
@@ -321,7 +321,7 @@ function handleExport() {
                 type="text"
                 required
                 autofocus
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
               />
             </div>
             <div>
@@ -330,7 +330,7 @@ function handleExport() {
                 v-model="editType"
                 type="text"
                 placeholder="Ex: MECS, Foyer, IME..."
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
               />
             </div>
             <div class="grid grid-cols-2 gap-3">
@@ -341,7 +341,7 @@ function handleExport() {
                   type="text"
                   placeholder="69000"
                   maxlength="10"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
                 />
               </div>
               <div>
@@ -350,7 +350,7 @@ function handleExport() {
                   v-model="editCity"
                   type="text"
                   placeholder="Lyon"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
                 />
               </div>
             </div>

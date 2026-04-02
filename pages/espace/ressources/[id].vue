@@ -46,7 +46,7 @@ const ressource = computed(() => {
 const color = computed(() =>
   ressource.value
     ? RESSOURCE_CATEGORY_COLORS[ressource.value.category as RessourceCategory]
-    : '#FB6223'
+    : '#93C1AF'
 )
 </script>
 
@@ -57,7 +57,7 @@ const color = computed(() =>
 
   <div v-else-if="!ressource" class="max-w-3xl mx-auto py-16 text-center">
     <h1 class="text-xl text-prado-text mb-3">Ressource non trouvee</h1>
-    <NuxtLink to="/espace/ressources" class="text-[var(--prado-signature-accent)] text-sm">Retour aux ressources</NuxtLink>
+    <NuxtLink to="/espace/ressources" class="text-prado-sage text-sm">Retour aux ressources</NuxtLink>
   </div>
 
   <div v-else class="max-w-3xl mx-auto space-y-6">

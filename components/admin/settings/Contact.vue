@@ -29,7 +29,7 @@ async function handleSave() {
   await save('contact', { ...form })
 }
 
-const inputClass = 'w-full px-4 py-2.5 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm placeholder:text-prado-text-faint focus:outline-none focus:border-prado-signature/50 transition-colors'
+const inputClass = 'w-full px-4 py-2.5 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm placeholder:text-prado-text-faint focus:outline-none focus:border-prado-sage/50 transition-colors'
 </script>
 
 <template>

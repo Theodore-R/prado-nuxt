@@ -95,7 +95,7 @@ function handleExport() {
                 :class="{ 'font-medium': !msg.is_read }"
                 @click="expandedId = expandedId === msg.id ? null : msg.id"
               >
-                <td class="px-4 py-3"><div class="w-2 h-2 rounded-full" :class="msg.is_read ? 'bg-transparent' : 'bg-[#FB6223]'" /></td>
+                <td class="px-4 py-3"><div class="w-2 h-2 rounded-full" :class="msg.is_read ? 'bg-transparent' : 'bg-prado-sage'" /></td>
                 <td class="px-4 py-3 text-prado-text-muted">{{ new Date(msg.created_at).toLocaleDateString('fr-FR') }}</td>
                 <td class="px-4 py-3 text-prado-text">{{ msg.name }} <br><span class="text-xs text-prado-text-faint">{{ msg.email }}</span></td>
                 <td class="px-4 py-3 text-prado-text">{{ msg.subject }}</td>
@@ -109,7 +109,7 @@ function handleExport() {
               <tr v-if="expandedId === msg.id" class="bg-prado-bg-deep/30 border-b border-prado-border">
                 <td colspan="5" class="px-6 py-4">
                   <div class="p-4 rounded-xl bg-prado-surface border border-prado-border text-prado-text text-sm whitespace-pre-wrap">{{ msg.message }}</div>
-                  <a :href="`mailto:${msg.email}`" class="inline-flex items-center gap-2 mt-3 text-xs text-[#FB6223] hover:underline"><Mail :size="12" /> Repondre</a>
+                  <a :href="`mailto:${msg.email}`" class="inline-flex items-center gap-2 mt-3 text-xs text-prado-sage hover:underline"><Mail :size="12" /> Repondre</a>
                 </td>
               </tr>
             </template>

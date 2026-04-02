@@ -85,20 +85,20 @@ async function handleLogout() {
           :class="[
             'relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors',
             isNavActive(item.to, item.exact)
-              ? 'bg-prado-signature-muted text-prado-text font-medium'
+              ? 'bg-prado-sage/15 text-prado-text font-medium'
               : 'text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface-hover',
           ]"
           @click="sidebarOpen = false"
         >
           <span
             v-if="isNavActive(item.to, item.exact)"
-            class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-prado-signature"
+            class="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-prado-sage"
           />
-          <component :is="item.icon" :size="18" :class="isNavActive(item.to, item.exact) ? 'text-prado-signature' : ''" />
+          <component :is="item.icon" :size="18" :class="isNavActive(item.to, item.exact) ? 'text-prado-sage' : ''" />
           <span class="flex-1">{{ item.label }}</span>
           <span
             v-if="item.badge && item.badge() > 0"
-            class="ml-auto min-w-[20px] h-5 flex items-center justify-center rounded-full text-[10px] font-bold text-prado-signature-text px-1.5 bg-prado-signature"
+            class="ml-auto min-w-[20px] h-5 flex items-center justify-center rounded-full text-[10px] font-bold text-white px-1.5 bg-prado-sage"
           >
             {{ item.badge() }}
           </span>

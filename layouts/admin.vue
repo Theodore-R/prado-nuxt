@@ -27,8 +27,8 @@ const navItems = [
 ]
 
 const badgeColors: Record<string, string> = {
-  pendingPrescripteurs: 'bg-[var(--prado-signature)]',
-  unreadContacts: 'bg-[var(--prado-signature)]',
+  pendingPrescripteurs: 'bg-prado-sage',
+  unreadContacts: 'bg-prado-sage',
 }
 
 function isNavActive(to: string, exact: boolean) {
@@ -76,12 +76,12 @@ async function handleLogout() {
           :class="[
             'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors',
             isNavActive(item.to, item.exact)
-              ? 'bg-[var(--prado-signature)] text-[var(--prado-signature-text)]'
+              ? 'bg-prado-sage/20 text-prado-text font-medium'
               : 'text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface-hover',
           ]"
           @click="sidebarOpen = false"
         >
-          <component :is="item.icon" :size="18" />
+          <component :is="item.icon" :size="18" :class="isNavActive(item.to, item.exact) ? 'text-prado-sage' : ''" />
           <span class="flex-1">{{ item.label }}</span>
           <span
             v-if="item.badgeKey && counts[item.badgeKey] > 0"
@@ -98,7 +98,7 @@ async function handleLogout() {
           :class="[
             'flex items-center gap-3 px-3 py-2.5 w-full rounded-xl text-sm transition-colors',
             isNavActive('/admin/parametres', false)
-              ? 'bg-[var(--prado-signature)] text-[var(--prado-signature-text)]'
+              ? 'bg-prado-sage/20 text-prado-text font-medium'
               : 'text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface-hover',
           ]"
           @click="sidebarOpen = false"

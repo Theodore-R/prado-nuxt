@@ -29,7 +29,7 @@ async function handleSave() {
   await save('analytics', { ...form })
 }
 
-const inputClass = 'w-full px-4 py-2.5 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm placeholder:text-prado-text-faint focus:outline-none focus:border-prado-signature/50 transition-colors'
+const inputClass = 'w-full px-4 py-2.5 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm placeholder:text-prado-text-faint focus:outline-none focus:border-prado-sage/50 transition-colors'
 </script>
 
 <template>
@@ -50,7 +50,7 @@ const inputClass = 'w-full px-4 py-2.5 rounded-xl bg-prado-input-bg border borde
           type="button"
           :class="[
             'relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent transition-colors duration-200',
-            form.ga4Enabled ? 'bg-[var(--prado-signature)]' : 'bg-prado-border',
+            form.ga4Enabled ? 'bg-prado-sage' : 'bg-prado-border',
           ]"
           role="switch"
           :aria-checked="form.ga4Enabled"
@@ -79,7 +79,7 @@ const inputClass = 'w-full px-4 py-2.5 rounded-xl bg-prado-input-bg border borde
             <input v-model="form.ga4Id" :class="inputClass" placeholder="G-XXXXXXXXXX" />
             <p class="text-[10px] text-prado-text-faint mt-1">
               Google Analytics → Admin → Data Streams →
-              <a href="https://analytics.google.com/" target="_blank" rel="noopener" class="text-[var(--prado-signature-accent)] hover:underline">
+              <a href="https://analytics.google.com/" target="_blank" rel="noopener" class="text-prado-sage hover:underline">
                 Measurement ID <ExternalLink :size="10" class="inline" />
               </a>
             </p>
@@ -102,7 +102,7 @@ const inputClass = 'w-full px-4 py-2.5 rounded-xl bg-prado-input-bg border borde
           type="button"
           :class="[
             'relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent transition-colors duration-200',
-            form.clarityEnabled ? 'bg-[var(--prado-signature)]' : 'bg-prado-border',
+            form.clarityEnabled ? 'bg-prado-sage' : 'bg-prado-border',
           ]"
           role="switch"
           :aria-checked="form.clarityEnabled"
@@ -131,7 +131,7 @@ const inputClass = 'w-full px-4 py-2.5 rounded-xl bg-prado-input-bg border borde
             <input v-model="form.clarityProjectId" :class="inputClass" placeholder="abc1234xyz" />
             <p class="text-[10px] text-prado-text-faint mt-1">
               Clarity → Settings → Overview →
-              <a href="https://clarity.microsoft.com/" target="_blank" rel="noopener" class="text-[var(--prado-signature-accent)] hover:underline">
+              <a href="https://clarity.microsoft.com/" target="_blank" rel="noopener" class="text-prado-sage hover:underline">
                 Project ID <ExternalLink :size="10" class="inline" />
               </a>
             </p>

@@ -22,7 +22,7 @@ const tabs: { key: FilterTab; label: string }[] = [
 
 const statusConfig: Record<string, { label: string; className: string }> = {
   approved: { label: 'Approuve', className: 'bg-[#93C1AF]/20 text-[#93C1AF]' },
-  pending: { label: 'En attente', className: 'bg-[#FB6223]/20 text-[#FB6223]' },
+  pending: { label: 'En attente', className: 'bg-amber-500/20 text-amber-500' },
   rejected: { label: 'Rejete', className: 'bg-red-500/20 text-red-400' },
 }
 
@@ -104,7 +104,7 @@ function handleExport() {
         :class="[
           'px-4 py-1.5 rounded-full text-sm transition-colors',
           filter === key
-            ? 'bg-[#FB6223] text-white'
+            ? 'bg-prado-sage text-white'
             : 'bg-prado-tag-bg text-prado-text-secondary hover:text-prado-text',
         ]"
         @click="filter = key"

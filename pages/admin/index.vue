@@ -28,18 +28,18 @@ const activity = ref<ActivityItem[]>([])
 const loading = ref(true)
 
 const statCards = [
-  { key: 'prescripteursCount' as const, label: 'Prescripteurs', icon: Users, color: '#FB6223' },
-  { key: 'jeunesCount' as const, label: 'Jeunes', icon: UserCheck, color: '#FB6223' },
+  { key: 'prescripteursCount' as const, label: 'Prescripteurs', icon: Users, color: '#93C1AF' },
+  { key: 'jeunesCount' as const, label: 'Jeunes', icon: UserCheck, color: '#93C1AF' },
   { key: 'inscriptionsCount' as const, label: 'Inscriptions', icon: ClipboardList, color: '#93C1AF' },
   { key: 'pendingCount' as const, label: 'En attente', icon: Clock, color: '#024266' },
-  { key: 'unreadContactsCount' as const, label: 'Contacts non lus', icon: Mail, color: '#FB6223' },
+  { key: 'unreadContactsCount' as const, label: 'Contacts non lus', icon: Mail, color: '#93C1AF' },
   { key: 'newsletterCount' as const, label: 'Abonnes newsletter', icon: Newspaper, color: '#93C1AF' },
 ]
 
 const activityColors: Record<string, string> = {
   inscription: '#93C1AF',
   prescripteur: '#024266',
-  contact: '#FB6223',
+  contact: '#93C1AF',
   newsletter: 'var(--prado-teal)',
 }
 

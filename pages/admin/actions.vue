@@ -247,7 +247,7 @@ async function duplicateAction(action: Record<string, any>) {
       <template #cell-is_activite="{ value }">
         <span
           class="px-2 py-0.5 rounded-full text-xs"
-          :class="value ? 'bg-[#FB6223]/15 text-[#FB6223]' : 'bg-prado-tag-bg text-prado-text-muted'"
+          :class="value ? 'bg-prado-sage/15 text-prado-sage' : 'bg-prado-tag-bg text-prado-text-muted'"
         >
           {{ value ? 'Planifie' : 'Sur mesure' }}
         </span>
@@ -334,14 +334,14 @@ async function duplicateAction(action: Record<string, any>) {
                 min="0"
                 step="0.01"
                 placeholder="0.00"
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
               />
             </div>
             <div>
               <label class="text-sm text-prado-text-secondary mb-1.5 block">Etablissement d'accueil</label>
               <select
                 v-model="editEtablissementId"
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
               >
                 <option value="">Aucun</option>
                 <option v-for="e in etablissements" :key="e.id" :value="e.id">{{ e.name }}</option>
@@ -389,7 +389,7 @@ async function duplicateAction(action: Record<string, any>) {
                 v-model="recurringTitle"
                 type="text"
                 required
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
               />
             </div>
             <div class="grid grid-cols-2 gap-3">
@@ -398,7 +398,7 @@ async function duplicateAction(action: Record<string, any>) {
                 <input
                   v-model="recurringCategory"
                   type="text"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
                 />
               </div>
               <div>
@@ -406,7 +406,7 @@ async function duplicateAction(action: Record<string, any>) {
                 <input
                   v-model="recurringTime"
                   type="time"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
                 />
               </div>
             </div>
@@ -414,7 +414,7 @@ async function duplicateAction(action: Record<string, any>) {
               <label class="text-sm text-prado-text-secondary mb-1.5 block">Frequence *</label>
               <select
                 v-model="recurringFrequency"
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
               >
                 <option value="weekly">Hebdomadaire</option>
                 <option value="biweekly">Bihebdomadaire</option>
@@ -428,7 +428,7 @@ async function duplicateAction(action: Record<string, any>) {
                   v-model="recurringStartDate"
                   type="date"
                   required
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
                 />
               </div>
               <div>
@@ -437,7 +437,7 @@ async function duplicateAction(action: Record<string, any>) {
                   v-model="recurringEndDate"
                   type="date"
                   required
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
                 />
               </div>
             </div>
@@ -449,7 +449,7 @@ async function duplicateAction(action: Record<string, any>) {
                   type="number"
                   min="0"
                   placeholder="Illimite"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
                 />
               </div>
               <div>
@@ -460,7 +460,7 @@ async function duplicateAction(action: Record<string, any>) {
                   min="0"
                   step="0.01"
                   placeholder="0.00"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
                 />
               </div>
             </div>
@@ -468,7 +468,7 @@ async function duplicateAction(action: Record<string, any>) {
               <label class="text-sm text-prado-text-secondary mb-1.5 block">Etablissement d'accueil</label>
               <select
                 v-model="recurringEtablissementId"
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
               >
                 <option value="">Aucun</option>
                 <option v-for="e in etablissements" :key="e.id" :value="e.id">{{ e.name }}</option>

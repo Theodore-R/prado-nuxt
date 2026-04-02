@@ -288,7 +288,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
             />
             <button
               :disabled="saving"
-              class="p-1.5 rounded-lg hover:bg-prado-signature/20 text-prado-signature transition-colors"
+              class="p-1.5 rounded-lg hover:bg-prado-sage/20 text-prado-sage transition-colors"
               @click="saveEdit(field.key)"
             >
               <Loader2 v-if="saving" :size="15" class="animate-spin" />

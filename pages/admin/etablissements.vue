@@ -137,7 +137,7 @@ function handleExport() {
   toast.success('Export CSV telecharge')
 }
 
-const inputClass = 'w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors'
+const inputClass = 'w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors'
 </script>
 
 <template>
@@ -152,7 +152,7 @@ const inputClass = 'w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-
           <Plus :size="16" /> Ajouter
         </button>
         <button
-          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] text-sm hover:opacity-90 transition-opacity"
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-prado-sage text-white text-sm hover:opacity-90 transition-opacity"
           @click="handleExport"
         >
           <Download :size="16" /> CSV

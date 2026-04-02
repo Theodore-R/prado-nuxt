@@ -75,7 +75,7 @@ function formatDate(iso: string | null) {
   return new Date(iso).toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short' })
 }
 
-const inputClass = 'w-full px-4 py-2.5 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm placeholder:text-prado-text-faint focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors'
+const inputClass = 'w-full px-4 py-2.5 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm placeholder:text-prado-text-faint focus:outline-none focus:border-prado-sage/50 transition-colors'
 </script>
 
 <template>
@@ -95,7 +95,7 @@ const inputClass = 'w-full px-4 py-2.5 rounded-xl bg-prado-input-bg border borde
         type="button"
         :class="[
           'relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent transition-colors duration-200',
-          form.mailchimpEnabled ? 'bg-[var(--prado-signature)]' : 'bg-prado-border',
+          form.mailchimpEnabled ? 'bg-prado-sage' : 'bg-prado-border',
         ]"
         role="switch"
         :aria-checked="form.mailchimpEnabled"
@@ -125,7 +125,7 @@ const inputClass = 'w-full px-4 py-2.5 rounded-xl bg-prado-input-bg border borde
           <input v-model="form.mailchimpApiKey" type="password" :class="inputClass" placeholder="xxxxxxxx-us21" />
           <p class="text-[10px] text-prado-text-faint mt-1">
             Mailchimp → Account → Extras →
-            <a href="https://us1.admin.mailchimp.com/account/api/" target="_blank" rel="noopener" class="text-[var(--prado-signature-accent)] hover:underline">
+            <a href="https://us1.admin.mailchimp.com/account/api/" target="_blank" rel="noopener" class="text-prado-sage hover:underline">
               API Keys <ExternalLink :size="10" class="inline" />
             </a>
           </p>

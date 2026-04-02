@@ -18,14 +18,14 @@ const cards = [
     title: 'Parcourir les 89 actions',
     desc: 'Ateliers, formations, stages — découvrez l\'offre complète.',
     to: '/espace',
-    color: '#FB6223',
+    color: '#93C1AF',
   },
   {
     icon: FileText,
     title: 'Consulter les 183 ressources',
     desc: 'Guides pratiques, fiches dispositifs, outils pédagogiques.',
     to: '/espace',
-    color: '#FB6223',
+    color: '#93C1AF',
   },
 ]
 </script>
@@ -34,7 +34,7 @@ const cards = [
   <div class="space-y-8">
     <!-- Header -->
     <div class="text-center">
-      <div class="inline-flex items-center gap-2 text-[var(--prado-signature-accent)] mb-4">
+      <div class="inline-flex items-center gap-2 text-prado-sage mb-4">
         <PartyPopper :size="20" />
         <span class="text-sm font-medium">Compte créé avec succès</span>
       </div>
@@ -75,8 +75,8 @@ const cards = [
     </div>
 
     <!-- Info banner -->
-    <div class="bg-[var(--prado-signature)]/10 rounded-xl p-4 text-sm">
-      <p class="text-[var(--prado-signature-accent)] font-medium mb-1">En attente de validation</p>
+    <div class="bg-prado-sage/10 rounded-xl p-4 text-sm">
+      <p class="text-prado-sage font-medium mb-1">En attente de validation</p>
       <p class="text-prado-text-secondary">
         Votre compte sera validé par notre équipe sous 24h. En attendant, vous pouvez naviguer librement et préparer vos inscriptions.
       </p>

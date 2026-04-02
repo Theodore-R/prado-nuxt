@@ -63,7 +63,7 @@ const action = computed(() => {
 const color = computed(() =>
   action.value
     ? PROGRAMMATION_CATEGORY_COLORS[action.value.category as ProgrammationCategory]
-    : '#FB6223'
+    : '#93C1AF'
 )
 
 const actionUrl = computed(() => {
@@ -144,7 +144,7 @@ async function handleDesinscrire(inscriptionId: string) {
 
   <div v-else-if="!action" class="max-w-3xl mx-auto py-16 text-center">
     <h1 class="text-xl text-prado-text mb-3">Action non trouvee</h1>
-    <NuxtLink to="/espace/actions" class="text-[#FB6223] text-sm">Retour aux actions</NuxtLink>
+    <NuxtLink to="/espace/actions" class="text-prado-sage text-sm">Retour aux actions</NuxtLink>
   </div>
 
   <div v-else class="max-w-3xl mx-auto space-y-6">
@@ -199,7 +199,7 @@ async function handleDesinscrire(inscriptionId: string) {
     <div class="bg-prado-surface rounded-xl p-5 border border-prado-border space-y-3">
       <h3 class="text-sm font-medium text-prado-text">Informations pratiques</h3>
       <div class="flex items-center gap-2.5 text-sm text-prado-text-muted">
-        <Calendar :size="14" class="text-[#FB6223] shrink-0" />
+        <Calendar :size="14" class="text-prado-sage shrink-0" />
         <span>{{ action.is_activite ? action.date : "Toute l'annee - a organiser avec le prescripteur" }}</span>
       </div>
       <div v-if="action.time" class="flex items-center gap-2.5 text-sm text-prado-text-muted">
@@ -217,7 +217,7 @@ async function handleDesinscrire(inscriptionId: string) {
         <div class="h-1.5 w-full bg-prado-bg rounded-full overflow-hidden">
           <div
             class="h-full rounded-full transition-all duration-500 ease-out"
-            :class="action.isFull ? 'bg-red-500' : (action.placesRemaining! <= 3 ? 'bg-[#FB6223]' : 'bg-[#93C1AF]')"
+            :class="action.isFull ? 'bg-red-500' : (action.placesRemaining! <= 3 ? 'bg-amber-500' : 'bg-[#93C1AF]')"
             :style="{ width: `${action.placesMax > 0 ? Math.min(100, (action.inscriptionsCount / action.placesMax) * 100) : 0}%` }"
           />
         </div>
@@ -228,7 +228,7 @@ async function handleDesinscrire(inscriptionId: string) {
         :href="action.url_detail"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-1.5 text-xs text-[#FB6223] hover:underline mt-2"
+        class="inline-flex items-center gap-1.5 text-xs text-prado-sage hover:underline mt-2"
       >
         <ExternalLink :size="12" />
         Voir sur le site Prado Itineraires
@@ -247,7 +247,7 @@ async function handleDesinscrire(inscriptionId: string) {
       <p class="text-sm text-prado-text-secondary mb-1">Action sur mesure</p>
       <p class="text-xs text-prado-text-muted">
         Les inscriptions se font en concertation avec l'equipe Prado.
-        <NuxtLink to="/contact" class="text-[#FB6223] underline">Contactez-nous</NuxtLink>
+        <NuxtLink to="/contact" class="text-prado-sage underline">Contactez-nous</NuxtLink>
         pour organiser une session.
       </p>
     </div>
@@ -373,7 +373,7 @@ async function handleDesinscrire(inscriptionId: string) {
         </h2>
         <button
           v-if="!action.isFull && jeunesNotEnrolled.length > 0 && !showInscription"
-          class="inline-flex items-center gap-1 text-xs text-[#FB6223] hover:text-[#a80057] transition-colors"
+          class="inline-flex items-center gap-1 text-xs text-prado-sage hover:text-prado-teal transition-colors"
           @click="showInscription = true"
         >
           <Plus :size="12" /> Ajouter

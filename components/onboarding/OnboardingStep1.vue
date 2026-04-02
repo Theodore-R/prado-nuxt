@@ -57,7 +57,7 @@ function switchToPassword() {
             type="email"
             required
             placeholder="votre@email-pro.fr"
-            class="w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border border-prado-border text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors"
+            class="w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border border-prado-border text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-prado-sage/50 transition-colors"
           />
         </div>
       </div>
@@ -90,7 +90,7 @@ function switchToPassword() {
     <!-- Trust signals -->
     <div class="pt-4 border-t border-prado-border">
       <div class="flex items-center justify-center gap-2 text-xs text-prado-text-muted mb-4">
-        <Shield :size="14" class="text-[var(--prado-signature-accent)]" />
+        <Shield :size="14" class="text-prado-sage" />
         <span>Données sécurisées et conformes au RGPD</span>
       </div>
       <p class="text-xs text-prado-text-faint text-center">

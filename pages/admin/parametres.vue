@@ -39,7 +39,7 @@ onMounted(() => {
             :class="[
               'flex items-center gap-2 px-4 py-3 text-sm whitespace-nowrap border-b-2 transition-colors',
               activeSection === section.key
-                ? 'border-[var(--prado-signature)] text-prado-text font-medium'
+                ? 'border-prado-sage text-prado-text font-medium'
                 : 'border-transparent text-prado-text-muted hover:text-prado-text hover:border-prado-border',
             ]"
             @click="activeSection = section.key"

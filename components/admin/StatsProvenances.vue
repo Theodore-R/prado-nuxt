@@ -95,7 +95,7 @@ function sortedEntries(record: Record<string, number>): [string, number][] {
             <span class="text-xs text-prado-text-secondary w-20 shrink-0">{{ key }}</span>
             <div class="flex-1 h-5 rounded-full bg-prado-bg-deep overflow-hidden">
               <div
-                class="h-full rounded-full bg-[#FB6223] transition-all duration-500"
+                class="h-full rounded-full bg-prado-sage transition-all duration-500"
                 :style="{ width: `${(count / maxValue(data.repartitionCodePostal)) * 100}%` }"
               />
             </div>
