@@ -168,7 +168,7 @@ async function handleInscrire() {
   inscribing.value = true
   // Conflict check (warning only)
   const selectedActionEntry = actionMap.value.get(selectedAction.value)
-  checkConflict(id, selectedAction.value, selectedActionEntry?.date ?? null, actionMap.value)
+  checkConflict(id, selectedAction.value, selectedActionEntry?.date ?? null, actionMap.value as any)
   try {
     await inscrire(selectedAction.value, null, id)
     toast.success('Inscription reussie')

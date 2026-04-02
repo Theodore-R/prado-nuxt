@@ -82,7 +82,8 @@ describe('syncToMailchimp', () => {
   }
 
   let mockFetch: ReturnType<typeof vi.fn>
-  let mockGetSettings: ReturnType<typeof vi.fn>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let mockGetSettings: any
 
   beforeEach(() => {
     mockFetch = vi.fn()

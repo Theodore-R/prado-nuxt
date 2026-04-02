@@ -7,7 +7,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
  */
 
 // We reproduce the composable logic to avoid Nuxt import.meta.server issues in test
-function createAnalytics(gtagFn?: (...args: unknown[]) => void) {
+function createAnalytics(gtagFn?: ((...args: unknown[]) => void) | any) {
   function trackEvent(name: string, params: Record<string, unknown> = {}) {
     if (typeof gtagFn === 'function') {
       gtagFn('event', name, params)

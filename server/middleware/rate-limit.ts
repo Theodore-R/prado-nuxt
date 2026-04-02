@@ -72,7 +72,7 @@ export default defineEventHandler((event) => {
 
   if (entry.count >= RATE_LIMIT_MAX) {
     const retryAfterSeconds = Math.ceil((entry.resetAt - now) / 1000)
-    setResponseHeader(event, 'Retry-After', String(retryAfterSeconds))
+    setResponseHeader(event, 'Retry-After', retryAfterSeconds)
     throw createError({
       statusCode: 429,
       message: 'Trop de requetes. Reessayez dans quelques instants.',

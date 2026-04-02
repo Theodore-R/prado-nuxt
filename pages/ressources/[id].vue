@@ -32,13 +32,14 @@ const loading = computed(() => status.value === 'pending')
 const ressource = computed(() => {
   const doc = ressourceDoc.value
   if (!doc?.data) return null
+  const data = doc.data as any
   return {
-    id: doc.uid ?? doc.data.original_id,
-    title: doc.data.title as string,
-    category: doc.data.category as string,
-    description: doc.data.description ?? [{ type: 'paragraph', text: '', spans: [] }],
-    url: doc.data.url?.url ?? '',
-    image: doc.data.image?.url ?? getRessourceImage(doc.data.original_id as number),
+    id: doc.uid ?? data.original_id,
+    title: data.title as string,
+    category: data.category as string,
+    description: data.description ?? [{ type: 'paragraph', text: '', spans: [] }],
+    url: data.url?.url ?? '',
+    image: data.image?.url ?? getRessourceImage(data.original_id as number),
   }
 })
 

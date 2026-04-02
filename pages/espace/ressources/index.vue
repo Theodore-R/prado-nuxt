@@ -34,14 +34,17 @@ const { data: prismicRessources, status } = await useAsyncData('espace-ressource
 const ressources = computed(() =>
   (prismicRessources.value ?? [])
     .filter(doc => (doc.data.title as string)?.trim())
-    .map(doc => ({
-      id: doc.uid ?? doc.id,
-      title: doc.data.title as string,
-      category: doc.data.category as RessourceCategory,
-      description: doc.data.description?.[0]?.text ?? '',
-      url: doc.data.url?.url ?? '',
-      image: doc.data.image?.url ?? getRessourceImage(doc.data.original_id as number),
-    })),
+    .map(doc => {
+      const data = doc.data as any
+      return {
+        id: doc.uid ?? doc.id,
+        title: data.title as string,
+        category: data.category as RessourceCategory,
+        description: (data.description?.[0] as any)?.text ?? '',
+        url: (data.url as any)?.url ?? '',
+        image: (data.image as any)?.url ?? getRessourceImage(data.original_id as number),
+      }
+    }),
 )
 
 const filteredRes = computed(() =>

@@ -99,7 +99,7 @@ describe('PATCH /api/admin/actions — logic', () => {
 // ---------- Tests for POST duplicate logic ----------
 
 describe('POST /api/admin/actions — duplication logic', () => {
-  function buildClone(source: Record<string, any>) {
+  function buildClone(source: Record<string, any>): Record<string, any> {
     const { id: _id, created_at: _created, ...rest } = source
     return {
       ...rest,

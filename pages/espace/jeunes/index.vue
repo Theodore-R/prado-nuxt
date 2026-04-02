@@ -63,7 +63,7 @@ const rows = computed(() =>
 async function handleAdd() {
   submitting.value = true
   try {
-    await addJeune(newJeune.value)
+    await addJeune({ ...newJeune.value, notes: '', sex: '', isQpv: false, accompagnementType: [] })
     complete('firstJeuneAdded')
     newJeune.value = { firstName: '', lastName: '', dateOfBirth: '', situation: '' }
     showAdd.value = false

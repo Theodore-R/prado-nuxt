@@ -91,9 +91,9 @@ async function handleInscrire(jeuneId: string) {
     return
   }
   // Conflict check (warning only, does not block)
-  checkConflict(jeuneId, String(action.value.id), action.value.date, actionsMap.value)
+  checkConflict(jeuneId, String(action.value.id), action.value.date, actionsMap.value as any)
   try {
-    await inscrire(String(action.value.id), jeuneId)
+    await inscrire(String(action.value.id), null, jeuneId)
     completeOnboarding('firstInscription')
     toast.success('Inscription confirmee !')
   } catch (err: unknown) {
@@ -109,9 +109,11 @@ async function handleQuickAddJeune() {
       firstName: quickAddFirstName.value.trim(),
       lastName: quickAddLastName.value.trim(),
       dateOfBirth: '',
-      address: '',
       situation: '',
       notes: '',
+      sex: '',
+      isQpv: false,
+      accompagnementType: [],
     })
     completeOnboarding('firstJeuneAdded')
     toast.success(`${quickAddFirstName.value} ${quickAddLastName.value} ajoute !`)
