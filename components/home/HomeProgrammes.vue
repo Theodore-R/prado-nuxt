@@ -61,7 +61,7 @@ const defaultProgrammes: Programme[] = [
     title: 'Compétences parentales',
     shortTitle: 'Compétences parentales',
     icon: Heart,
-    color: '#024266',
+    color: '#93C1AF',
     text: [
       'Prado Itinéraires prend également toute sa place d\'incubateur d\'innovations sociales au bénéfice des enfants et des familles en portant le développement de deux programmes reconnus scientifiquement.',
       '« Ces Années Incroyables » (Incredible Years), déployé depuis 2014\u00a0: un programme de groupe pour les parents d\'enfants de 3 à 12 ans qui rencontrent des difficultés éducatives. Évalué internationalement, il vise à reconnaître les compétences des parents et à les outiller concrètement.',

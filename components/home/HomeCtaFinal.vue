@@ -79,7 +79,7 @@ onMounted(() => {
         </NuxtLink>
         <NuxtLink
           :to="ctaSecondary.to"
-          class="px-7 py-3 rounded-full border border-white/30 text-white hover:bg-white/10 transition-colors"
+          class="px-7 py-3 rounded-full bg-prado-sage text-white hover:bg-prado-sage/80 transition-colors font-medium"
         >
           {{ ctaSecondary.label }}
         </NuxtLink>

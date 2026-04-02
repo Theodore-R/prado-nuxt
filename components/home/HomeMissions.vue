@@ -125,8 +125,8 @@ onMounted(() => {
           style="--delay: 0.3s;"
         >
           <div class="flex items-center gap-3 mb-6">
-            <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-[#024266]/15">
-              <Heart :size="20" class="text-[#024266]" />
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-prado-sage/15">
+              <Heart :size="20" class="text-prado-sage" />
             </div>
             <h3 class="text-xl text-prado-text">{{ famillesTitle }}</h3>
           </div>
@@ -138,8 +138,8 @@ onMounted(() => {
               :class="isVisible && 'is-visible'"
               :style="{ '--delay': `${0.4 + (idx as number) * 0.07}s` }"
             >
-              <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 bg-[#024266]/15">
-                <Check :size="12" class="text-[#024266]" />
+              <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 bg-prado-sage/15">
+                <Check :size="12" class="text-prado-sage" />
               </div>
               <span class="text-prado-text-secondary leading-relaxed">{{ mission }}</span>
             </li>
