@@ -40,7 +40,7 @@ const inputClass = 'w-full px-3.5 py-2.5 rounded-lg bg-prado-bg border border-pr
 <template>
   <!-- Floating button -->
   <button
-    class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] shadow-lg shadow-[var(--prado-signature)]/30 hover:shadow-xl hover:shadow-[var(--prado-signature)]/40 hover:scale-105 active:scale-95 transition-all flex items-center justify-center"
+    class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-prado-sage text-white shadow-lg shadow-prado-sage/30 hover:shadow-xl hover:shadow-prado-sage/40 hover:scale-105 active:scale-95 transition-all flex items-center justify-center"
     :class="isOpen ? 'rotate-90' : ''"
     @click="toggle"
   >
@@ -63,9 +63,9 @@ const inputClass = 'w-full px-3.5 py-2.5 rounded-lg bg-prado-bg border border-pr
       style="background-color: var(--prado-surface);"
     >
       <!-- Header -->
-      <div class="bg-[var(--prado-signature)] px-5 py-4">
-        <h3 class="text-[var(--prado-signature-text)] font-medium">Besoin d'aide ?</h3>
-        <p class="text-[var(--prado-signature-text)]/70 text-sm">Notre équipe répond sous 48h.</p>
+      <div class="bg-prado-sage px-5 py-4">
+        <h3 class="text-white font-medium">Besoin d'aide ?</h3>
+        <p class="text-white/70 text-sm">Notre équipe répond sous 48h.</p>
       </div>
 
       <!-- Content -->
