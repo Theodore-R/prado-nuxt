@@ -110,19 +110,19 @@ const brandColor = computed(() => d.value?.brand_color || '#024266')
           </p>
         </div>
 
-        <div class="bg-prado-surface rounded-2xl p-6 border border-[#FD6223]/20">
+        <div class="bg-prado-surface rounded-2xl p-6 border border-[#FB6223]/20">
           <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-full bg-[#FD6223]/15 flex items-center justify-center">
-              <Users :size="18" class="text-[#FD6223]" />
+            <div class="w-10 h-10 rounded-full bg-[#FB6223]/15 flex items-center justify-center">
+              <Users :size="18" class="text-[#FB6223]" />
             </div>
             <h3 class="text-prado-text text-lg">Grand public</h3>
           </div>
           <div class="space-y-2 text-sm mb-4">
             <div class="flex items-center gap-2 text-prado-text-muted">
-              <Clock :size="14" class="text-[#FD6223]" /> <span>2h30</span>
+              <Clock :size="14" class="text-[#FB6223]" /> <span>2h30</span>
             </div>
             <div class="flex items-center gap-2 text-prado-text-muted">
-              <Users :size="14" class="text-[#FD6223]" /> <span>4 a 8 participants par groupe</span>
+              <Users :size="14" class="text-[#FB6223]" /> <span>4 a 8 participants par groupe</span>
             </div>
           </div>
           <p class="text-prado-text-muted text-sm">

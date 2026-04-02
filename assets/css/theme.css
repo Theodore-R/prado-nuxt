@@ -7,7 +7,7 @@
   --prado-black: #0D1F26;
   --prado-teal: #024266;
   --prado-sage: #93C1AF;
-  --prado-orange: #FD6223;
+  --prado-orange: #FB6223;
 
   /* ── 60% Dominant (dark) ── */
   --background: var(--prado-black);
@@ -28,7 +28,7 @@
   /* ── 10% Accent ── */
   --prado-signature: var(--prado-orange);
   --prado-signature-accent: var(--prado-orange);
-  --prado-signature-muted: rgba(253, 98, 35, 0.15);
+  --prado-signature-muted: rgba(251, 98, 35, 0.15);
   --prado-signature-text: #ffffff;
 
   /* ── UI tokens ── */
@@ -102,8 +102,8 @@
 
   /* ── 10% Accent ── */
   --prado-signature: var(--prado-orange);
-  --prado-signature-accent: #D94E15;
-  --prado-signature-muted: rgba(253, 98, 35, 0.12);
+  --prado-signature-accent: #FB6223;
+  --prado-signature-muted: rgba(251, 98, 35, 0.12);
   --prado-signature-text: #ffffff;
 
   /* ── UI tokens ── */

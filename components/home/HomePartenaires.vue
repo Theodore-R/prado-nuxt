@@ -41,7 +41,7 @@ const scrollPartners = computed(() => [...partners.value, ...partners.value])
 </script>
 
 <template>
-  <!-- SVG filter for exact #FD6223 tint -->
+  <!-- SVG filter for exact #FB6223 tint -->
   <svg width="0" height="0" class="absolute">
     <defs>
       <filter id="tint-signature" color-interpolation-filters="sRGB">
@@ -109,9 +109,9 @@ const scrollPartners = computed(() => [...partners.value, ...partners.value])
 }
 
 /*
-  Tint logos to signature orange #FD6223 = rgb(253, 98, 35)
+  Tint logos to signature orange #FB6223 = rgb(253, 98, 35)
   → normalized: r=0.992, g=0.384, b=0.137
-  Uses SVG feColorMatrix to map any pixel to exact #FD6223 while preserving alpha.
+  Uses SVG feColorMatrix to map any pixel to exact #FB6223 while preserving alpha.
 */
 .partner-logo-yellow {
   filter: url(#tint-signature);

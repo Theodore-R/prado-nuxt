@@ -10,7 +10,7 @@
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| Orange Prado | `#FD6223` | Primary, boutons, liens, CTA, gradients |
+| Orange Prado | `#FB6223` | Primary, boutons, liens, CTA, gradients |
 | Bleu marine Prado | `#024266` | Accent, headers, footer, badges, gradients |
 | Vert-sauge Itineraires | `#93C1AF` | Secondary, elements illustratifs, badges doux |
 | Noir Prado | `#0D1F26` | Texte principal (theme clair), fond (theme sombre) |
@@ -42,8 +42,8 @@
 - [ ] Au premier chargement (sans localStorage), le theme clair est actif
 - [ ] Fond de page : blanc / gris tres clair
 - [ ] Texte principal : noir/gris fonce (`#0D1F26`)
-- [ ] Boutons primaires : fond orange `#FD6223`, texte blanc
-- [ ] Liens : orange `#FD6223`
+- [ ] Boutons primaires : fond orange `#FB6223`, texte blanc
+- [ ] Liens : orange `#FB6223`
 - [ ] Header/navbar : fond blanc ou leger, texte fonce
 - [ ] Footer : fond bleu marine `#024266`, texte blanc/clair
 
@@ -52,7 +52,7 @@
 - [ ] Toggle theme fonctionne (bouton dans le header ou settings)
 - [ ] Fond de page : noir/bleu tres fonce (`#0D1F26`)
 - [ ] Texte principal : blanc
-- [ ] Boutons primaires : fond orange `#FD6223`, texte blanc
+- [ ] Boutons primaires : fond orange `#FB6223`, texte blanc
 - [ ] Les cartes et surfaces ont un fond legerement plus clair que le fond
 - [ ] Contraste suffisant sur tous les textes (ratio >= 4.5:1)
 - [ ] Le choix persiste apres rechargement de la page
@@ -556,7 +556,7 @@
 ### 13.2 Contraste
 
 - [ ] Texte principal sur fond clair : ratio >= 4.5:1
-- [ ] Texte blanc sur fond orange `#FD6223` : ratio ~3.1:1 (acceptable pour gros texte, ajouter ombre ou fond plus fonce pour petit texte)
+- [ ] Texte blanc sur fond orange `#FB6223` : ratio ~3.1:1 (acceptable pour gros texte, ajouter ombre ou fond plus fonce pour petit texte)
 - [ ] Texte blanc sur fond bleu `#024266` : ratio >= 10:1 (excellent)
 - [ ] Texte sur fond vert-sauge `#93C1AF` : verifier le ratio selon la taille
 

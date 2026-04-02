@@ -73,7 +73,7 @@ onMounted(() => {
 
 <template>
   <section ref="sectionRef" class="py-24 relative">
-    <HomeHalo color="#FD6223" position="top-right" :size="600" :opacity="0.06" />
+    <HomeHalo color="#FB6223" position="top-right" :size="600" :opacity="0.06" />
 
     <div class="max-w-7xl mx-auto px-6 relative z-10">
       <h2

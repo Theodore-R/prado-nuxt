@@ -4,7 +4,7 @@ export const richTextSerializer: HTMLRichTextMapSerializer = {
   label: ({ node, children }) => {
     const classMap: Record<string, string> = {
       'highlight-pink': 'text-prado-signature-accent',
-      'highlight-orange': 'text-[#FD6223]',
+      'highlight-orange': 'text-[#FB6223]',
       'highlight-purple': 'text-[#024266]',
       'highlight-green': 'text-[#93C1AF]',
     }

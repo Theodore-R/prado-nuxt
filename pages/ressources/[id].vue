@@ -45,7 +45,7 @@ const ressource = computed(() => {
 const color = computed(() =>
   ressource.value
     ? RESSOURCE_CATEGORY_COLORS[ressource.value.category as RessourceCategory]
-    : '#FD6223'
+    : '#FB6223'
 )
 </script>
 

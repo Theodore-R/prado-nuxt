@@ -50,7 +50,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section ref="sectionRef" class="py-24 bg-gradient-to-r from-[#FD6223] to-[#FD6223]">
+  <section ref="sectionRef" class="py-24 bg-gradient-to-r from-[#FB6223] to-[#FB6223]">
     <div class="max-w-3xl mx-auto px-6 text-center">
       <h2
         class="text-3xl md:text-4xl text-white mb-8 reveal"

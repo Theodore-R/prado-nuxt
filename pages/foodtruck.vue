@@ -13,7 +13,7 @@ useHead({
     : [],
 })
 
-const brandColor = computed(() => d.value?.brand_color || '#FD6223')
+const brandColor = computed(() => d.value?.brand_color || '#FB6223')
 </script>
 
 <template>
@@ -127,7 +127,7 @@ const brandColor = computed(() => d.value?.brand_color || '#FD6223')
             </div>
           </div>
 
-          <div class="bg-gradient-to-r from-[#FD6223]/10 to-[#FD6223]/5 rounded-2xl p-5 border border-prado-border mt-6 flex items-start gap-4">
+          <div class="bg-gradient-to-r from-[#FB6223]/10 to-[#FB6223]/5 rounded-2xl p-5 border border-prado-border mt-6 flex items-start gap-4">
             <Phone :size="18" class="mt-0.5 shrink-0" :style="{ color: brandColor }" />
             <div>
               <p class="text-prado-text text-sm mb-1">{{ d.phone_label || 'Renseignements menus & tournees' }}</p>

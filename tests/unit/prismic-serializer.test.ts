@@ -7,7 +7,7 @@ import { describe, it, expect } from 'vitest'
 
 const classMap: Record<string, string> = {
   'highlight-pink': 'text-prado-signature-accent',
-  'highlight-orange': 'text-[#FD6223]',
+  'highlight-orange': 'text-[#FB6223]',
   'highlight-purple': 'text-[#024266]',
   'highlight-green': 'text-[#93C1AF]',
 }
@@ -25,7 +25,7 @@ describe('richTextSerializer — label handler', () => {
 
   it('applies orange highlight class', () => {
     const html = renderLabel('highlight-orange', 'World')
-    expect(html).toBe('<span class="text-[#FD6223]">World</span>')
+    expect(html).toBe('<span class="text-[#FB6223]">World</span>')
   })
 
   it('applies purple highlight class', () => {

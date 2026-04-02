@@ -19,7 +19,7 @@ const mainLinks = [
 ]
 
 const programmeItems = [
-  { to: '/foodtruck', label: 'Foodtruck « Les Saveurs d\'Élise »', desc: 'Insertion par la restauration mobile', icon: Truck, color: '#FD6223' },
+  { to: '/foodtruck', label: 'Foodtruck « Les Saveurs d\'Élise »', desc: 'Insertion par la restauration mobile', icon: Truck, color: '#FB6223' },
   { to: '/fresque', label: 'Fresque de la Protection de l\'Enfance', desc: 'Atelier collaboratif de sensibilisation', icon: BookOpen, color: '#93C1AF' },
   { to: '/educolab', label: 'Compétences parentales', desc: 'Programmes Ces Années Incroyables & Parent d\'Ado', icon: Heart, color: '#024266' },
 ]

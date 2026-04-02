@@ -110,7 +110,7 @@ export default defineEventHandler(async (event) => {
           <div style="font-size:12px;color:#6b6b6b;">Absents</div>
         </div>
         <div style="flex:1;background:#fff7ed;border-radius:8px;padding:12px;text-align:center;">
-          <div style="font-size:24px;font-weight:700;color:#FD6223;">${tauxPresence}%</div>
+          <div style="font-size:24px;font-weight:700;color:#FB6223;">${tauxPresence}%</div>
           <div style="font-size:12px;color:#6b6b6b;">Taux presence</div>
         </div>
       </div>

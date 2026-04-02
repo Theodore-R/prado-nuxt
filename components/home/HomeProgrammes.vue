@@ -30,7 +30,7 @@ const defaultProgrammes: Programme[] = [
     title: 'Programme Jeunes & Autonomes',
     shortTitle: 'Jeunes & Autonomes',
     icon: Users,
-    color: '#FD6223',
+    color: '#FB6223',
     text: [
       'Prado Itinéraires agit en faveur de l\'autonomie des jeunes de 11 à 25 ans bénéficiant d\'un accompagnement éducatif — Aide Sociale à l\'Enfance, Protection Judiciaire de la Jeunesse, handicap, prévention — pour les structures du Prado et les structures partenaires de la Métropole de Lyon, du Rhône, de l\'Ain et de l\'Isère.',
       '89 actions et ateliers programmés toute l\'année\u00a0: bien-être et estime de soi, découverte des métiers, vie quotidienne, mobilité, numérique, droits, emploi. En individuel ou en groupe, à organiser dans vos locaux ou dans les nôtres.',
@@ -47,7 +47,7 @@ const defaultProgrammes: Programme[] = [
     title: 'Foodtruck « Les Saveurs d\'Élise »',
     shortTitle: 'Foodtruck',
     icon: Truck,
-    color: '#FD6223',
+    color: '#FB6223',
     text: [
       'Concept pédagogique et inclusif, « Les Saveurs d\'Élise » est une offre de restauration mobile qui favorise l\'insertion socio-professionnelle des jeunes. Accueillis en stage pendant une semaine dans la cuisine centrale et en vente directe au public, les jeunes expérimentent, rencontrent, se valorisent, tout en étant accompagnés par l\'équipe du Prado.',
       'Le foodtruck sillonne la métropole lyonnaise cinq jours par semaine. Menu du jour à prix libre, ouvert à tous. Un outil d\'insertion par l\'activité économique qui mêle formation, emploi et convivialité. Stages ouverts à tous les jeunes dès 14 ans bénéficiant d\'un accompagnement éducatif.',
@@ -95,7 +95,7 @@ const programmes = computed<Programme[]>(() => {
       title: item.title || '',
       shortTitle: item.short_title || '',
       icon: iconMap[item.icon_name] || Users,
-      color: item.brand_color || '#FD6223',
+      color: item.brand_color || '#FB6223',
       text: item.description?.map((block: any) => block.text).filter(Boolean) ?? [],
       ctas: [
         item.cta_1_label ? { label: item.cta_1_label, to: item.cta_1_link?.url || '#' } : null,
@@ -108,7 +108,7 @@ const programmes = computed<Programme[]>(() => {
 })
 
 const activeId = ref(programmes.value[0].id)
-const activeColor = computed(() => programmes.value.find(p => p.id === activeId.value)?.color ?? '#FD6223')
+const activeColor = computed(() => programmes.value.find(p => p.id === activeId.value)?.color ?? '#FB6223')
 const programmeRefs = ref<Record<string, HTMLElement | null>>({})
 const sectionRef = ref<HTMLElement | null>(null)
 

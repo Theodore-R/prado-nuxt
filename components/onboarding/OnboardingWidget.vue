@@ -31,7 +31,7 @@ const strokeDashoffset = computed(() =>
         <circle
           cx="22" cy="22" :r="radius"
           fill="none"
-          stroke="#FD6223"
+          stroke="#FB6223"
           stroke-width="2.5"
           stroke-linecap="round"
           :stroke-dasharray="circumference"

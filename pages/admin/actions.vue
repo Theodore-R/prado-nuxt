@@ -247,7 +247,7 @@ async function duplicateAction(action: Record<string, any>) {
       <template #cell-is_activite="{ value }">
         <span
           class="px-2 py-0.5 rounded-full text-xs"
-          :class="value ? 'bg-[#FD6223]/15 text-[#FD6223]' : 'bg-prado-tag-bg text-prado-text-muted'"
+          :class="value ? 'bg-[#FB6223]/15 text-[#FB6223]' : 'bg-prado-tag-bg text-prado-text-muted'"
         >
           {{ value ? 'Planifie' : 'Sur mesure' }}
         </span>

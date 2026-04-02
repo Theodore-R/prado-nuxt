@@ -61,7 +61,7 @@ const action = computed(() => {
 const color = computed(() =>
   action.value
     ? PROGRAMMATION_CATEGORY_COLORS[action.value.category as ProgrammationCategory]
-    : '#FD6223'
+    : '#FB6223'
 )
 
 const actionInscriptions = computed(() =>

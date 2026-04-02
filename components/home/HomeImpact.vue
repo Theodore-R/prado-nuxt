@@ -11,8 +11,8 @@ interface Stat {
 const props = defineProps<{ data?: any }>()
 
 const defaultStats: Stat[] = [
-  { value: 89, suffix: '', label: 'actions et ateliers programmés sur le territoire', color: '#FD6223' },
-  { value: 183, suffix: '', label: 'ressources professionnelles en accès libre', color: '#FD6223' },
+  { value: 89, suffix: '', label: 'actions et ateliers programmés sur le territoire', color: '#FB6223' },
+  { value: 183, suffix: '', label: 'ressources professionnelles en accès libre', color: '#FB6223' },
   { value: 500, suffix: '+', label: 'jeunes accompagnés chaque année', color: '#024266' },
   { value: 50, suffix: '+', label: 'structures partenaires sur la Métropole de Lyon', color: '#93C1AF' },
 ]
@@ -23,7 +23,7 @@ const stats = computed<Stat[]>(() => {
       value: item.value ?? 0,
       suffix: item.suffix ?? '',
       label: item.label ?? '',
-      color: item.color ?? '#FD6223',
+      color: item.color ?? '#FB6223',
     }))
   }
   return defaultStats

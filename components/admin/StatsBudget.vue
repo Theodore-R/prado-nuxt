@@ -85,7 +85,7 @@ function formatCurrency(value: number): string {
             <span class="text-xs text-prado-text-secondary w-32 shrink-0 truncate" :title="key">{{ key }}</span>
             <div class="flex-1 h-5 rounded-full bg-prado-bg-deep overflow-hidden">
               <div
-                class="h-full rounded-full bg-[#FD6223] transition-all duration-500"
+                class="h-full rounded-full bg-[#FB6223] transition-all duration-500"
                 :style="{ width: `${(amount / maxValue(data.ventilationParStructure)) * 100}%` }"
               />
             </div>

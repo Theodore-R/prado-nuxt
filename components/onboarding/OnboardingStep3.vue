@@ -18,14 +18,14 @@ const cards = [
     title: 'Parcourir les 89 actions',
     desc: 'Ateliers, formations, stages — découvrez l\'offre complète.',
     to: '/espace',
-    color: '#FD6223',
+    color: '#FB6223',
   },
   {
     icon: FileText,
     title: 'Consulter les 183 ressources',
     desc: 'Guides pratiques, fiches dispositifs, outils pédagogiques.',
     to: '/espace',
-    color: '#FD6223',
+    color: '#FB6223',
   },
 ]
 </script>

@@ -61,7 +61,7 @@ export default defineEventHandler(async (event) => {
         <p style="margin:0 0 12px;font-size:16px;">Bonjour,</p>
         <p style="margin:0 0 16px;font-size:16px;">Merci pour votre inscription à la newsletter Prado Itinéraires.</p>
         <p style="margin:0 0 16px;">
-          <a href="${confirmUrl}" style="display:inline-block;background:#FD6223;color:#ffffff;text-decoration:none;padding:10px 16px;border-radius:999px;font-size:14px;">
+          <a href="${confirmUrl}" style="display:inline-block;background:#FB6223;color:#ffffff;text-decoration:none;padding:10px 16px;border-radius:999px;font-size:14px;">
             Confirmer mon inscription
           </a>
         </p>

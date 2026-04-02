@@ -77,7 +77,7 @@ const labelClass = 'text-sm text-prado-text-muted mb-1 block'
 <template>
   <div class="space-y-6">
     <div class="flex items-center gap-2 mb-2">
-      <Heart :size="16" class="text-[#FD6223]" />
+      <Heart :size="16" class="text-[#FB6223]" />
       <h3 class="text-sm font-semibold text-prado-text">Informations de sante</h3>
     </div>
 

@@ -147,7 +147,7 @@ onMounted(() => {
         @click="setFilterMode(filterMode === 'activite' ? 'actions' : 'activite')"
       >
         <span
-          class="absolute h-8 rounded-full bg-[#FD6223] transition-all duration-300 ease-in-out"
+          class="absolute h-8 rounded-full bg-[#FB6223] transition-all duration-300 ease-in-out"
           :style="{
             width: '86px',
             left: filterMode === 'activite' ? '2px' : '92px',
@@ -230,7 +230,7 @@ onMounted(() => {
               a.isFull
                 ? 'bg-red-500/15 text-red-400'
                 : a.placesRemaining <= 3
-                  ? 'bg-[#FD6223]/15 text-[#FD6223]'
+                  ? 'bg-[#FB6223]/15 text-[#FB6223]'
                   : 'bg-[#93C1AF]/15 text-[#13332B]'
             ]"
           >
@@ -252,7 +252,7 @@ onMounted(() => {
       </p>
       <button
         v-if="search || categoryFilter !== 'all'"
-        class="mt-4 text-xs text-[#FD6223] hover:underline"
+        class="mt-4 text-xs text-[#FB6223] hover:underline"
         @click="search = ''; categoryFilter = 'all'; visibleCount = BATCH_SIZE"
       >
         Reinitialiser les filtres

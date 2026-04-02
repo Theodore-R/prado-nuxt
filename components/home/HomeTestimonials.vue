@@ -45,7 +45,7 @@ const testimonials = computed<Testimonial[]>(() => {
   return defaultTestimonials
 })
 
-const colors = ['#FD6223', '#FD6223', '#024266', '#93C1AF']
+const colors = ['#FB6223', '#FB6223', '#024266', '#93C1AF']
 const firstColumn = computed(() => testimonials.value)
 const secondColumn = computed(() => [...testimonials.value].reverse())
 const thirdColumn = computed(() => [...testimonials.value.slice(1), testimonials.value[0]])

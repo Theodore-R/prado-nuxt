@@ -48,7 +48,7 @@ La plateforme remplace et modernise les outils existants en proposant :
 |----------|-------------|
 | **Visibilité** | Présenter l'association et ses programmes sur un site moderne et engageant |
 | **Efficacité** | Permettre aux prescripteurs de gérer leurs jeunes et inscriptions en ligne, sans formulaire papier |
-| **Conformité** | Respecter les obligations légales ([RGPD](https://www.cnil.fr/fr/reglement-europeen-protection-donnees), hébergement HDS des données de santé) |
+| **Conformité** | Respecter les obligations légales ([RGPD](https://www.cnil.fr/fr/reglement-europeen-protection-donnees)) |
 | **Autonomie** | Permettre à l'équipe Prado de modifier le contenu éditorial sans intervention technique |
 | **Sécurité** | Garantir l'isolation des données entre organismes et le contrôle d'accès par rôle |
 
@@ -117,7 +117,7 @@ graph LR
 | Tableau de bord | — | Lecture seule | ✅ Complet | ✅ Admin |
 | Ajouter un jeune | — | ❌ Bloqué | ✅ | — |
 | Inscrire à une action | — | ❌ Bloqué | ✅ | — |
-| Fiche santé | — | — | Jeunes de son organisme | — |
+| Fiche jeune | — | — | Jeunes de son organisme | — |
 | Valider un prescripteur | — | — | — | ✅ |
 | Gérer les actions | — | — | — | ✅ |
 | Voir tous les jeunes | — | — | — | ✅ |
@@ -180,7 +180,7 @@ graph TB
 | 4 | Ajouter son premier jeune | Création d'une fiche jeune |
 | 5 | Inscrire un jeune à une action | Première inscription |
 
-Le widget montre la progression en temps réel et disparaît une fois toutes les étapes complétées, avec une animation de célébration.
+Le widget montre la progression en temps réel et disparaît une fois toutes les étapes complétées.
 
 
 
@@ -188,16 +188,10 @@ Le widget montre la progression en temps réel et disparaît une fois toutes les
 
 ```mermaid
 graph TB
-    A["1. Ajouter un jeune<br/>Prénom, Nom, Date de naissance,<br/>Adresse, Situation"] --> B["2. Compléter la fiche santé<br/>Allergies, handicap, suivi médical,<br/>traitements, contacts d'urgence"]
-    A --> C["3. Compléter la situation familiale<br/>Mesure de protection, référent ASE,<br/>composition familiale, hébergement"]
-    A --> D["4. Vérifier l'identité (optionnel)<br/>Scan de la pièce d'identité<br/>en présence du jeune"]
-    A --> E["5. Inscrire le jeune à une action<br/>Vérification automatique<br/>des places disponibles"]
+    A["1. Ajouter un jeune<br/>Prénom, Nom, Date de naissance,<br/>Sexe, Code postal, QPV,<br/>Situation, Accompagnement"] --> B["2. Inscrire le jeune à une action<br/>Choix accompagnateur/autonomie<br/>Attestation de responsabilité<br/>Vérification des places disponibles"]
 
     style A fill:#2a2a1a,stroke:#FFD228,stroke-width:2px
-    style B fill:#4a1942,stroke:#CF006C,stroke-width:2px
-    style C fill:#4a1942,stroke:#CF006C,stroke-width:2px
-    style D fill:#1a2a3a,stroke:#004657,stroke-width:2px
-    style E fill:#1a3a2a,stroke:#93C1AF,stroke-width:2px
+    style B fill:#1a3a2a,stroke:#93C1AF,stroke-width:2px
 ```
 
 ---
@@ -221,6 +215,7 @@ La page d'accueil est conçue pour présenter l'association de manière engagean
 | **FAQ** | Questions fréquentes avec accordéons | ✅ |
 | **Partenaires** | Logos des partenaires institutionnels | ✅ |
 | **Newsletter** | Formulaire d'inscription | Automatique |
+| **Actualités** | Slider/carrousel d'annonces et d'actualités (dernières nouvelles, événements à venir) | ✅ |
 | **Appel à l'action final** | Lien vers la création de compte | ✅ |
 
 ![Interface Prismic — Édition de la page d'accueil](https://raw.githubusercontent.com/Theodore-R/prado-nuxt/main/docs/screenshots/02-prismic-homepage.png)
@@ -299,88 +294,37 @@ Vue d'ensemble de l'activité du prescripteur :
 
 Le cœur de l'espace prescripteur est la gestion des fiches jeunes. Chaque fiche se compose de plusieurs volets :
 
-**Identité et situation**
+**Fiche jeune**
 | Champ | Description | Particularité |
 |-------|-------------|---------------|
 | Prénom, Nom | Identité du jeune | Obligatoire |
 | Date de naissance | Format JJ/MM/AAAA | Sélecteur de date adapté |
-| Adresse | Adresse complète | Autocomplétion via l'[API officielle des adresses françaises](https://adresse.data.gouv.fr/) |
-| Code postal, Ville | Remplis automatiquement | Via l'autocomplétion |
-| Situation | En placement, en famille, en autonomie... | Champ libre |
+| Sexe | Homme / Femme | Obligatoire (nécessaire pour les statistiques) |
+| Code postal | Code postal du lieu de résidence | Saisie manuelle |
+| QPV | Le jeune réside en Quartier Prioritaire de la politique de la Ville | Checkbox oui/non, déclaratif |
+| Situation | Sans emploi ni formation / Scolarisé en milieu ordinaire / Scolarisé en milieu médico-social / En emploi ou formation pro / Autre | Select catégorisé (nécessaire pour les statistiques) |
+| Accompagnement au titre de | ASE / PJJ / Handicap / Décrochage scolaire / RSJ / CEJ / Autre | Choix multiples |
 | Notes | Notes internes du prescripteur | Champ libre |
-
-**Fiche santé** (données sensibles — voir [section 10 sur l'hébergement HDS](#102-hébergement-hds-pour-les-données-de-santé))
-| Champ | Type | Description |
-|-------|------|-------------|
-| Médecin traitant | Autocomplétion | Recherche par nom avec base de médecins |
-| Allergies | Tags | Liste d'allergies (saisie libre + suggestions) |
-| Handicap | Oui/Non + détails | Type de handicap, taux d'invalidité |
-| Suivi psychologique | Formulaire | Professionnel, fréquence, observations |
-| Suivi médical | Liste | Spécialité, professionnel, motif |
-| Traitements en cours | Liste | Nom, posologie, prescripteur |
-| Régime alimentaire | Tags | Restrictions alimentaires |
-| Contacts d'urgence | Liste | Nom, lien, téléphone, email |
-
-**Situation familiale** (données sensibles)
-| Champ | Type | Description |
-|-------|------|-------------|
-| Mesure de protection | Tags | ASE, PJJ, tutelle, curatelle, etc. |
-| Référent ASE | Formulaire | Nom, service, téléphone, email |
-| Composition familiale | Liste | Membres de la famille |
-| Lieu d'hébergement | Champ libre | Foyer, famille d'accueil, etc. |
-| Droits parentaux | Champ libre | Situation des droits |
-
-
-
-**Vérification d'identité**
-
-Deux méthodes de vérification d'identité sont prévues :
-
-**Méthode 1 — Scan de pièce d'identité (Veriff)** *(disponible dès la V1)*
-
-Le prescripteur peut vérifier l'identité d'un jeune grâce au service Veriff. La vérification se fait **en présence physique du jeune** :
-
-1. Le prescripteur ouvre la fiche du jeune
-2. Il clique sur « Vérifier l'identité »
-3. Le jeune scanne sa pièce d'identité avec la caméra
-4. Le service analyse automatiquement le document
-5. Un badge « Identité vérifiée ✓ » apparaît sur la fiche
-
-**Méthode 2 — France Identité / FranceConnect+** *(évolution prévue)*
-
-À terme, la plateforme pourra intégrer **France Identité** via **FranceConnect+**, le dispositif d'identité numérique régalien français. Cela permettrait au jeune de prouver son identité directement depuis l'application France Identité sur son smartphone, sans scan de document.
-
-| Aspect | Détail |
-|--------|--------|
-| **Éligibilité** | Le Prado est éligible via l'[expérimentation secteur social et médico-social](https://docs.partenaires.franceconnect.gouv.fr/fs/devenir-fs/pilotage-eligibilite/) ouverte aux associations proposant un service concourant aux secteurs de la santé, social et médico-social |
-| **Niveau de sécurité** | FranceConnect+ (niveau de garantie « substantiel » [eIDAS](https://www.ssi.gouv.fr/entreprise/reglementation/confiance-numerique/le-reglement-eidas/)), plus sécurisé que FranceConnect standard |
-| **Fournisseurs d'identité** | France Identité (app gouvernementale) et L'Identité Numérique La Poste — plus de 7 millions d'identités actives début 2025 |
-| **Démarche d'habilitation** | 1. Demande via formulaire [Datapass](https://demarche.numerique.gouv.fr/commencer/demande-creation-fs-fc/dossier_vide) — 2. Validation juridique DINUM (~5 jours ouvrés) — 3. Intégration technique — 4. Qualification — 5. Mise en production |
-| **Délai estimé** | 4 à 8 semaines entre la demande d'habilitation et la mise en production |
-| **Coût** | Gratuit (service public) |
-| **Prérequis pour le jeune** | Posséder une CNI au format carte de crédit (nouveau format) et avoir installé l'app France Identité sur son smartphone |
-
-
-
-<details>
-<summary><strong>💡 Pourquoi deux méthodes de vérification ?</strong></summary>
-
-- **Veriff (V1)** est disponible immédiatement et fonctionne avec **toute pièce d'identité** (ancienne CNI, passeport, titre de séjour). C'est la solution de démarrage, adaptée à un public jeune qui ne possède pas nécessairement la nouvelle CNI ni un smartphone avec France Identité.
-- **France Identité (évolution)** est gratuite et souveraine, mais nécessite la nouvelle CNI au format carte de crédit et l'app France Identité. Son adoption est croissante mais pas encore universelle. Elle sera intégrée lorsque le taux d'équipement du public cible le justifiera.
-
-Les deux méthodes pourront coexister : le prescripteur choisira la plus adaptée selon la situation du jeune.
-
-</details>
 
 #### Inscription aux actions
 
 Le prescripteur inscrit ses jeunes aux actions disponibles :
 
 - Parcours du catalogue depuis le dashboard
+- **Inscription groupée** : possibilité de sélectionner plusieurs jeunes pour les inscrire à la même action en une seule opération
 - Vérification automatique des places disponibles
 - Détection des conflits d'horaires
 - Confirmation par email
 - Possibilité d'annulation
+
+**Avant validation de l'inscription**, le prescripteur doit :
+
+1. **Choisir le mode de participation** (mutuellement exclusif) :
+   - **Accompagnateur présent** → saisir le nom, prénom et téléphone de l'accompagnateur
+   - **Le jeune participe en autonomie** → saisir le nom et téléphone d'une personne à prévenir en cas d'urgence
+
+2. **Cocher l'attestation de responsabilité** (obligatoire, bloquante) :
+   > *« J'atteste que le jeune que j'inscris reste sous la responsabilité de mon établissement pendant la durée de l'atelier. »*
 
 #### Paramètres du compte
 
@@ -435,6 +379,7 @@ Un journal d'activité affiche les dernières actions (nouvelle inscription, nou
 | **Publier/Dépublier** | Contrôler la visibilité dans le catalogue |
 | **Archiver** | Retirer du catalogue une action passée (archivage automatique programmé chaque nuit) |
 | **Gérer la capacité** | Suivre le remplissage (inscriptions vs. places max) |
+| **Récurrence** | Créer des actions récurrentes (ex : un atelier chaque mardi) avec gestion individuelle de chaque occurrence |
 
 #### Autres fonctionnalités admin
 
@@ -444,6 +389,77 @@ Un journal d'activité affiche les dernières actions (nouvelle inscription, nou
 | **Inscriptions** | Vue d'ensemble de toutes les inscriptions, avec filtres |
 | **Contacts** | Messages reçus via le formulaire, marquer comme lu, exporter en CSV |
 | **Newsletter** | Liste des abonnés, exporter en CSV |
+
+#### Émargement des présences
+
+L'administrateur peut pointer la présence des jeunes inscrits à une action :
+
+| Fonctionnalité | Description |
+|----------------|-------------|
+| **Pointage** | Pour chaque action, liste des jeunes inscrits avec case présent/absent |
+| **Statut** | Chaque inscription a un statut de présence : inscrit (par défaut), présent, absent |
+| **Taux de participation** | Calculé automatiquement à partir du pointage (présents / inscrits) |
+| **Export PDF** | Feuille de présence exportable en PDF pour les financeurs |
+
+L'émargement alimente directement les statistiques (taux de participation, taux d'absentéisme).
+
+#### Rapport d'action (PDF)
+
+Pour chaque action passée, l'administrateur peut générer un **rapport PDF** synthétique récapitulant l'ensemble des informations de l'action :
+
+| Contenu du rapport | Description |
+|--------------------|-------------|
+| **Informations de l'action** | Titre, catégorie/programme, date, lieu, description, coût |
+| **Liste des participants** | Jeunes inscrits avec statut de présence (présent/absent), organisme d'origine |
+| **Accompagnateurs** | Nom et coordonnées des accompagnateurs présents |
+| **Indicateurs** | Nombre d'inscrits, nombre de présents, taux de participation |
+| **Organismes concernés** | Liste des organismes ayant inscrit au moins un jeune |
+
+Le rapport peut être :
+- **Téléchargé** directement en PDF depuis le panel d'administration
+- **Envoyé par email** à un ou plusieurs destinataires (financeur, direction Prado, établissement)
+
+> Ce rapport est destiné à être transmis aux financeurs ou à la direction du Prado comme justificatif d'une action réalisée.
+
+#### Module statistiques
+
+Un onglet **« Statistiques »** dans le panel d'administration permet de visualiser les indicateurs clés, avec un **filtre par année** (toutes les métriques se recalculent en fonction de l'année sélectionnée).
+
+**Profils & situations**
+| Indicateur | Description |
+|------------|-------------|
+| Jeunes inscrits | Nombre de jeunes inscrits à au moins 1 action (+ évolution vs année précédente) |
+| Âge médian | Âge médian des jeunes inscrits |
+| Répartition par sexe | % femmes / % hommes |
+| Répartition par situation | Graphique : sans emploi ni formation / scolarisé milieu ordinaire / scolarisé milieu médico-social / en emploi ou formation pro / autre |
+
+**Provenances**
+| Indicateur | Description |
+|------------|-------------|
+| Origine géographique | % de jeunes de la métropole de Lyon (basé sur le code postal) |
+| Structures prescriptrices | Nombre total de structures, dont structures du Prado (+ % des inscrits) |
+| Accompagnement au titre de | Graphique (camembert) : répartition par type d'accompagnement (ASE, PJJ, Handicap, etc.) |
+
+**Les actions**
+| Indicateur | Description |
+|------------|-------------|
+| Nombre d'actions | Total + répartition par catégorie/programme (graphique en anneau) |
+| Taux de participation | % (calculé à partir de l'émargement : présents / inscrits) |
+| Jeunes par action | Nombre moyen de jeunes par action |
+| Fidélisation | % de jeunes participant à 1 action / 2 actions / 3 actions et + |
+
+#### Module budget (confidentiel)
+
+Le module budget est accessible uniquement aux administrateurs. Il permet de suivre les coûts des actions et leur répartition entre les établissements.
+
+| Fonctionnalité | Description |
+|----------------|-------------|
+| **Coût par action** | Champ renseigné à la création/modification d'une action (coût total en €) |
+| **Ventilation par organisme** | Chaque organisme ayant au moins un jeune inscrit à une action se voit imputer le coût total de l'action. Si 2 organismes participent à une action à 300 €, chacun comptabilise 300 € (le coût n'est pas divisé — l'action coûte le même prix qu'il y ait 1 ou 6 jeunes) |
+| **Récapitulatif par organisme** | Total des coûts imputés par organisme, filtrable |
+| **Filtre par année** | Récapitulatif année par année |
+| **Total global** | Somme des coûts de toutes les actions réalisées par année |
+| **Prix moyen** | Prix moyen d'une action, calculé sur l'ensemble des actions |
 
 ---
 
@@ -457,61 +473,39 @@ Le design de Prado Itinéraires s'inspire du site [idealco.fr](https://idealco.f
 
 ### 5.2 Palette de couleurs
 
-La palette est construite autour des couleurs identitaires de l'association Le Prado, avec des accents destinés à guider l'œil et l'action de l'utilisateur :
+La palette suit la **nouvelle identité visuelle de la Fondation du Prado** (mars 2026). Chaque association affiliée utilise les couleurs de la fondation (orange et bleu marine) complétées par sa couleur propre. Pour **Prado Itinéraires**, la couleur associée est un vert-teal.
 
-| Couleur | Code | Usage | Aperçu |
-|---------|------|-------|--------|
-| **Rose/Magenta** | `#CF006C` | Couleur principale : boutons, liens actifs, accents | 🟣 |
-| **Jaune signature** | `#FFD228` | Couleur d'accentuation forte : éléments interactifs clés, navigation espace prescripteur | 🟡 |
-| **Vert/Teal** | `#93C1AF` | Couleur secondaire : succès, validations | 🟢 |
-| **Violet** | `#C18ED8` | Couleur tertiaire : éléments complémentaires | 🟣 |
-| **Orange** | `#FB6223` | Appels à l'action forts (don, CTA) | 🟠 |
-| **Bleu sombre** | `#004657` | Éléments professionnels, barre latérale | 🔵 |
+| Couleur | Code | Usage |
+|---------|------|-------|
+| **Orange Prado** | `#FB6223` | Couleur principale de la fondation : boutons, liens actifs, accents, appels à l'action |
+| **Bleu marine Prado** | `#024266` | Couleur secondaire de la fondation : textes, en-têtes, barre latérale, éléments professionnels |
+| **Vert-teal Itinéraires** | *(à confirmer — couleur spécifique Prado Itinéraires dans la charte)* | Couleur d'accentuation propre à Itinéraires : succès, validations, éléments distinctifs |
+
+> La charte graphique de la Fondation du Prado (mars 2026) n'est pas encore définitive. Les codes couleurs ci-dessus pourront être ajustés à réception de la version finale.
 
 ### 5.3 Typographie
 
+La typographie suit la charte de la Fondation du Prado :
+
 | Propriété | Valeur |
 |-----------|--------|
-| **Police des titres** | Neulis Neue Bold (police premium) |
+| **Police des titres** | Neulis Neue Bold |
 | **Police du corps** | [Poppins](https://fonts.google.com/specimen/Poppins) ([Google Fonts](https://fonts.google.com/)) |
 | **Graisses Poppins** | Regular (400), Medium (500), Semi-Bold (600) |
-| **Style des titres** | Italique |
-
-<details>
-<summary><strong>💡 Pourquoi ce choix typographique ?</strong></summary>
-
-**Neulis Neue Bold** pour les titres :
-- **Caractère** : police géométrique distinctive qui donne une identité forte à la plateforme
-- **Impact** : les titres se démarquent clairement du corps de texte, renforçant la hiérarchie visuelle
-- **Personnalité** : évite l'aspect générique des polices gratuites pour les éléments les plus visibles
-
-**Poppins** pour le corps de texte :
-- **Lisibilité** : excellente sur tous les écrans, y compris mobiles
-- **Modernité** : confère une image professionnelle et contemporaine
-- **Gratuite** : licence Google Fonts, pas de coût récurrent
-- **Complémentarité** : s'associe harmonieusement avec Neulis Neue grâce à leurs géométries proches
-
-</details>
 
 ### 5.4 Thème clair / sombre
 
-La plateforme propose un **thème sombre par défaut** et un **thème clair** basculable via un interrupteur. Le choix de l'utilisateur est mémorisé dans le navigateur.
+La plateforme propose un **thème clair par défaut** et un **thème sombre** basculable via un interrupteur. Le choix de l'utilisateur est mémorisé dans le navigateur.
 
 | Thème | Fond principal | Surface | Texte |
 |-------|---------------|---------|-------|
-| **Sombre** (défaut) | `#1a1a2e` (marine profond) | `#232340` | Blanc |
-| **Clair** | `#f5f5f7` (gris clair) | `#ffffff` | Marine profond |
-
-
+| **Clair** (défaut) | `#f5f5f7` (gris clair) | `#ffffff` | Bleu marine `#024266` |
+| **Sombre** | `#1a1a2e` (marine profond) | `#232340` | Blanc |
 
 <details>
-<summary><strong>💡 Pourquoi ce choix : thème sombre par défaut ?</strong></summary>
+<summary><strong>💡 Pourquoi proposer un thème sombre ?</strong></summary>
 
-Le thème sombre a été choisi comme défaut car :
-- **Couleur signature** : le jaune `#FFD228` de Prado Itinéraires est un élément fort de l'identité visuelle. Sur fond sombre, il ressort avec éclat et contraste ; sur fond blanc/clair, la combinaison blanc-jaune offre un contraste insuffisant et rend la couleur signature difficilement lisible
-- **Confort visuel** : réduit la fatigue oculaire pour les prescripteurs qui passent de longues heures devant l'écran
-- **Modernité** : correspond aux tendances actuelles du design d'interfaces professionnelles
-- **Choix** : le thème clair reste disponible pour ceux qui le préfèrent (le jaune y est utilisé avec des adaptations de contraste) — le basculement est instantané
+Le thème clair est le défaut, en cohérence avec la charte graphique du Prado. Le thème sombre est proposé en option pour les prescripteurs qui préfèrent travailler sur fond foncé, notamment en fin de journée. Le basculement est instantané et le choix est mémorisé.
 
 </details>
 
@@ -548,7 +542,6 @@ L'application s'adapte automatiquement à tous les formats d'écran :
 | Apparition progressive (reveal) | Sections de la page d'accueil au scroll |
 | Transition de panneau | Ouverture du widget d'onboarding (glissement latéral) |
 | Barre de progression circulaire | Avancement de l'onboarding (SVG animé) |
-| Confettis | Célébration à la fin de l'onboarding |
 | Soulignement animé | Liens de navigation actifs |
 | Transitions douces | Changements d'état (200ms à 700ms) |
 
@@ -558,7 +551,6 @@ Le système d'icônes utilise la bibliothèque **[Lucide](https://lucide.dev/)**
 
 - Utilisateurs → icône Utilisateur
 - Actions → icône Calendrier
-- Santé → icône Cœur
 - Documents → icône Livre
 - etc.
 
@@ -586,15 +578,13 @@ graph TB
     CLOUDFLARE -->|"Trafic filtré"| VERCEL
 
     subgraph VERCEL["Serveur applicatif — Vercel"]
-        API["Routes API sécurisées (/api/*)<br/>Authentification · Gestion des jeunes<br/>Vérification identité · Administration<br/>Newsletter / Contact · Tâches cron"]
+        API["Routes API sécurisées (/api/*)<br/>Authentification · Gestion des jeunes<br/>Administration · Statistiques<br/>Newsletter / Contact · Tâches cron"]
     end
 
     VERCEL --> SUPABASE
     VERCEL --> PRISMIC
-    VERCEL --> VERIFF
     VERCEL --> RESEND
     VERCEL --> MAILCHIMP
-    VERCEL --> APIADRESSE
 
     subgraph SUPABASE["Supabase (Europe)"]
         direction TB
@@ -604,11 +594,7 @@ graph TB
     end
 
     subgraph PRISMIC["Prismic (Cloud)"]
-        PR1["CMS headless<br/>Page d'accueil<br/>Ressources · Documents"]
-    end
-
-    subgraph VERIFF["Veriff (Europe)"]
-        VF1["Vérification d'identité<br/>(KYC)"]
+        PR1["CMS headless<br/>Page d'accueil<br/>Ressources · Documents<br/>Actualités (slider)"]
     end
 
     subgraph RESEND["Resend (Cloud)"]
@@ -619,20 +605,6 @@ graph TB
         MC1["Newsletter<br/>Campagnes · Stats"]
     end
 
-    subgraph APIADRESSE["API Adresse (gouv.fr)"]
-        AD1["Autocomplétion<br/>adresses françaises"]
-    end
-
-    SUPABASE -->|"Liaison par jeune_id<br/>(jamais le nom du jeune)"| HDS
-
-    subgraph HDS["Serveur HDS certifié (France)"]
-        direction TB
-        HD1["Données de santé chiffrées<br/>Allergies · Handicap · Suivi médical/psy<br/>Traitements · Contacts urgence · Médecin"]
-        HD2["Situation familiale<br/>Mesures de protection · Référent ASE<br/>Composition familiale"]
-        HD3["Chiffrement AES-256 au repos<br/>Journalisation de chaque accès"]
-    end
-
-    style HDS fill:#4a1942,stroke:#CF006C,stroke-width:2px
     style SUPABASE fill:#1a3a2a,stroke:#93C1AF,stroke-width:2px
     style VERCEL fill:#1a2a3a,stroke:#004657,stroke-width:2px
     style CLIENT fill:#2a2a1a,stroke:#FFD228,stroke-width:2px
@@ -651,7 +623,6 @@ graph TB
 | **[Lucide Vue](https://lucide.dev/)** | 0.487+ | Bibliothèque d'icônes |
 | **[GSAP](https://gsap.com/)** | 3.14+ | Animations avancées (scroll, transitions) |
 | **[Vue Sonner](https://vue-sonner.vercel.app/)** | 1.3+ | Notifications toast |
-| **Canvas Confetti** | 1.9+ | Animation de confettis (onboarding) |
 
 <details>
 <summary><strong>💡 Pourquoi ce choix : Nuxt 3 + Vue 3 ?</strong></summary>
@@ -664,13 +635,11 @@ Nuxt 3 a été choisi comme framework principal pour plusieurs raisons :
 - **Maintenabilité** : code structuré, TypeScript pour la fiabilité, conventions claires
 - **Communauté** : framework activement maintenu avec une large communauté (mises à jour régulières)
 
-**Par rapport à WordPress** : une application sur mesure garantit la conformité HDS pour les données de santé, une sécurité renforcée (pas de plugins tiers vulnérables) et des fonctionnalités impossibles avec des plugins standards (vérification d'identité, gestion de capacité temps réel, isolation des données par organisme).
+**Par rapport à WordPress** : une application sur mesure garantit une sécurité renforcée (pas de plugins tiers vulnérables) et des fonctionnalités impossibles avec des plugins standards (gestion de capacité temps réel, isolation des données par organisme).
 
 | Critère | WordPress + plugins | Application Nuxt sur mesure |
 |---------|:---:|:---:|
 | Gestion de comptes avec validation | Complexe | Natif |
-| Données de santé (HDS) | Impossible | Architecture dédiée |
-| Vérification d'identité | Pas de solution | Intégration Veriff |
 | Performance | Lent avec plugins | Rapide, optimisé |
 | Sécurité | Vulnérable (plugins tiers) | Contrôle total |
 | Évolution | Limitée | Illimitée |
@@ -695,12 +664,9 @@ Tailwind CSS est un système de classes utilitaires qui permet de construire des
 | Service | Rôle | Hébergement |
 |---------|------|-------------|
 | **[Supabase](https://supabase.com/)** | Authentification + Base de données [PostgreSQL](https://www.postgresql.org/) + Sécurité par ligne (RLS) | Cloud (Europe) |
-| **Serveur HDS** | Données de santé et situation familiale (chiffrées AES-256, accès journalisé) — voir [section 10.2](#102-hébergement-hds-pour-les-données-de-santé) | France (certifié HDS) |
-| **[Prismic](https://prismic.io/)** | CMS headless (articles, ressources, page d'accueil) | Cloud |
-| **[Veriff](https://www.veriff.com/)** | Vérification d'identité des jeunes (KYC) | Cloud (Europe) |
+| **[Prismic](https://prismic.io/)** | CMS headless (articles, ressources, page d'accueil, actualités) | Cloud |
 | **[Resend](https://resend.com/)** | Emails transactionnels (confirmations, rappels) | Cloud |
 | **[Mailchimp](https://mailchimp.com/)** | Newsletter et campagnes email | Cloud |
-| **[API Adresse](https://adresse.data.gouv.fr/)** | Autocomplétion des adresses françaises | API gouvernementale |
 | **[Cloudflare](https://www.cloudflare.com/fr-fr/)** | Protection réseau (anti-DDoS, WAF, CDN, SSL, rate limiting) — voir [section 10.1](#101-mesures-de-sécurité) | Cloud (mondial) |
 | **[Microsoft Clarity](https://clarity.microsoft.com/)** | Analyse du comportement utilisateur (anonymisé) | Cloud |
 
@@ -714,8 +680,6 @@ Tailwind CSS est un système de classes utilitaires qui permet de construire des
 - **Row Level Security (RLS)** : l'isolation des données entre organismes est gérée au niveau de la base de données elle-même, pas uniquement dans l'application. Les prescripteurs d'un même organisme partagent l'accès aux jeunes, mais ne peuvent jamais voir ceux d'un autre organisme
 - **Hébergement européen** : les données sont stockées en Europe, conformément au [RGPD — Art. 44 à 49 sur les transferts de données](https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre5)
 - **Coût maîtrisé** : le plan Pro à 25 €/mois couvre largement les besoins du projet (8 Go de stockage, 100 000 utilisateurs actifs, sauvegardes quotidiennes), avec possibilité de montée en charge progressive. Le plan gratuit existe mais ne convient pas à la production : pas de sauvegardes automatiques, pas de garantie de disponibilité (SLA), et le projet se met en pause après 7 jours sans trafic
-
-**Et le serveur HDS ?** Les données de santé seront migrées vers un serveur certifié HDS séparé (voir [section 10.2](#102-hébergement-hds-pour-les-données-de-santé)). La liaison entre Supabase et le serveur HDS se fait par identifiant unique, garantissant la séparation.
 
 </details>
 
@@ -746,18 +710,31 @@ erDiagram
     ORGANISMES ||--o{ JEUNES : "rattaché à"
     PRESCRIPTEURS ||--o{ INSCRIPTIONS : "réalise"
     JEUNES ||--o{ INSCRIPTIONS : "est inscrit"
+    ETABLISSEMENTS ||--o{ ACTIONS : "accueille"
     ACTIONS ||--o{ INSCRIPTIONS : "reçoit"
-    JEUNES ||--o| JEUNE_SANTE : "a une fiche santé"
 
     ORGANISMES {
-        string structure PK "Nom de l'organisme"
+        uuid id PK
+        string name "Nom de l'organisme"
+        boolean is_prado "Structure du Prado"
+        string type "MECS, Foyer, Service, etc."
+        string postal_code
+        string city
+    }
+
+    ETABLISSEMENTS {
+        uuid id PK
+        string name "Nom de l'établissement"
+        string address
+        string postal_code
+        string city
     }
 
     PRESCRIPTEURS {
         uuid id PK
         string name
         string professional_email
-        string structure FK "Organisme"
+        uuid organisme_id FK "Organisme"
         string phone
         enum role "prescripteur | admin"
         enum status "pending | approved | rejected"
@@ -766,16 +743,16 @@ erDiagram
     JEUNES {
         uuid id PK
         uuid prescripteur_id FK "Créé par"
-        string structure FK "Organisme"
+        uuid organisme_id FK "Organisme"
         string first_name
         string last_name
         date date_of_birth
-        string address
+        enum sex "homme | femme"
         string postal_code
-        string city
-        string situation
+        boolean is_qpv
+        enum situation "sans_emploi | scolarise | emploi_formation | autre"
+        text accompagnement_type "multi-valeur"
         string notes
-        boolean identity_verified
     }
 
     ACTIONS {
@@ -786,6 +763,9 @@ erDiagram
         string description
         int places_max
         boolean is_published
+        decimal cost "Coût total en €"
+        boolean is_recurring "Action récurrente"
+        uuid etablissement_id FK "Établissement d'accueil"
         timestamp archived_at
     }
 
@@ -794,6 +774,12 @@ erDiagram
         uuid prescripteur_id FK
         uuid jeune_id FK
         bigint action_id FK
+        boolean accompagnateur_present
+        text noms_accompagnateurs "nullable"
+        text personne_urgence_nom "nullable"
+        text personne_urgence_tel "nullable"
+        boolean attestation_responsabilite
+        enum presence "inscrit | present | absent"
         timestamp canceled_at
     }
 
@@ -812,28 +798,7 @@ erDiagram
         timestamp confirmed_at
     }
 
-    JEUNE_SANTE {
-        uuid jeune_id PK "FK unique — SERVEUR HDS"
-        jsonb allergies "chiffré AES-256"
-        jsonb handicap "chiffré"
-        jsonb suivi_psychologique "chiffré"
-        jsonb suivi_medical "chiffré"
-        jsonb traitements_en_cours "chiffré"
-        jsonb regime_alimentaire "chiffré"
-        jsonb contacts_urgence "chiffré"
-        jsonb medecin_traitant "chiffré"
-        jsonb mesure_protection "chiffré"
-        jsonb referent_ase "chiffré"
-        jsonb composition_familiale "chiffré"
-        string lieu_hebergement "chiffré"
-        string droits_parentaux "chiffré"
-        string notes_confidentielles "chiffré"
-        timestamp derniere_mise_a_jour
-        uuid mis_a_jour_par FK
-    }
 ```
-
-> **Note** : la table `jeune_sante` est hébergée sur un **serveur HDS certifié séparé** (voir [section 10.2](#102-hébergement-hds-pour-les-données-de-santé)), relié à la base principale uniquement par `jeune_id`. Toutes ses colonnes sont chiffrées AES-256 au repos et chaque accès est journalisé.
 
 ### 7.2 Relations entre les entités
 
@@ -841,10 +806,10 @@ erDiagram
 |----------|:---:|-------------|
 | Organisme → Prescripteurs | 1:N | Un organisme emploie **plusieurs** prescripteurs. Un prescripteur appartient à **un** organisme |
 | Organisme → Jeunes | 1:N | Un jeune est rattaché à l'organisme du prescripteur qui l'a ajouté. Tous les prescripteurs du même organisme y ont accès |
+| Établissement → Actions | 1:N | Un établissement accueille **plusieurs** actions. Une action se déroule dans **un** établissement |
 | Prescripteur → Inscriptions | 1:N | Un prescripteur réalise **plusieurs** inscriptions |
 | Jeune → Inscriptions | 1:N | Un jeune peut être inscrit à **plusieurs** actions |
 | Action → Inscriptions | 1:N | Une action peut avoir **plusieurs** inscriptions |
-| Jeune → Santé | 1:1 | Un jeune a **une** fiche santé (stockée sur le serveur HDS) |
 
 ### 7.3 Isolation des données par organisme
 
@@ -924,33 +889,7 @@ Cette isolation est garantie par les **Row Level Security (RLS) policies** de Po
 
 </details>
 
-### 8.3 Vérification d'identité — Veriff + France Identité
-
-**Veriff** *(disponible dès la V1)*
-
-| Propriété | Détail |
-|-----------|--------|
-| **Service** | Veriff (leader européen de la vérification d'identité) |
-| **Flux** | Le prescripteur initie → le jeune scanne sa pièce d'identité → résultat automatique |
-| **Résultat** | Badge « vérifié » sur la fiche jeune |
-| **Sécurité** | Webhook signé (HMAC-SHA256), pas de stockage de la pièce d'identité |
-| **Coût** | ~1 € par vérification |
-| **Conformité** | Conforme aux réglementations européennes ([eIDAS](https://www.ssi.gouv.fr/entreprise/reglementation/confiance-numerique/le-reglement-eidas/)) |
-| **Avantage** | Fonctionne avec toute pièce d'identité (ancienne CNI, passeport, titre de séjour) |
-
-**France Identité / FranceConnect+** *(évolution prévue)*
-
-| Propriété | Détail |
-|-----------|--------|
-| **Service** | [France Identité](https://france-identite.gouv.fr/) via FranceConnect+ (identité numérique régalienne) |
-| **Flux** | Le jeune s'identifie via l'app France Identité sur son smartphone |
-| **Résultat** | Badge « vérifié » sur la fiche jeune |
-| **Coût** | Gratuit (service public) |
-| **Éligibilité** | Via l'[expérimentation secteur social et médico-social](https://docs.partenaires.franceconnect.gouv.fr/fs/devenir-fs/pilotage-eligibilite/) |
-| **Délai d'intégration** | 4 à 8 semaines (habilitation DINUM ~5 jours + intégration + qualification) |
-| **Prérequis pour le jeune** | Nouvelle CNI (format carte de crédit) + app France Identité installée |
-
-### 8.4 Resend — Emails transactionnels
+### 8.3 Resend — Emails transactionnels
 
 | Email | Déclencheur |
 |-------|-------------|
@@ -964,7 +903,7 @@ Cette isolation est garantie par les **Row Level Security (RLS) policies** de Po
 
 **Adresse d'envoi** : `Prado Itinéraires <noreply@itineraires.le-prado.fr>`
 
-### 8.5 Mailchimp — Newsletter et campagnes
+### 8.4 Mailchimp — Newsletter et campagnes
 
 La plateforme s'intègre au compte Mailchimp existant de l'association pour la gestion avancée des newsletters :
 
@@ -1007,22 +946,7 @@ L'association Le Prado utilise déjà Mailchimp pour ses newsletters. Plutôt qu
 
 </details>
 
-### 8.6 API Adresse (gouv.fr) — Autocomplétion d'adresses
-
-L'autocomplétion des adresses dans les fiches jeunes utilise l'[API officielle des adresses françaises](https://adresse.data.gouv.fr/). Le prescripteur commence à taper une adresse et des suggestions apparaissent automatiquement.
-
-<details>
-<summary><strong>💡 Pourquoi ce choix : API gouvernementale ?</strong></summary>
-
-- **Gratuit** : service public, aucun coût
-- **Fiable** : base de données officielle de la Poste / IGN
-- **Complet** : toutes les adresses françaises
-- **Pas de limite** : pas de quotas d'utilisation
-- **Souveraineté** : les données restent en France, pas de dépendance à Google Maps
-
-</details>
-
-### 8.7 Microsoft Clarity — Analyse du comportement utilisateur
+### 8.5 Microsoft Clarity — Analyse du comportement utilisateur
 
 Service gratuit d'analyse qui permet de comprendre comment les utilisateurs naviguent sur le site :
 
@@ -1100,7 +1024,7 @@ Le domaine itineraires.le-prado.fr sera protégé par **[Cloudflare](https://www
 - **Gratuit** : le plan gratuit couvre la protection DDoS, le CDN, le SSL et les règles WAF de base — largement suffisant pour le volume de Prado Itinéraires
 - **Standard de l'industrie** : protège plus de 25 % du trafic web mondial, y compris des sites gouvernementaux
 - **Transparent** : aucun impact sur l'expérience utilisateur — les vrais visiteurs ne voient aucune différence
-- **Indispensable** : une plateforme manipulant des données de jeunes et de santé doit être protégée contre les cyberattaques, même les plus basiques (DDoS, brute force)
+- **Indispensable** : une plateforme manipulant des données personnelles de jeunes doit être protégée contre les cyberattaques, même les plus basiques (DDoS, brute force)
 
 </details>
 
@@ -1113,7 +1037,7 @@ Le domaine itineraires.le-prado.fr sera protégé par **[Cloudflare](https://www
 | **Isolation des données** | Les jeunes sont partagés au sein d'un même organisme, mais invisibles aux autres organismes (RLS PostgreSQL) |
 | **Validation manuelle** | Tout nouveau compte prescripteur est vérifié par l'équipe Prado avant activation |
 | **Rôles** | Le rôle « admin » ne peut pas être auto-attribué — attribution uniquement par l'équipe technique |
-| **Tokens signés** | JWT pour l'authentification, HMAC-SHA256 pour les webhooks Veriff |
+| **Tokens signés** | JWT pour l'authentification |
 | **Sanitisation** | Toutes les entrées utilisateur sont nettoyées côté serveur (prévention XSS, injection SQL) |
 | **Validation serveur** | Chaque donnée est validée côté serveur (format, longueur, type) — ne jamais faire confiance au client |
 | **En-têtes de sécurité** | Headers HTTP de sécurité (Content-Security-Policy, X-Frame-Options, Strict-Transport-Security) |
@@ -1128,49 +1052,10 @@ Le domaine itineraires.le-prado.fr sera protégé par **[Cloudflare](https://www
 | **Sessions sécurisées** | Tokens JWT avec expiration, rafraîchissement automatique, révocation possible |
 | **CSRF** | Protection contre les attaques Cross-Site Request Forgery via tokens de vérification |
 | **CORS** | Politique de partage des ressources limitée au domaine itineraires.le-prado.fr |
-| **Webhooks signés** | Les webhooks Veriff sont vérifiés par signature HMAC-SHA256 — toute requête non signée est rejetée |
 
-### 10.2 Hébergement HDS pour les données de santé
+### 10.2 Conformité [RGPD](https://www.cnil.fr/fr/reglement-europeen-protection-donnees) (Règlement UE 2016/679)
 
-**Obligation légale** : l'[article L1111-8 du Code de la Santé Publique](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000043895875) impose que les données de santé à caractère personnel soient hébergées chez un prestataire certifié **[HDS](https://esante.gouv.fr/produits-services/hebergement-des-donnees-de-sante)** (Hébergeur de Données de Santé).
-
-**Architecture de séparation :**
-
-| Base de données | Contenu | Certification |
-|-----------------|---------|:---:|
-| **Supabase (principale)** | Comptes, identités, inscriptions, contacts, newsletter | [RGPD](https://www.cnil.fr/fr/reglement-europeen-protection-donnees) ✅ |
-| **Serveur HDS (dédié)** | Données de santé et situation familiale | HDS ✅ |
-
-La séparation fonctionne comme suit :
-- Les informations d'identité (nom, prénom) restent sur la base principale
-- Les informations médicales et familiales sont stockées sur le serveur HDS
-- Le lien entre les deux se fait par un **identifiant unique** (pas le nom du jeune)
-- Les données de santé sont **chiffrées au repos** (AES-256)
-- Chaque accès est **journalisé** (qui a consulté, quand, quelle donnée)
-
-**Hébergeurs certifiés HDS envisagés (tous en France) :**
-
-| Hébergeur | Certification | Coût indicatif |
-|-----------|:---:|------|
-| [OVH Healthcare](https://www.ovhcloud.com/fr/enterprise/certification-conformity/hds/) | HDS ✅ | ~50 €/mois |
-| [Scaleway](https://www.scaleway.com/fr/hebergement-donnees-sante/) | HDS ✅ | ~30 €/mois |
-| [Clever Cloud](https://www.clever-cloud.com/fr/hebergement-donnees-sante/) | HDS ✅ | ~40 €/mois |
-
-> La migration vers le serveur HDS sera effectuée **avant toute saisie de données de santé réelles**.
-
-<details>
-<summary><strong>💡 Pourquoi ne pas tout héberger sur un serveur HDS ?</strong></summary>
-
-Héberger **toute** l'application sur un serveur HDS serait :
-- **Plus coûteux** : les plans HDS sont significativement plus chers que les hébergements standards
-- **Moins performant** : les serveurs HDS ne sont pas optimisés pour l'hébergement d'applications web
-- **Inutile** : seules les données de santé **stricto sensu** sont soumises à l'obligation HDS
-
-La séparation permet de bénéficier des performances et du coût avantageux de Supabase pour les données non-sensibles, tout en respectant l'obligation légale pour les données de santé.
-
-</details>
-
-### 10.3 Conformité [RGPD](https://www.cnil.fr/fr/reglement-europeen-protection-donnees) (Règlement UE 2016/679)
+> L'accompagnement RGPD est assuré par le dispositif mutualisé du Prado. Les mesures techniques suivantes sont intégrées à la plateforme :
 
 | Mesure | Détail | Article |
 |--------|--------|---------|
@@ -1179,7 +1064,6 @@ La séparation permet de bénéficier des performances et du coût avantageux de
 | **Droit à la suppression** | Le prescripteur peut supprimer son compte et toutes ses données | [Art. 17 — Droit à l'effacement](https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre3/article17) |
 | **Export des données** | Le prescripteur peut exporter ses données personnelles | [Art. 20 — Droit à la portabilité](https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre3/article20) |
 | **Double opt-in** | Newsletter avec email de confirmation | [Art. 7 — Consentement](https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre2/article7) |
-| **Données de mineurs** | Pas de collecte directe auprès des jeunes — tout passe par le prescripteur | [Art. 8 — Conditions applicables au consentement des enfants](https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre2/article8) |
 | **Durée de conservation** | Données supprimées à la fermeture du compte | [Art. 5.1.e — Limitation de la conservation](https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre2/article5) |
 | **Minimisation** | Seules les données nécessaires sont collectées | [Art. 5.1.c — Minimisation des données](https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre2/article5) |
 
@@ -1230,7 +1114,6 @@ Les données dynamiques existantes sur l'ancien site de l'association pourront �
 | **Application** | Vercel | Hébergement serverless, déploiement automatique | Le Prado |
 | **Sécurité réseau** | Cloudflare | Anti-DDoS, WAF, CDN, SSL, DNS sécurisé | Le Prado |
 | **Base de données** | Supabase | PostgreSQL managé (Europe) | Le Prado |
-| **Données de santé** | Hébergeur HDS | PostgreSQL certifié HDS (France) | Le Prado |
 | **CMS** | Prismic | Hébergement cloud inclus | Le Prado |
 | **Domaine** | itineraires.le-prado.fr | Sous-domaine du domaine existant le-prado.fr | Le Prado (existant) |
 
@@ -1320,9 +1203,7 @@ Vercel est la plateforme de référence pour les applications Nuxt :
 | **Nom de domaine** | Configurer le sous-domaine itineraires.le-prado.fr (DNS existant, hébergement inchangé) | Prado (DNS) + Devops |
 | **Cloudflare** | Configurer le DNS, activer la protection DDoS/WAF et le CDN | Devops |
 | **Mailchimp** | Connecter la clé API du compte existant | Prado + Devops |
-| **Veriff** | Finaliser la configuration du compte | Devops |
 | **Prismic** | Formation de l'équipe Prado à l'interface | Devops |
-| **Serveur HDS** | Choisir l'hébergeur, déployer la base de santé | Devops |
 | **Email d'envoi** | Configurer le domaine d'envoi (DNS) | Prado (DNS) + Devops |
 | **Microsoft Clarity** | Créer le projet et intégrer le script | Devops |
 
@@ -1342,32 +1223,23 @@ Vercel est la plateforme de référence pour les applications Nuxt :
 | **Resend** (emails) | 0–20 € | Gratuit jusqu'à 3 000 emails/mois (largement suffisant au lancement). Si le volume de rappels augmente : plan Pro à 20 €/mois (50 000 emails/mois) |
 | **Mailchimp** (newsletter) | 0–13 € | Dépend du plan existant de l'association. Gratuit jusqu'à 500 contacts. Au-delà : plan Essentials à ~13 €/mois (500–2 500 contacts) |
 | **Cloudflare** (sécurité réseau) | 0 € | Plan gratuit largement suffisant (anti-DDoS, WAF, CDN, SSL). Plan Pro à 20 €/mois uniquement si besoin de règles WAF avancées |
-| **API Adresse** (autocomplétion) | 0 € | Service gouvernemental, entièrement gratuit sans limite |
 | **Microsoft Clarity** (analytics) | 0 € | Entièrement gratuit, sans limite de trafic |
-| **Serveur HDS** (données de santé) | 30–50 € | Obligatoire pour les données de santé (voir [section 10.2](#102-hébergement-hds-pour-les-données-de-santé)). Coût fixe, indépendant du trafic |
 | **Nom de domaine** | 0 € | Sous-domaine de le-prado.fr (domaine existant, hébergement inchangé) |
 
 | | |
 |--|:--:|
-| **TOTAL AU LANCEMENT** | **55–75 €/mois** |
-| **TOTAL SI MONTÉE EN CHARGE** | **95–135 €/mois** |
+| **TOTAL AU LANCEMENT** | **25 €/mois** |
+| **TOTAL SI MONTÉE EN CHARGE** | **65–85 €/mois** |
 
 > Les coûts augmentent progressivement en fonction du nombre d'utilisateurs, du volume d'emails et du trafic sur le site. La grande majorité des services utilisés proposent des plans gratuits ou à bas coût qui s'adaptent automatiquement — il n'y a pas de palier brutal à franchir.
 
-### 13.2 Coûts à l'usage
-
-| Service | Coût unitaire | Remarque |
-|---------|:---:|----------|
-| **Veriff** (vérification d'identité) | ~1 €/vérification | Facturé uniquement quand un jeune vérifie son identité. Volume variable selon le nombre de nouveaux jeunes |
-| **France Identité** (évolution) | 0 € | Gratuit — service public. Remplacera progressivement Veriff pour les jeunes équipés |
-
-### 13.3 Évolution des coûts selon la croissance
+### 13.2 Évolution des coûts selon la croissance
 
 ```mermaid
 graph LR
-    A["Lancement<br/>~10 prescripteurs<br/>~50 jeunes"] -->|"55–75 €/mois"| B["Croissance<br/>~50 prescripteurs<br/>~300 jeunes"]
-    B -->|"75–95 €/mois"| C["Maturité<br/>~200 prescripteurs<br/>~1 000+ jeunes"]
-    C -->|"95–135 €/mois"| D["Forte activité<br/>Plans Pro activés<br/>sur tous les services"]
+    A["Lancement<br/>~10 prescripteurs<br/>~50 jeunes"] -->|"~25 €/mois"| B["Croissance<br/>~50 prescripteurs<br/>~300 jeunes"]
+    B -->|"~25-52 €/mois"| C["Maturité<br/>~200 prescripteurs<br/>~1 000+ jeunes"]
+    C -->|"~65-85 €/mois"| D["Forte activité<br/>Plans Pro activés<br/>sur tous les services"]
 
     style A fill:#1a3a2a,stroke:#93C1AF
     style B fill:#2a2a1a,stroke:#FFD228
@@ -1375,11 +1247,11 @@ graph LR
     style D fill:#4a1942,stroke:#CF006C
 ```
 
-| Phase | Supabase | Vercel | Resend | Prismic | HDS | Total |
-|-------|:---:|:---:|:---:|:---:|:---:|:---:|
-| **Lancement** | 25 € | 0 € | 0 € | 0 € | 30–50 € | **55–75 €** |
-| **Croissance** | 25 € | 0 € | 0–20 € | 0–7 € | 30–50 € | **75–95 €** |
-| **Maturité** | 25 € | 20 € | 20 € | 7 € | 30–50 € | **95–135 €** |
+| Phase | Supabase | Vercel | Resend | Prismic | Total |
+|-------|:---:|:---:|:---:|:---:|:---:|
+| **Lancement** | 25 € | 0 € | 0 € | 0 € | **25 €** |
+| **Croissance** | 25 € | 0 € | 0–20 € | 0–7 € | **25–52 €** |
+| **Maturité** | 25 € | 20 € | 20 € | 7 € | **65–85 €** |
 
 ---
 
@@ -1395,11 +1267,15 @@ L'ensemble des fonctionnalités suivantes est prévu pour la première version d
 | Authentification (magic link + mot de passe) | 🔴 Critique |
 | Espace prescripteur (dashboard, jeunes, inscriptions) | 🔴 Critique |
 | Panel admin (validation, gestion actions, stats) | 🔴 Critique |
-| Fiche santé et situation familiale | 🔴 Critique |
-| Migration données de santé vers serveur HDS | 🔴 Critique |
-| Vérification d'identité (Veriff) | 🟡 Haute |
+| Module statistiques (reproduction rapport d'activité) | 🔴 Critique |
+| Module budget (ventilation par organisme) | 🔴 Critique |
 | Onboarding avec checklist interactive | 🟡 Haute |
-| Autocomplétion d'adresses (API gouvernementale) | 🟡 Haute |
+| Émargement des présences (admin) | 🟡 Haute |
+| Rapport d'action PDF (téléchargement + envoi par email) | 🟡 Haute |
+| Actions récurrentes | 🟡 Haute |
+| Inscription groupée | 🟡 Haute |
+| Slider actualités (page d'accueil) | 🟡 Haute |
+| Filtre par année (dashboard prescripteur) | 🟡 Haute |
 | Thème clair / sombre | 🟡 Haute |
 | Newsletter avec double opt-in | 🟡 Haute |
 | Export CSV (jeunes, contacts, newsletter) | 🟡 Haute |
@@ -1414,7 +1290,6 @@ Ces actions doivent être réalisées avant la mise en ligne :
 
 | Action | Priorité | Responsable | Détail |
 |--------|----------|-------------|--------|
-| Migration données de santé vers serveur HDS | 🔴 Critique | Devops | Obligatoire avant toute donnée de santé réelle |
 | Configuration du sous-domaine itineraires.le-prado.fr | 🔴 Critique | Prado (DNS) + Devops | Ajout d'un enregistrement DNS sur le domaine existant le-prado.fr |
 | Configuration Cloudflare | 🔴 Critique | Devops | Protection DDoS, WAF, CDN, SSL |
 | Connexion Mailchimp | 🟡 Haute | Prado + Devops | Synchronisation automatique des abonnés newsletter |
@@ -1427,7 +1302,7 @@ Ces actions doivent être réalisées avant la mise en ligne :
 
 | Fonctionnalité | Description | Priorité |
 |----------------|-------------|----------|
-| **France Identité** | Vérification d'identité gratuite et souveraine via FranceConnect+ (voir [section 4.2](#42-espace-prescripteur)) | 🟡 Moyenne |
+| **Vérification d'identité (Veriff / France Identité)** | Vérification d'identité des jeunes via scan de pièce d'identité (Veriff, ~1€/vérification) ou identité numérique souveraine (France Identité, gratuit). Module indépendant. | 🟡 Moyenne |
 | **Notifications in-app** | Alertes dans l'interface (nouvelle action, validation, etc.) | 🟡 Moyenne |
 | **Statistiques avancées** | Graphiques et rapports pour l'admin (inscriptions par période, taux de remplissage, etc.) | 🟡 Moyenne |
 | **Réassignation de jeunes** | Transférer un jeune d'un organisme à un autre | 🟡 Moyenne |
@@ -1441,16 +1316,9 @@ Ces actions doivent être réalisées avant la mise en ligne :
 <details>
 <summary><strong>Pourquoi ne pas utiliser WordPress ?</strong></summary>
 
-WordPress est excellent pour les sites vitrines simples, mais Prado Itinéraires a des besoins spécifiques : gestion de comptes professionnels avec validation, données de santé chiffrées sur serveur certifié, vérification d'identité, inscription à des actions avec gestion de capacité en temps réel. Ces fonctionnalités nécessitent une application sur mesure pour garantir la sécurité et la fiabilité.
+WordPress est excellent pour les sites vitrines simples, mais Prado Itinéraires a des besoins spécifiques : gestion de comptes professionnels avec validation, isolation des données par organisme, inscription à des actions avec gestion de capacité en temps réel. Ces fonctionnalités nécessitent une application sur mesure pour garantir la sécurité et la fiabilité.
 
 De plus, WordPress repose sur des plugins tiers souvent vulnérables et nécessitant des mises à jour constantes. Une application sur mesure offre un contrôle total sur la sécurité.
-
-</details>
-
-<details>
-<summary><strong>Pourquoi séparer les données de santé ?</strong></summary>
-
-La loi française ([Article L1111-8 du Code de la Santé Publique](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000043895875)) impose que les données de santé à caractère personnel soient hébergées chez un prestataire certifié HDS. Notre base de données principale n'a pas cette certification. Nous séparons donc les données : l'identité et les inscriptions d'un côté, les informations médicales de l'autre, sur un serveur certifié en France.
 
 </details>
 
@@ -1478,7 +1346,7 @@ L'équipe Prado peut désactiver son compte depuis le panneau d'administration. 
 <details>
 <summary><strong>Comment sont protégées les données des jeunes ?</strong></summary>
 
-Les jeunes sont rattachés à l'organisme (structure) du prescripteur. Tous les prescripteurs d'un même organisme partagent l'accès aux jeunes de cet organisme, mais ne peuvent jamais voir ceux d'un autre organisme. Cette isolation est gérée au niveau de la base de données (pas juste dans l'interface). Même en cas de faille dans l'application, un prescripteur ne pourrait pas accéder aux données d'un autre organisme. Les données de santé sont en plus chiffrées et stockées sur un serveur certifié HDS.
+Les jeunes sont rattachés à l'organisme (structure) du prescripteur. Tous les prescripteurs d'un même organisme partagent l'accès aux jeunes de cet organisme, mais ne peuvent jamais voir ceux d'un autre organisme. Cette isolation est gérée au niveau de la base de données (pas juste dans l'interface). Même en cas de faille dans l'application, un prescripteur ne pourrait pas accéder aux données d'un autre organisme.
 
 </details>
 
@@ -1492,7 +1360,7 @@ Uniquement les comptes ayant le rôle « admin », attribué par l'équipe techn
 <details>
 <summary><strong>Combien coûte l'hébergement ?</strong></summary>
 
-Le coût mensuel au lancement est estimé entre 55 et 75 €/mois, dont 25 € pour la base de données (Supabase Pro, requis en production) et 30–50 € pour le serveur de santé certifié HDS. La plupart des autres services (hébergement, CMS, emails, sécurité) sont gratuits au démarrage et ne deviennent payants qu'en cas de forte croissance. Même en phase de maturité, le total reste inférieur à 135 €/mois. Les vérifications d'identité Veriff coûtent ~1 €/vérification (France Identité, gratuite, les remplacera à terme).
+Le coût mensuel au lancement est estimé à environ 25 €/mois, principalement pour la base de données (Supabase Pro, requis en production). La plupart des autres services (hébergement, CMS, emails, sécurité) sont gratuits au démarrage et ne deviennent payants qu'en cas de forte croissance. Même en phase de maturité, le total reste inférieur à 85 €/mois.
 
 </details>
 
@@ -1506,8 +1374,7 @@ L'architecture est conçue pour monter en charge. Les services utilisés (Vercel
 <details>
 <summary><strong>Les données sont-elles hébergées en France / Europe ?</strong></summary>
 
-- **Base de données principale** (Supabase) : Europe
-- **Données de santé** (serveur HDS) : France
+- **Base de données** (Supabase) : Europe
 - **CMS** (Prismic) : Europe
 - **Hébergement** (Vercel) : réseau mondial avec point d'entrée européen
 - **Emails** (Resend) : Europe
@@ -1522,24 +1389,26 @@ L'architecture est conçue pour monter en charge. Les services utilisés (Vercel
 | Terme | Définition |
 |-------|------------|
 | **[ASE](https://www.service-public.fr/particuliers/vosdroits/F1136)** | Aide Sociale à l'Enfance — service départemental de protection de l'enfance |
-| **[CI/CD](https://about.gitlab.com/topics/ci-cd/)** | Intégration Continue / Déploiement Continu — processus automatisé de vérification et mise en ligne du code |
+| **[CCAS](https://www.service-public.fr/particuliers/vosdroits/F1332)** | Centre Communal d'Action Sociale — établissement public communal chargé de l'action sociale |
 | **[CDN](https://www.cloudflare.com/fr-fr/learning/cdn/what-is-a-cdn/)** | Content Delivery Network — réseau mondial de serveurs distribuant le contenu au plus proche de l'utilisateur |
+| **[CEJ](https://www.1jeune1solution.gouv.fr/contrat-engagement-jeune)** | Contrat d'Engagement Jeune — dispositif d'accompagnement des jeunes de 16 à 25 ans sans emploi ni formation |
+| **[CI/CD](https://about.gitlab.com/topics/ci-cd/)** | Intégration Continue / Déploiement Continu — processus automatisé de vérification et mise en ligne du code |
 | **[CMS](https://fr.wikipedia.org/wiki/Syst%C3%A8me_de_gestion_de_contenu)** | Content Management System — système de gestion de contenu permettant de modifier les textes du site sans toucher au code. Exemple : [Prismic](https://prismic.io/) |
 | **[DDoS](https://www.cloudflare.com/fr-fr/learning/ddos/what-is-a-ddos-attack/)** | Distributed Denial of Service — attaque visant à rendre un site inaccessible en le surchargeant de requêtes |
 | **[DNS](https://www.cloudflare.com/fr-fr/learning/dns/what-is-dns/)** | Domain Name System — système qui traduit un nom de domaine (ex: le-prado.fr) en adresse IP |
 | **[Double opt-in](https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre2/article7)** | Processus d'inscription en deux étapes (inscription + confirmation par email) — requis par le RGPD Art. 7 |
-| **[eIDAS](https://www.ssi.gouv.fr/entreprise/reglementation/confiance-numerique/le-reglement-eidas/)** | Règlement européen sur l'identification électronique et les services de confiance |
-| **[HDS](https://esante.gouv.fr/produits-services/hebergement-des-donnees-de-sante)** | Hébergeur de Données de Santé — [certification obligatoire](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000043895875) pour stocker des données médicales en France |
 | **[HTTPS](https://www.cloudflare.com/fr-fr/learning/ssl/what-is-https/)** | HyperText Transfer Protocol Secure — protocole de communication chiffré entre le navigateur et le serveur |
+| **IAE** | Insertion par l'Activité Économique — structures qui emploient des personnes en difficulté pour faciliter leur insertion professionnelle |
 | **[JWT](https://jwt.io/introduction)** | JSON Web Token — jeton d'authentification signé permettant de vérifier l'identité d'un utilisateur |
-| **[KYC](https://www.veriff.com/kyc)** | Know Your Customer — processus de vérification d'identité réglementaire |
 | **[Magic link](https://supabase.com/docs/guides/auth/auth-magic-link)** | Lien unique envoyé par email permettant de se connecter sans mot de passe |
 | **[OWASP](https://owasp.org/www-project-top-ten/)** | Open Web Application Security Project — référentiel des 10 vulnérabilités web les plus courantes |
 | **[PJJ](https://www.justice.gouv.fr/justice-des-mineurs)** | Protection Judiciaire de la Jeunesse — service du ministère de la Justice chargé de l'accompagnement des mineurs |
 | **[PostgreSQL](https://www.postgresql.org/)** | Système de gestion de base de données relationnelle open-source, le plus robuste et éprouvé du marché |
 | **Prescripteur** | Professionnel de l'accompagnement (éducateur, référent ASE/PJJ, conseiller en insertion) qui oriente les jeunes vers les actions du Prado |
+| **QPV** | Quartier Prioritaire de la politique de la Ville — zone urbaine définie par l'État où les revenus des habitants sont particulièrement bas, conditionnant des financements spécifiques |
 | **[RGPD](https://www.cnil.fr/fr/reglement-europeen-protection-donnees)** | Règlement Général sur la Protection des Données ([Règlement UE 2016/679](https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX%3A32016R0679)) — réglementation européenne sur les données personnelles |
 | **[RLS](https://www.postgresql.org/docs/current/ddl-rowsecurity.html)** | Row Level Security — mécanisme de [PostgreSQL](https://www.postgresql.org/) isolant les données entre utilisateurs au niveau de la base de données |
+| **RSJ** | Revenu de Solidarité Jeunes — aide financière pour les jeunes en situation de précarité |
 | **[SLA](https://fr.wikipedia.org/wiki/Accord_de_niveau_de_service)** | Service Level Agreement — engagement contractuel de disponibilité d'un service (ex: 99,99 % de temps en ligne) |
 | **[SSR](https://nuxt.com/docs/guide/concepts/rendering#universal-rendering)** | Server-Side Rendering — rendu côté serveur pour la performance et le référencement naturel (SEO) |
 | **[WAF](https://www.cloudflare.com/fr-fr/learning/ddos/glossary/web-application-firewall-waf/)** | Web Application Firewall — pare-feu applicatif filtrant les requêtes malveillantes |
