@@ -50,7 +50,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section ref="sectionRef" class="py-24 bg-prado-teal">
+  <section ref="sectionRef" class="py-24 bg-prado-sage">
     <div class="max-w-3xl mx-auto px-6 text-center">
       <h2
         class="text-3xl md:text-4xl text-white mb-8 reveal"
