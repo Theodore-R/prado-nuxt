@@ -29,6 +29,7 @@ export { default as PrFileUpload } from './components/form/PrFileUpload.vue'
 
 // Feedback
 export { default as PrDialog } from './components/feedback/PrDialog.vue'
+export { default as PrConfirmDialog } from './components/feedback/PrConfirmDialog.vue'
 export { default as PrAlert } from './components/feedback/PrAlert.vue'
 export { default as PrSkeleton } from './components/feedback/PrSkeleton.vue'
 export { default as PrEmptyState } from './components/feedback/PrEmptyState.vue'

@@ -1,23 +1,33 @@
-const _state = reactive({
-  visible: false,
-  message: '',
-  variant: 'danger' as 'danger' | 'warning' | 'default',
-  resolve: null as ((value: boolean) => void) | null,
-})
+/**
+ * App-level useConfirm — delegates to @prado/ui's useConfirm with backwards-compatible API.
+ *
+ * Supports both:
+ *   confirm('Are you sure?', { variant: 'danger' })   // legacy string + opts
+ *   confirm({ description: 'Are you sure?', variant: 'danger' })  // new API
+ */
+import {
+  useConfirm as _useConfirm,
+  useConfirmState as _useConfirmState,
+  type ConfirmOptions,
+} from '@theodoreriant/prado-ui/composables'
 
-export function useConfirmState() {
-  return _state
-}
+export { _useConfirmState as useConfirmState }
 
 export function useConfirm() {
-  function confirm(message: string, opts?: { variant?: 'danger' | 'warning' | 'default' }): Promise<boolean> {
-    return new Promise((resolve) => {
-      _state.message = message
-      _state.variant = opts?.variant ?? 'default'
-      _state.resolve = resolve
-      _state.visible = true
-    })
+  const { confirm: libConfirm, handleConfirm, handleCancel } = _useConfirm()
+
+  function confirm(
+    messageOrOptions: string | ConfirmOptions,
+    opts?: { variant?: 'danger' | 'warning' | 'default' },
+  ): Promise<boolean> {
+    if (typeof messageOrOptions === 'string') {
+      return libConfirm({
+        description: messageOrOptions,
+        variant: opts?.variant ?? 'default',
+      })
+    }
+    return libConfirm(messageOrOptions)
   }
 
-  return { confirm }
+  return { confirm, handleConfirm, handleCancel }
 }

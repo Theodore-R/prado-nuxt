@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Loader2, Save, Users, Infinity, Copy, Archive, ArchiveRestore, Euro, Repeat, Building2, X, Plus } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
-import type { AdminTableColumn } from '~/components/admin/AdminTable.vue'
+import type { PrDataTableColumn } from '@theodoreriant/prado-ui'
 import type { DbActionWithPlaces, Etablissement } from '~/lib/api'
 
 definePageMeta({ layout: 'admin', middleware: 'admin' })
@@ -120,7 +120,7 @@ async function handleCreateRecurring() {
   }
 }
 
-const columns: AdminTableColumn[] = [
+const columns: PrDataTableColumn[] = [
   { key: 'title', label: 'Action', sortable: true },
   { key: 'is_activite', label: 'Type', sortable: true },
   { key: 'cost', label: 'Cout', sortable: true, hiddenBelow: 'md' },
@@ -230,7 +230,7 @@ async function duplicateAction(action: Record<string, any>) {
       </div>
     </div>
 
-    <AdminTable
+    <PrDataTable
       :columns="columns"
       :rows="actions"
       :loading="loading"
@@ -318,182 +318,44 @@ async function duplicateAction(action: Record<string, any>) {
           <Archive v-else :size="16" />
         </button>
       </template>
-    </AdminTable>
+    </PrDataTable>
 
     <!-- Edit action modal (cost / recurring / etablissement) -->
-    <Teleport to="body">
-      <div v-if="showEditModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" @click.self="showEditModal = false">
-        <div class="rounded-2xl border border-prado-border p-6 w-full max-w-md mx-4 shadow-xl" style="background-color: var(--prado-surface)">
-          <h3 class="text-lg font-semibold text-prado-text mb-4">Modifier l'action</h3>
-          <form class="space-y-4" @submit.prevent="handleSaveEdit">
-            <div>
-              <label class="text-sm text-prado-text-secondary mb-1.5 block">Cout (euros)</label>
-              <input
-                v-model="editCost"
-                type="number"
-                min="0"
-                step="0.01"
-                placeholder="0.00"
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-              />
-            </div>
-            <div>
-              <label class="text-sm text-prado-text-secondary mb-1.5 block">Etablissement d'accueil</label>
-              <select
-                v-model="editEtablissementId"
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-              >
-                <option value="">Aucun</option>
-                <option v-for="e in etablissements" :key="e.id" :value="e.id">{{ e.name }}</option>
-              </select>
-            </div>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input
-                v-model="editIsRecurring"
-                type="checkbox"
-                class="rounded border-prado-border text-prado-teal focus:ring-prado-teal"
-              />
-              <span class="text-sm text-prado-text">Action recurrente</span>
-            </label>
-            <div class="flex justify-end gap-3">
-              <button
-                type="button"
-                class="px-4 py-2 rounded-full text-sm text-prado-text-muted hover:text-prado-text transition-colors"
-                @click="showEditModal = false"
-              >
-                Annuler
-              </button>
-              <button
-                type="submit"
-                :disabled="savingEdit"
-                class="px-5 py-2 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] text-sm disabled:opacity-50 flex items-center gap-2"
-              >
-                <Loader2 v-if="savingEdit" :size="14" class="animate-spin" />
-                Enregistrer
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </Teleport>
+    <PrDialog :open="showEditModal" title="Modifier l'action" @update:open="showEditModal = $event" @cancel="showEditModal = false">
+      <form class="space-y-4" @submit.prevent="handleSaveEdit">
+        <PrInput v-model="editCost" type="number" label="Cout (euros)" placeholder="0.00" />
+        <PrSelect v-model="editEtablissementId" label="Etablissement d'accueil" :options="[{ value: '', label: 'Aucun' }, ...etablissements.map(e => ({ value: e.id, label: e.name }))]" />
+        <PrCheckbox v-model="editIsRecurring" label="Action recurrente" />
+      </form>
+      <template #footer>
+        <PrButton variant="ghost" @click="showEditModal = false">Annuler</PrButton>
+        <PrButton variant="primary" :loading="savingEdit" @click="handleSaveEdit">Enregistrer</PrButton>
+      </template>
+    </PrDialog>
 
     <!-- Create recurring action modal -->
-    <Teleport to="body">
-      <div v-if="showRecurringModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" @click.self="showRecurringModal = false">
-        <div class="rounded-2xl border border-prado-border p-6 w-full max-w-lg mx-4 shadow-xl max-h-[90vh] overflow-y-auto" style="background-color: var(--prado-surface)">
-          <h3 class="text-lg font-semibold text-prado-text mb-4">Creer une action recurrente</h3>
-          <form class="space-y-4" @submit.prevent="handleCreateRecurring">
-            <div>
-              <label class="text-sm text-prado-text-secondary mb-1.5 block">Titre *</label>
-              <input
-                v-model="recurringTitle"
-                type="text"
-                required
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-              />
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="text-sm text-prado-text-secondary mb-1.5 block">Categorie</label>
-                <input
-                  v-model="recurringCategory"
-                  type="text"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-                />
-              </div>
-              <div>
-                <label class="text-sm text-prado-text-secondary mb-1.5 block">Heure</label>
-                <input
-                  v-model="recurringTime"
-                  type="time"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-                />
-              </div>
-            </div>
-            <div>
-              <label class="text-sm text-prado-text-secondary mb-1.5 block">Frequence *</label>
-              <select
-                v-model="recurringFrequency"
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-              >
-                <option value="weekly">Hebdomadaire</option>
-                <option value="biweekly">Bihebdomadaire</option>
-                <option value="monthly">Mensuel</option>
-              </select>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="text-sm text-prado-text-secondary mb-1.5 block">Date debut *</label>
-                <input
-                  v-model="recurringStartDate"
-                  type="date"
-                  required
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-                />
-              </div>
-              <div>
-                <label class="text-sm text-prado-text-secondary mb-1.5 block">Date fin *</label>
-                <input
-                  v-model="recurringEndDate"
-                  type="date"
-                  required
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-                />
-              </div>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="text-sm text-prado-text-secondary mb-1.5 block">Places max</label>
-                <input
-                  v-model="recurringPlacesMax"
-                  type="number"
-                  min="0"
-                  placeholder="Illimite"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-                />
-              </div>
-              <div>
-                <label class="text-sm text-prado-text-secondary mb-1.5 block">Cout (euros)</label>
-                <input
-                  v-model="recurringCost"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  placeholder="0.00"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-                />
-              </div>
-            </div>
-            <div>
-              <label class="text-sm text-prado-text-secondary mb-1.5 block">Etablissement d'accueil</label>
-              <select
-                v-model="recurringEtablissementId"
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-              >
-                <option value="">Aucun</option>
-                <option v-for="e in etablissements" :key="e.id" :value="e.id">{{ e.name }}</option>
-              </select>
-            </div>
-            <div class="flex justify-end gap-3">
-              <button
-                type="button"
-                class="px-4 py-2 rounded-full text-sm text-prado-text-muted hover:text-prado-text transition-colors"
-                @click="showRecurringModal = false"
-              >
-                Annuler
-              </button>
-              <button
-                type="submit"
-                :disabled="creatingRecurring"
-                class="px-5 py-2 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] text-sm disabled:opacity-50 flex items-center gap-2"
-              >
-                <Loader2 v-if="creatingRecurring" :size="14" class="animate-spin" />
-                Creer
-              </button>
-            </div>
-          </form>
+    <PrDialog :open="showRecurringModal" title="Creer une action recurrente" @update:open="showRecurringModal = $event" @cancel="showRecurringModal = false">
+      <form class="space-y-4" @submit.prevent="handleCreateRecurring">
+        <PrInput v-model="recurringTitle" label="Titre *" required />
+        <div class="grid grid-cols-2 gap-3">
+          <PrInput v-model="recurringCategory" label="Categorie" />
+          <PrInput v-model="recurringTime" type="time" label="Heure" />
         </div>
-      </div>
-    </Teleport>
+        <PrSelect v-model="recurringFrequency" label="Frequence *" :options="[{ value: 'weekly', label: 'Hebdomadaire' }, { value: 'biweekly', label: 'Bihebdomadaire' }, { value: 'monthly', label: 'Mensuel' }]" required />
+        <div class="grid grid-cols-2 gap-3">
+          <PrInput v-model="recurringStartDate" type="date" label="Date debut *" required />
+          <PrInput v-model="recurringEndDate" type="date" label="Date fin *" required />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <PrInput v-model="recurringPlacesMax" type="number" label="Places max" placeholder="Illimite" />
+          <PrInput v-model="recurringCost" type="number" label="Cout (euros)" placeholder="0.00" />
+        </div>
+        <PrSelect v-model="recurringEtablissementId" label="Etablissement d'accueil" :options="[{ value: '', label: 'Aucun' }, ...etablissements.map(e => ({ value: e.id, label: e.name }))]" />
+      </form>
+      <template #footer>
+        <PrButton variant="ghost" @click="showRecurringModal = false">Annuler</PrButton>
+        <PrButton variant="primary" :loading="creatingRecurring" @click="handleCreateRecurring">Creer</PrButton>
+      </template>
+    </PrDialog>
   </div>
 </template>

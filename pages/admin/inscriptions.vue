@@ -3,7 +3,7 @@ import { Download } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import type { AdminInscription } from '~/lib/adminApi'
 import { exportToCsv } from '~/utils/csvExport'
-import type { AdminTableColumn } from '~/components/admin/AdminTable.vue'
+import type { PrDataTableColumn } from '@theodoreriant/prado-ui'
 
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 
@@ -22,7 +22,7 @@ const actionsMap = computed(() => {
   return map
 })
 
-const columns: AdminTableColumn[] = [
+const columns: PrDataTableColumn[] = [
   { key: 'jeune_name', label: 'Jeune', sortable: true },
   { key: 'action_name', label: 'Action', sortable: true },
   { key: 'prescripteur_name', label: 'Prescripteur', sortable: true, hiddenBelow: 'md' },
@@ -74,7 +74,7 @@ function handleExport() {
       </button>
     </div>
 
-    <AdminTable
+    <PrDataTable
       :columns="columns"
       :rows="rows"
       :loading="loading"
@@ -93,6 +93,6 @@ function handleExport() {
       <template #cell-created_at="{ value }">
         <span class="text-prado-text-muted">{{ new Date(value).toLocaleDateString('fr-FR') }}</span>
       </template>
-    </AdminTable>
+    </PrDataTable>
   </div>
 </template>

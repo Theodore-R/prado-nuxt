@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, resolveComponent } from 'vue'
 import { useCsvExport } from '../../composables/useCsvExport'
 
 export interface PrDataTableColumn {
@@ -22,6 +22,8 @@ interface Props {
   exportFilename?: string
   virtualScroll?: boolean
   virtualItemHeight?: number
+  /** When provided, each row becomes a clickable link. Receives the row and must return a route path. */
+  rowLink?: (row: Record<string, unknown>) => string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -34,6 +36,7 @@ const props = withDefaults(defineProps<Props>(), {
   exportFilename: 'export.csv',
   virtualScroll: false,
   virtualItemHeight: 48,
+  rowLink: undefined,
 })
 
 defineSlots<{
@@ -145,6 +148,16 @@ function handleExport() {
     props.columns.map(col => String(row[col.key] ?? '')),
   )
   exportCsv(props.exportFilename, headers, csvRows)
+}
+
+const emit = defineEmits<{
+  'row-click': [row: Record<string, unknown>]
+}>()
+
+function handleRowClick(row: Record<string, unknown>) {
+  if (props.rowLink) {
+    emit('row-click', row)
+  }
 }
 </script>
 
@@ -330,7 +343,11 @@ function handleExport() {
               <tr
                 v-for="(row, idx) in paginated"
                 :key="idx"
-                class="border-b border-prado-border last:border-0 hover:bg-prado-surface-hover transition-colors"
+                :class="[
+                  'border-b border-prado-border last:border-0 hover:bg-prado-surface-hover transition-colors',
+                  rowLink ? 'cursor-pointer' : '',
+                ]"
+                @click="rowLink && handleRowClick(row)"
               >
                 <td
                   v-for="col in columns"

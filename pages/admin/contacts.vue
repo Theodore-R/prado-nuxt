@@ -2,7 +2,7 @@
 import { Download, Mail, CheckCircle, Circle } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import { exportToCsv } from '~/utils/csvExport'
-import type { AdminTableColumn } from '~/components/admin/AdminTable.vue'
+import type { PrDataTableColumn } from '@theodoreriant/prado-ui'
 
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 
@@ -15,7 +15,7 @@ const contacts = ref<ContactMessage[]>([])
 const loading = ref(true)
 const expandedId = ref<string | null>(null)
 
-const columns: AdminTableColumn[] = [
+const columns: PrDataTableColumn[] = [
   { key: 'is_read', label: '', sortable: false },
   { key: 'created_at', label: 'Date', sortable: true },
   { key: 'name', label: 'Auteur', sortable: true },
@@ -66,7 +66,7 @@ function handleExport() {
       </button>
     </div>
 
-    <!-- Custom table with expand support (can't fully use AdminTable due to expand row) -->
+    <!-- Custom table with expand support (can't fully use PrDataTable due to expand row) -->
     <div class="space-y-4">
       <div class="bg-prado-surface rounded-2xl border border-prado-border overflow-hidden">
         <table class="w-full text-sm">

@@ -2,7 +2,7 @@
 import { Download } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import { exportToCsv } from '~/utils/csvExport'
-import type { AdminTableColumn } from '~/components/admin/AdminTable.vue'
+import type { PrDataTableColumn } from '@theodoreriant/prado-ui'
 
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 
@@ -20,7 +20,7 @@ interface AdminJeune {
 const jeunes = ref<AdminJeune[]>([])
 const loading = ref(true)
 
-const columns: AdminTableColumn[] = [
+const columns: PrDataTableColumn[] = [
   { key: 'full_name', label: 'Nom complet', sortable: true },
   { key: 'date_of_birth', label: 'Date de naissance', sortable: true, hiddenBelow: 'lg' },
   { key: 'situation', label: 'Situation', sortable: true, hiddenBelow: 'md' },
@@ -75,7 +75,7 @@ function handleExport() {
       </button>
     </div>
 
-    <AdminTable
+    <PrDataTable
       :columns="columns"
       :rows="rows"
       :loading="loading"
@@ -101,6 +101,6 @@ function handleExport() {
       <template #cell-created_at="{ value }">
         <span class="text-prado-text-muted">{{ new Date(value).toLocaleDateString('fr-FR') }}</span>
       </template>
-    </AdminTable>
+    </PrDataTable>
   </div>
 </template>

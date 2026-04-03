@@ -172,7 +172,7 @@ async function handleLogout() {
         <slot />
       </main>
 
-      <AdminConfirmDialog />
+      <PrConfirmDialog />
 
       <!-- Onboarding widget + panel -->
       <OnboardingWidget />

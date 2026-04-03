@@ -2,7 +2,7 @@
 import { Trash2, Download } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import { exportToCsv } from '~/utils/csvExport'
-import type { AdminTableColumn } from '~/components/admin/AdminTable.vue'
+import type { PrDataTableColumn } from '@theodoreriant/prado-ui'
 
 definePageMeta({ layout: 'espace', middleware: 'auth' })
 
@@ -29,7 +29,7 @@ const actionMap = computed(() => {
   return map
 })
 
-const columns: AdminTableColumn[] = [
+const columns: PrDataTableColumn[] = [
   { key: 'jeuneName', label: 'Jeune', sortable: true },
   { key: 'actionTitle', label: 'Action', sortable: true },
   { key: 'dateDisplay', label: 'Date', sortable: true, hiddenBelow: 'sm' },
@@ -105,13 +105,13 @@ function handleExport() {
       </select>
     </div>
 
-    <AdminTable
+    <PrDataTable
       :columns="columns"
       :rows="rows"
       search-placeholder="Rechercher..."
       empty-message="Aucune inscription"
     >
-      <template #header-actions>
+      <template #toolbar>
         <button
           v-if="rows.length > 0"
           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-prado-border text-sm text-prado-text-secondary hover:bg-prado-surface-hover transition-colors"
@@ -141,6 +141,6 @@ function handleExport() {
           <Trash2 :size="15" />
         </button>
       </template>
-    </AdminTable>
+    </PrDataTable>
   </div>
 </template>

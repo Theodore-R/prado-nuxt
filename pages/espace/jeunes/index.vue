@@ -2,7 +2,7 @@
 import { UserPlus, Trash2, Eye, Download, Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import { exportToCsv } from '~/utils/csvExport'
-import type { AdminTableColumn } from '~/components/admin/AdminTable.vue'
+import type { PrDataTableColumn } from '@theodoreriant/prado-ui'
 
 const SITUATIONS = [
   { value: '', label: 'Non renseigné' },
@@ -37,7 +37,7 @@ const newJeune = ref({
   firstName: '', lastName: '', dateOfBirth: '', situation: '',
 })
 
-const columns: AdminTableColumn[] = [
+const columns: PrDataTableColumn[] = [
   { key: 'name', label: 'Nom complet', sortable: true },
   { key: 'dateOfBirth', label: 'Date de naissance', sortable: true, hiddenBelow: 'sm' },
   { key: 'situation', label: 'Situation', sortable: true, hiddenBelow: 'md' },
@@ -107,8 +107,14 @@ async function handleExport() {
   }
 }
 
-function rowLink(row: Record<string, any>) {
+const router = useRouter()
+
+function rowLink(row: Record<string, unknown>) {
   return `/espace/jeunes/${row.id}`
+}
+
+function handleRowClick(row: Record<string, unknown>) {
+  router.push(`/espace/jeunes/${row.id}`)
 }
 
 const addFormFields = [
@@ -187,7 +193,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
     </form>
 
     <!-- Table (only shown when there are jeunes) -->
-    <AdminTable
+    <PrDataTable
       v-if="hasJeunes"
       :columns="columns"
       :rows="rows"
@@ -195,8 +201,9 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
       :row-link="rowLink"
       search-placeholder="Rechercher un jeune..."
       empty-message="Aucun jeune enregistre"
+      @row-click="handleRowClick"
     >
-      <template #header-actions>
+      <template #toolbar>
         <button
           v-if="rows.length > 0"
           :disabled="exporting"
@@ -225,6 +232,6 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
           <Trash2 :size="15" />
         </button>
       </template>
-    </AdminTable>
+    </PrDataTable>
   </div>
 </template>

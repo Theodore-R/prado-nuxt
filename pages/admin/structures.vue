@@ -2,7 +2,7 @@
 import { Download, Plus, Pencil, Trash2, Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import { exportToCsv } from '~/utils/csvExport'
-import type { AdminTableColumn } from '~/components/admin/AdminTable.vue'
+import type { PrDataTableColumn } from '@theodoreriant/prado-ui'
 
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 
@@ -21,7 +21,7 @@ interface AdminStructure {
 const structures = ref<AdminStructure[]>([])
 const loading = ref(true)
 
-const columns: AdminTableColumn[] = [
+const columns: PrDataTableColumn[] = [
   { key: 'name', label: 'Nom', sortable: true },
   { key: 'city', label: 'Ville', sortable: true, hiddenBelow: 'sm' },
   { key: 'prescripteurs_count', label: 'Prescripteurs', sortable: true, hiddenBelow: 'md' },
@@ -183,7 +183,7 @@ function handleExport() {
       </div>
     </div>
 
-    <AdminTable
+    <PrDataTable
       :columns="columns"
       :rows="structures"
       :loading="loading"
@@ -229,159 +229,40 @@ function handleExport() {
           <Trash2 :size="16" />
         </button>
       </template>
-    </AdminTable>
+    </PrDataTable>
 
     <!-- Add modal -->
-    <Teleport to="body">
-      <div v-if="showAddModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" @click.self="showAddModal = false">
-        <div class="rounded-2xl border border-prado-border p-6 w-full max-w-md mx-4 shadow-xl" style="background-color: var(--prado-surface)">
-          <h3 class="text-lg font-semibold text-prado-text mb-4">Ajouter une structure</h3>
-          <form class="space-y-3" @submit.prevent="handleAdd">
-            <div>
-              <label class="text-sm text-prado-text-secondary mb-1.5 block">Nom de la structure *</label>
-              <input
-                v-model="newName"
-                type="text"
-                required
-                autofocus
-                placeholder="Ex: MECS Saint-Vincent"
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-              />
-            </div>
-            <div>
-              <label class="text-sm text-prado-text-secondary mb-1.5 block">Type</label>
-              <input
-                v-model="newType"
-                type="text"
-                placeholder="Ex: MECS, Foyer, IME..."
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-              />
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="text-sm text-prado-text-secondary mb-1.5 block">Code postal</label>
-                <input
-                  v-model="newPostalCode"
-                  type="text"
-                  placeholder="69000"
-                  maxlength="10"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-                />
-              </div>
-              <div>
-                <label class="text-sm text-prado-text-secondary mb-1.5 block">Ville</label>
-                <input
-                  v-model="newCity"
-                  type="text"
-                  placeholder="Lyon"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-                />
-              </div>
-            </div>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input
-                v-model="newIsPrado"
-                type="checkbox"
-                class="rounded border-prado-border text-prado-teal focus:ring-prado-teal"
-              />
-              <span class="text-sm text-prado-text">Structure Prado</span>
-            </label>
-            <div class="flex justify-end gap-3 pt-2">
-              <button
-                type="button"
-                class="px-4 py-2 rounded-full text-sm text-prado-text-muted hover:text-prado-text transition-colors"
-                @click="showAddModal = false"
-              >
-                Annuler
-              </button>
-              <button
-                type="submit"
-                :disabled="adding"
-                class="px-5 py-2 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] text-sm disabled:opacity-50 flex items-center gap-2"
-              >
-                <Loader2 v-if="adding" :size="14" class="animate-spin" />
-                Créer
-              </button>
-            </div>
-          </form>
+    <PrDialog :open="showAddModal" title="Ajouter une structure" @update:open="showAddModal = $event" @cancel="showAddModal = false">
+      <form class="space-y-3" @submit.prevent="handleAdd">
+        <PrInput v-model="newName" label="Nom de la structure *" placeholder="Ex: MECS Saint-Vincent" required />
+        <PrInput v-model="newType" label="Type" placeholder="Ex: MECS, Foyer, IME..." />
+        <div class="grid grid-cols-2 gap-3">
+          <PrInput v-model="newPostalCode" label="Code postal" placeholder="69000" />
+          <PrInput v-model="newCity" label="Ville" placeholder="Lyon" />
         </div>
-      </div>
-    </Teleport>
+        <PrCheckbox v-model="newIsPrado" label="Structure Prado" />
+      </form>
+      <template #footer>
+        <PrButton variant="ghost" @click="showAddModal = false">Annuler</PrButton>
+        <PrButton variant="primary" :loading="adding" @click="handleAdd">Créer</PrButton>
+      </template>
+    </PrDialog>
 
     <!-- Edit modal -->
-    <Teleport to="body">
-      <div v-if="showEditModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" @click.self="showEditModal = false">
-        <div class="rounded-2xl border border-prado-border p-6 w-full max-w-md mx-4 shadow-xl" style="background-color: var(--prado-surface)">
-          <h3 class="text-lg font-semibold text-prado-text mb-4">Modifier la structure</h3>
-          <form class="space-y-3" @submit.prevent="handleEdit">
-            <div>
-              <label class="text-sm text-prado-text-secondary mb-1.5 block">Nom *</label>
-              <input
-                v-model="editName"
-                type="text"
-                required
-                autofocus
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-              />
-            </div>
-            <div>
-              <label class="text-sm text-prado-text-secondary mb-1.5 block">Type</label>
-              <input
-                v-model="editType"
-                type="text"
-                placeholder="Ex: MECS, Foyer, IME..."
-                class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-              />
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="text-sm text-prado-text-secondary mb-1.5 block">Code postal</label>
-                <input
-                  v-model="editPostalCode"
-                  type="text"
-                  placeholder="69000"
-                  maxlength="10"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-                />
-              </div>
-              <div>
-                <label class="text-sm text-prado-text-secondary mb-1.5 block">Ville</label>
-                <input
-                  v-model="editCity"
-                  type="text"
-                  placeholder="Lyon"
-                  class="w-full px-4 py-3 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-sage/50 transition-colors"
-                />
-              </div>
-            </div>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input
-                v-model="editIsPrado"
-                type="checkbox"
-                class="rounded border-prado-border text-prado-teal focus:ring-prado-teal"
-              />
-              <span class="text-sm text-prado-text">Structure Prado</span>
-            </label>
-            <div class="flex justify-end gap-3 pt-2">
-              <button
-                type="button"
-                class="px-4 py-2 rounded-full text-sm text-prado-text-muted hover:text-prado-text transition-colors"
-                @click="showEditModal = false"
-              >
-                Annuler
-              </button>
-              <button
-                type="submit"
-                :disabled="editing"
-                class="px-5 py-2 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] text-sm disabled:opacity-50 flex items-center gap-2"
-              >
-                <Loader2 v-if="editing" :size="14" class="animate-spin" />
-                Enregistrer
-              </button>
-            </div>
-          </form>
+    <PrDialog :open="showEditModal" title="Modifier la structure" @update:open="showEditModal = $event" @cancel="showEditModal = false">
+      <form class="space-y-3" @submit.prevent="handleEdit">
+        <PrInput v-model="editName" label="Nom *" required />
+        <PrInput v-model="editType" label="Type" placeholder="Ex: MECS, Foyer, IME..." />
+        <div class="grid grid-cols-2 gap-3">
+          <PrInput v-model="editPostalCode" label="Code postal" placeholder="69000" />
+          <PrInput v-model="editCity" label="Ville" placeholder="Lyon" />
         </div>
-      </div>
-    </Teleport>
+        <PrCheckbox v-model="editIsPrado" label="Structure Prado" />
+      </form>
+      <template #footer>
+        <PrButton variant="ghost" @click="showEditModal = false">Annuler</PrButton>
+        <PrButton variant="primary" :loading="editing" @click="handleEdit">Enregistrer</PrButton>
+      </template>
+    </PrDialog>
   </div>
 </template>

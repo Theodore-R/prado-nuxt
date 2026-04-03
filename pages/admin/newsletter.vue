@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Download, Check, X } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
-import type { AdminTableColumn } from '~/components/admin/AdminTable.vue'
+import type { PrDataTableColumn } from '@theodoreriant/prado-ui'
 
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 
@@ -13,7 +13,7 @@ interface Subscriber {
 const subscribers = ref<Subscriber[]>([])
 const loading = ref(true)
 
-const columns: AdminTableColumn[] = [
+const columns: PrDataTableColumn[] = [
   { key: 'email', label: 'Email', sortable: true },
   { key: 'structure', label: 'Structure', sortable: true, hiddenBelow: 'md' },
   { key: 'source', label: 'Source', sortable: true, hiddenBelow: 'lg' },
@@ -46,7 +46,7 @@ async function handleExport() {
       </button>
     </div>
 
-    <AdminTable
+    <PrDataTable
       :columns="columns"
       :rows="subscribers"
       :loading="loading"
@@ -69,6 +69,6 @@ async function handleExport() {
         <Check v-if="value" :size="16" class="text-[#93C1AF]" />
         <X v-else :size="16" class="text-prado-text-faint" />
       </template>
-    </AdminTable>
+    </PrDataTable>
   </div>
 </template>

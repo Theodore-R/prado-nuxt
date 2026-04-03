@@ -149,7 +149,7 @@ async function handleLogout() {
         <slot />
       </main>
 
-      <AdminConfirmDialog />
+      <PrConfirmDialog />
     </div>
   </div>
 </template>

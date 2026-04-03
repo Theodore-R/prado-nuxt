@@ -3,7 +3,7 @@ import { Download, CheckCircle, XCircle } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import type { AdminPrescripteur } from '~/lib/adminApi'
 import { exportToCsv } from '~/utils/csvExport'
-import type { AdminTableColumn } from '~/components/admin/AdminTable.vue'
+import type { PrDataTableColumn } from '@theodoreriant/prado-ui'
 
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 
@@ -26,7 +26,7 @@ const statusConfig: Record<string, { label: string; className: string }> = {
   rejected: { label: 'Rejete', className: 'bg-red-500/20 text-red-400' },
 }
 
-const columns: AdminTableColumn[] = [
+const columns: PrDataTableColumn[] = [
   { key: 'name', label: 'Nom', sortable: true },
   { key: 'professional_email', label: 'Email', sortable: true, hiddenBelow: 'md' },
   { key: 'structure', label: 'Structure', sortable: true, hiddenBelow: 'lg' },
@@ -113,7 +113,7 @@ function handleExport() {
       </button>
     </div>
 
-    <AdminTable
+    <PrDataTable
       :columns="columns"
       :rows="filtered"
       :loading="loading"
@@ -158,6 +158,6 @@ function handleExport() {
           <XCircle :size="16" />
         </button>
       </template>
-    </AdminTable>
+    </PrDataTable>
   </div>
 </template>
