@@ -31,3 +31,6 @@ playwright-report/
 .env.*
 !.env.example
 .vercel
+
+# Claude Code plugins (local only)
+everything-claude-code/

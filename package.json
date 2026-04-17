@@ -2,12 +2,16 @@
   "name": "prado-nuxt",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
+    "build:ui": "npm run build --workspace @theodoreriant/prado-ui",
+    "postinstall": "npm run build:ui && nuxt prepare",
     "slicemachine": "start-slicemachine",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -26,7 +30,7 @@
     "vue-router": "^5.0.4",
     "vue-sonner": "^1.3.0",
     "zod": "^3.25.76",
-    "@theodoreriant/prado-ui": "file:packages/ui"
+    "@theodoreriant/prado-ui": "*"
   },
   "devDependencies": {
     "@nuxt/test-utils": "^4.0.0",
