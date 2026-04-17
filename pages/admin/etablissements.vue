@@ -108,7 +108,7 @@ async function handleEdit() {
 }
 
 // ─── Delete ───
-const { confirm } = useConfirm()
+const { confirm } = usePradoConfirm()
 
 async function handleDelete(etab: Etablissement) {
   const ok = await confirm(`Supprimer l'etablissement "${etab.name}" ?`, { variant: 'danger' })

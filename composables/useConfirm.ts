@@ -1,5 +1,5 @@
 /**
- * App-level useConfirm — delegates to @prado/ui's useConfirm with backwards-compatible API.
+ * App-level usePradoConfirm — delegates to @prado/ui's useConfirm with backwards-compatible API.
  *
  * Supports both:
  *   confirm('Are you sure?', { variant: 'danger' })   // legacy string + opts
@@ -7,13 +7,10 @@
  */
 import {
   useConfirm as _useConfirm,
-  useConfirmState as _useConfirmState,
   type ConfirmOptions,
 } from '@theodoreriant/prado-ui/composables'
 
-export { _useConfirmState as useConfirmState }
-
-export function useConfirm() {
+export function usePradoConfirm() {
   const { confirm: libConfirm, handleConfirm, handleCancel } = _useConfirm()
 
   function confirm(

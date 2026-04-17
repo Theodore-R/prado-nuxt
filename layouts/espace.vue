@@ -5,8 +5,8 @@ import {
 import { Toaster } from 'vue-sonner'
 
 const { user, logout, jeunes, inscriptions } = useAuth()
-const { theme, toggleTheme } = useTheme()
-const { loadFromStorage, syncWithData } = useOnboarding()
+const { theme, toggleTheme } = usePradoTheme()
+const { loadFromStorage, syncWithData } = usePradoOnboarding()
 const route = useRoute()
 
 // Load and sync onboarding on every espace page

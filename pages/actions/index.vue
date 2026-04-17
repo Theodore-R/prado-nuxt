@@ -9,7 +9,7 @@ import type { DbActionWithPlaces } from '~/lib/api'
 
 type FilterMode = 'activite' | 'actions'
 
-const { complete: completeOnboarding } = useOnboarding()
+const { complete: completeOnboarding } = usePradoOnboarding()
 
 onMounted(() => {
   completeOnboarding('catalogVisited')

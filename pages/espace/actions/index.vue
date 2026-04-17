@@ -10,7 +10,7 @@ import type { DbActionWithPlaces } from '~/lib/api'
 definePageMeta({ layout: 'espace', middleware: 'auth' })
 
 // Nudge contextuel : marquer "catalogue visité"
-const { complete: completeOnboarding } = useOnboarding()
+const { complete: completeOnboarding } = usePradoOnboarding()
 onMounted(() => completeOnboarding('catalogVisited'))
 
 type FilterMode = 'activite' | 'actions'

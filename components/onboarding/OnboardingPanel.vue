@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { X, Check, ArrowRight, Clock, Sparkles } from 'lucide-vue-next'
 
-const { steps, panelOpen, closePanel, completedCount, totalSteps, progress, dismiss, isComplete } = useOnboarding()
+const { steps, panelOpen, closePanel, completedCount, totalSteps, progress, dismiss, isComplete } = usePradoOnboarding()
 
 const expandedStep = ref<string | null>(null)
 

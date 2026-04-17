@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Check, X } from 'lucide-vue-next'
 
-const { steps, progress, showChecklist, dismiss } = useOnboarding()
+const { steps, progress, showChecklist, dismiss } = usePradoOnboarding()
 </script>
 
 <template>

@@ -129,7 +129,7 @@ async function handleEdit() {
 }
 
 // ─── Delete ───
-const { confirm } = useConfirm()
+const { confirm } = usePradoConfirm()
 
 async function handleDelete(structure: AdminStructure) {
   if (structure.prescripteurs_count > 0) {

@@ -1,4 +1,4 @@
-export function useTheme() {
+export function usePradoTheme() {
   const theme = useState<'light' | 'dark'>('theme', () => 'light');
 
   const toggleTheme = () => {

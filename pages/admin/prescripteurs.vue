@@ -51,7 +51,7 @@ onMounted(async () => {
   }
 })
 
-const { confirm } = useConfirm()
+const { confirm } = usePradoConfirm()
 
 async function handleStatusChange(id: string, status: 'approved' | 'rejected') {
   const msg = status === 'approved' ? 'Approuver ce prescripteur ?' : 'Rejeter ce prescripteur ?'

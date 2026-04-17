@@ -1,6 +1,6 @@
 import { toast } from 'vue-sonner'
 
-export function useShare() {
+export function usePradoShare() {
   const canNativeShare = computed(() =>
     import.meta.client && typeof navigator !== 'undefined' && !!navigator.share,
   )

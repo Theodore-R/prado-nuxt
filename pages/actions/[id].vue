@@ -9,9 +9,9 @@ import type { DbActionWithPlaces } from '~/lib/api'
 
 const route = useRoute()
 const { user, jeunes, inscriptions, inscrire, desinscrire } = useAuth()
-const { complete: completeOnboarding } = useOnboarding()
+const { complete: completeOnboarding } = usePradoOnboarding()
 const { checkConflict } = useConflictCheck()
-const { share, copyLink, shareByEmail, shareByWhatsApp, canNativeShare } = useShare()
+const { share, copyLink, shareByEmail, shareByWhatsApp, canNativeShare } = usePradoShare()
 const showShareMenu = ref(false)
 
 const showInscription = ref(false)

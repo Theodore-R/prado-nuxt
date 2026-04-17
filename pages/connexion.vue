@@ -15,7 +15,7 @@ const FONCTIONS = [
 
 const route = useRoute()
 const { login, register, resetPassword, user, loading } = useAuth()
-const { complete: completeOnboarding } = useOnboarding()
+const { complete: completeOnboarding } = usePradoOnboarding()
 
 // Steps: 'email' | 'password' | 'register-email' | 'magic-link-sent' | 'register-password' | 'profile' | 'welcome'
 const step = ref<string>(

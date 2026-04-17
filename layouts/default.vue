@@ -6,7 +6,7 @@ import {
 import { Toaster } from 'vue-sonner'
 
 const { user, isAdmin, logout } = useAuth()
-const { theme, toggleTheme } = useTheme()
+const { theme, toggleTheme } = usePradoTheme()
 const route = useRoute()
 
 const menuOpen = ref(false)

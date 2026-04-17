@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ArrowRight, Rocket } from 'lucide-vue-next'
 
-const { nextStep, showWidget, openPanel, completedCount, totalSteps } = useOnboarding()
+const { nextStep, showWidget, openPanel, completedCount, totalSteps } = usePradoOnboarding()
 </script>
 
 <template>

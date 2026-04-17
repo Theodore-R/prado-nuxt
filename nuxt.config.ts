@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     theme: false, // App already provides theme tokens via ~/assets/css/theme.css
   },
 
+
   css: [
     '~/assets/css/tailwind.css',
     '~/assets/css/theme.css',

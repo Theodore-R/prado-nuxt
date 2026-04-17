@@ -4,7 +4,7 @@ import { toast } from 'vue-sonner'
 
 const { user, logout } = useAuth()
 const supabaseUser = useSupabaseUser()
-const { confirm } = useConfirm()
+const { confirm } = usePradoConfirm()
 
 const deleting = ref(false)
 const exporting = ref(false)

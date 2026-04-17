@@ -30,7 +30,7 @@ const defaultState: OnboardingState = {
   firstInscription: false,
 }
 
-export function useOnboarding() {
+export function usePradoOnboarding() {
   const state = useState<OnboardingState>('onboarding', () => ({ ...defaultState }))
   const dismissed = useState<boolean>('onboarding-dismissed', () => false)
   const panelOpen = useState<boolean>('onboarding-panel', () => false)

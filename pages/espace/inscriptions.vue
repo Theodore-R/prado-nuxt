@@ -7,7 +7,7 @@ import type { PrDataTableColumn } from '@theodoreriant/prado-ui'
 definePageMeta({ layout: 'espace', middleware: 'auth' })
 
 const { jeunes, inscriptions, desinscrire } = useAuth()
-const { confirm } = useConfirm()
+const { confirm } = usePradoConfirm()
 
 const filterJeune = ref('')
 const filterYear = ref(String(new Date().getFullYear()))

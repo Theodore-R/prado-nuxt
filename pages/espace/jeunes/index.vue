@@ -17,8 +17,8 @@ definePageMeta({ layout: 'espace', middleware: 'auth' })
 
 const route = useRoute()
 const { user, jeunes, jeunesLoading, inscriptions, addJeune, removeJeune } = useAuth()
-const { confirm } = useConfirm()
-const { complete } = useOnboarding()
+const { confirm } = usePradoConfirm()
+const { complete } = usePradoOnboarding()
 
 const isRestricted = computed(() =>
   user.value?.status === 'pending' || user.value?.status === 'rejected',

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { showWidget, completedCount, totalSteps, progress, openPanel } = useOnboarding()
+const { showWidget, completedCount, totalSteps, progress, openPanel } = usePradoOnboarding()
 
 const radius = 18
 const circumference = 2 * Math.PI * radius

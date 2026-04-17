@@ -11,7 +11,7 @@ const props = defineProps<{
 }>()
 
 const { completeProfile } = useAuth()
-const { complete } = useOnboarding()
+const { complete } = usePradoOnboarding()
 
 const form = ref({
   prenom: '',

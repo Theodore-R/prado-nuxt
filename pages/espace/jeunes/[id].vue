@@ -31,7 +31,7 @@ definePageMeta({ layout: 'espace', middleware: 'auth' })
 const route = useRoute()
 const id = route.params.id as string
 const { jeunes, inscriptions, editJeune, desinscrire, inscrire } = useAuth()
-const { confirm } = useConfirm()
+const { confirm } = usePradoConfirm()
 const { checkConflict } = useConflictCheck()
 
 const jeune = computed(() => jeunes.value.find(j => j.id === id))
